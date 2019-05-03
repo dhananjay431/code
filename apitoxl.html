@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Write Demo</title>
+<meta charset="utf-8" />
+</head>
+<body>
+<script type="text/javascript" src="https://unpkg.com/xlsx/dist/shim.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+<script>
+    fetch("https://jsonresp.herokuapp.com/datatable",{
+ method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify([
+{"_": "fileName"},
+{"_": "commonFileName"},
+{"_": "mimeType"},
+{"_": "commonFileType"},
+{"_": "commonFileExt"},
+{"_": "fileType"},
+{"_": "fileExt"},
+{"_": "directoryPath"},
+{"_": "filePath"},
+{"_": "semver"}
+])
+}).then(resp => resp.json()).then(json => {
+var filename = new Date().getTime()+".xlsx";
+
+var ws_name = "SheetJS";
+ 
+if(typeof console !== 'undefined') console.log(new Date());
+var wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(json.data);
+
+XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+XLSX.writeFile(wb, filename);
+
+
+});
+
+
+</script>
+</body>
+</html>
