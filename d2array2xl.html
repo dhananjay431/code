@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Write Demo</title>
+<meta charset="utf-8" />
+</head>
+<body>
+<script type="text/javascript" src="https://unpkg.com/xlsx/dist/shim.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+<script>
+var data =[["AKANSHA.m3u", "system_dynamic_non_volatile.mp2a", "application/vnd.nokia.landmark+wbxml", "audio", "gif", "model", "json", null, null, "2.7.5"], ["books.daf", "pula.mpga", "application/vnd.openofficeorg.extension", "audio", "png", "audio", "ics", null, null, "2.7.6"], ["context_sensitive.mk3d", "strategize.html", "audio/vnd.dolby.heaac.1", "application", "m3a", "audio", "igl", null, null, "8.7.2"], ["backing_up.tao", "tasty_metal_towels_zambian_kwacha_towels.html", "application/vnd.spotfire.sfs", "application", "jpe", "message", "js", null, null, "4.5.2"], ["kids_multi_byte_roi.xpl", "array_bandwidth_buckinghamshire.pdf", "model/vnd.parasolid.transmit.text", "application", "shtml", "message", "semf", null, null, "6.9.4"], ["out_of_the_box_plum.uvvh", "ssl_bandwidth_ergonomic_rubber_ball.m1v", "text/vnd.si.uricatalogue", "video", "gif", "video", "asc", null, null, "6.1.7"], ["viral_bi_directional.me", "haptic_pink_borders.mpg4", "application/wspolicy+xml", "image", "m2a", "audio", "uvx", null, null, "0.8.4"], ["reactive_program_chief.nnw", "diverse_payment_tuna.m1v", "application/vnd.globalplatform.card-content-mgt-response", "video", "mpga", "x-conference", "ipk", null, null, "6.7.6"], ["mexican_peso_mexican_unidad_de_inversion_(udi)_monitor_bedfordshire.dxp", "calculating_dynamic.pdf", "video/mpv", "video", "gif", "application", "mpga", null, null, "2.7.7"], ["help_desk_hdd.udeb", "panel.png", "audio/vnd.dolby.heaac.1", "video", "wav", "image", "doc", null, null, "2.9.8"] ]; var filename = new Date().getTime()+".xlsx";
+
+var ws_name = "SheetJS";
+ 
+if(typeof console !== 'undefined') console.log(new Date());
+var wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(data);
+
+XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+
+XLSX.writeFile(wb, filename);
+
+
+</script>
+</body>
+</html>
