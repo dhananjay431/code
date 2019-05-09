@@ -6,7 +6,11 @@ angular.module('App.quoteComparisionCtrl')
                     headerName: "PART_NUMBER",
                     field: "PART_NUMBER"
                 }
-            ]
+            ],
+            components:{
+            
+                moodEditor: DropDownTemplate
+            }
             
         };
         $scope.data ={};
@@ -52,6 +56,25 @@ angular.module('App.quoteComparisionCtrl')
                             return d;
                         });
                         
+                        
+                        Object.keys(temp[0].ToolmakerPref).forEach(function(d){
+                            var z = {
+                                headerName: d,
+                                field: "ToolmakerPref."+d,
+                                editable: true,
+                                cellEditorSelector:function (params){
+                                    debugger;
+                                       return {
+                                           component: 'moodEditor',
+                                           params: {values:  _.map(params.data.TOOLMAKER,'ID') }
+                                       };
+                                   }
+                            }
+                            $scope.gridOptions.columnDefs.push(z);
+                        })
+                       console.log("$scope.gridOptions.columnDefs=>",$scope.gridOptions.columnDefs);
+                        $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
+
                         $scope.gridOptions.api.setRowData(temp);
                         console.log($scope.gridOptions.data);
              
