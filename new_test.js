@@ -1,2 +1,2 @@
 var v  = new angular;
-console.log("v=>",v);
+console.log("v=>",vmaster);
