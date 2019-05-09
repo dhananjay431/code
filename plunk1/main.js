@@ -12,6 +12,11 @@ module.controller("exampleCtrl", function($scope) {
 
 
     $scope.gridOptions = {
+        getRowStyle :function(params) {
+            if (params.node.rowIndex % 2 === 0) {
+                return { background: '#FFF' }
+            }
+        },
         columnDefs: [
             {
                 headerName: "color",
@@ -41,6 +46,19 @@ module.controller("exampleCtrl", function($scope) {
          
                 headerName: "productAdjective",
                 field: "productAdjective"
+            },
+            {
+         
+                headerName: "first Name",
+                field: "name.first"
+            },
+            {
+                headerName: "middl Name",
+                field: "name.middl"
+            },
+            {
+                headerName: "last Name",
+                field: "name.last"
             }
         ],
         rowData: null,
@@ -90,6 +108,11 @@ module.controller("exampleCtrl", function($scope) {
             },
             "product": {
                 "_": "product"
+            },
+            "name":{
+                "first":{"_":"firstName"},
+                "middl":{"_":"firstName"},
+                "last":{"_":"lastName"}
             }
         })
     }).then(json => json.json())
@@ -111,6 +134,7 @@ module.controller("exampleCtrl", function($scope) {
         $scope.gridOptions.api.forEachNode(function(d,i){
             console.log(d.data);
         })
+        console.log("getRowData=>",$scope.gridOptions.api.getRowData());
     }
     $scope.addCol=function(){
         var d = $scope.gridOptions.columnDefs.filter(function(d){ return d.headerName == "added"})[0];
@@ -118,5 +142,17 @@ module.controller("exampleCtrl", function($scope) {
 
         $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
         console.log($scope.gridOptions);
+    }
+    function getBooleanValue(cssSelector) {
+        return document.querySelector(cssSelector).checked === true;
+    }
+    $scope.getXlsx = function(){
+        var params = {
+            color: "asdfasddsafds"
+            // fileName: document.querySelector('#fileName').value,
+            // sheetName: document.querySelector('#sheetName').value,
+            // exportMode: document.querySelector('input[name="mode"]:checked').value
+        };
+        $scope.gridOptions.api.exportDataAsExcel(params);
     }
 });
