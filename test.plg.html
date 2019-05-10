@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <script src="plg.js"></script>
+        <script>
+         
+
+       //  
+
+        for(var i=0;i<100;i++){
+            console.log("////////////////",i);
+         db.set({k:"data",v:function(a,b){ console.log("data=>",(a+b))}});
+         db.set({k:"data2",v:{foo:123,mul:function(b){ console.log("mul=>",b*b);}}})
+         db.get('data')(i,6);
+         db.key('data2.mul')(i);
+         scope.data2.mul(i*2);
+        }
+
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>
