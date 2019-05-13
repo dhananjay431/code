@@ -85,6 +85,17 @@ angular.module('App.quoteComparisionCtrl')
         }
     
         zz = new cl();
+        $scope.setting = {
+            P:[],
+            l:[],
+            menus:[
+                {"key":"Base Cost","value":true},
+                {"key":"Landed Cost","value":true},
+                {"key":"No Of Dies","value":true},
+                {"key":"Die Weight","value":true},
+                {"key":"Cost per Tone","value":true}
+            ]
+        };
         $scope.tableDataSave =function(){
             
             var arr = [];
@@ -156,10 +167,12 @@ angular.module('App.quoteComparisionCtrl')
             //             var k = d3.field;
             //             z[k] = _.at(node.data,d3.field)[0];
             //             })
-            //         }                    
+            //         }
+                    
             //     })
             //     arr.push(z);
-            // })
+
+           //  })
         }
         $scope.gridOptions = {
             rowDrag: false,
