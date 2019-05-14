@@ -119,7 +119,8 @@
             </div>
             <div class="col-sm-10"></div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3 text-right">
+            <button ng-click="addCol()"> + </button>
             <div class="btn-group">
                 <div class="border-0 rounded mb-4" style="background-color: #ccc;width:35px;height:35px; display: flex;justify-content: center;align-items: center;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-cog text-light"></i>
@@ -130,17 +131,29 @@
                         <div class="col-sm-4">Toolmaker Preference</div>
                         <div class="col-sm-4">View Preference</div>
                         <div class="col-sm-4">
-                            <input type="checkbox" name="vehicle1" value="Bike1"> Select All</div>
+                            <input type="checkbox" ng-model="setting.ls.value"  ng-change="setting.ls.f(setting.l)"> Select All</div>
                         <div class="col-sm-4">
-                            <input type="checkbox" name="vehicle2" value="Bike2"> Select All</div>
+                            <input type="checkbox" ng-model="setting.ps.value" ng-change="setting.ps.f(setting.p)"> Select All</div>
                         <div class="col-sm-4">
-                            <input type="checkbox" name="vehicle3" value="Bike3"> Select All</div>
-                        <div class="col-sm-4"> </div>
-                        <div class="col-sm-4"> </div>
+                            <!-- <input type="checkbox" name="vehicle3" value="Bike3"> Select All -->
+                        </div>
                         <div class="col-sm-4">
-                            <div ng-repeat="d in setting.menus">
-                                    <input type="checkbox" value={{d.value}}> {{d.key}}
-                            </div>
+                                <div ng-repeat="d in setting.l">
+                                        <input ng-model="d.value" type="checkbox" > {{d.key}}
+                                </div> </div>
+                        <div class="col-sm-4">
+                                <div ng-repeat="d in setting.p">
+                                        <input ng-model="d.value" type="checkbox" > {{d.key}}
+                                </div>
+                         </div>
+                        <div class="col-sm-4">
+                            <!-- <div ng-repeat="d in setting.menus"> -->
+                                    <input   type="checkbox" ng-model="setting.menus" ng-true-value="'Base Cost'">Base Cost<br>
+                                    <input   type="checkbox" ng-model="setting.menus" ng-true-value="'Landed Cost'">Landed Cost<br>
+                                    <input   type="checkbox" ng-model="setting.menus" ng-true-value="'No Of Dies'">No Of Dies<br>
+                                    <input   type="checkbox" ng-model="setting.menus" ng-true-value="'Die Weight'">Die Weight<br>
+                                    <input   type="checkbox" ng-model="setting.menus" ng-true-value="'Cost per Tone'">Cost per Tone<br>
+                            <!-- </div> -->
                             
                         </div>
                     </div>
@@ -148,14 +161,13 @@
                     <div class="row">
                         <div class="col-sm">
                             <div class="text-right">
-                                <button type="button" class="btn btn-danger">
-                                    <i id="some-create-element3" class="fas fa-save"></i> Apply
+                                <button type="button" class="btn btn-danger" ng-click="settingFun()">
+                                    <i id="some-create-element3" class="fas fa-check-double"></i> Apply
                                 </button>
                             </div>
                         </div>
                     </div>
                     <pre>
-                            {{ setting | json }}
                     </pre>
                     
                 </div>

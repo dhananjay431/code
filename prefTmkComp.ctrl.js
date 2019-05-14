@@ -9,7 +9,7 @@ angular.module('App.quoteComparisionCtrl')
                 columnDefs:[
                     {
                         headerName: "PART_NUMBER",
-                        field: "PART_NUMBER"
+                        field: "PART_NUMBER",
                     }
                 ],
                 components:{
@@ -18,6 +18,14 @@ angular.module('App.quoteComparisionCtrl')
             };
         }
         cl.prototype.initPro= function(data){
+            $scope.setting.p = [];
+            $scope.setting.l = [];
+            _.keys(data[0].ToolmakerPref).map(function(d){
+                $scope.setting.p.push({key:d,value:true});
+            })
+            _.keys(data[0].LANDEDCOST).map(function(d){
+                $scope.setting.l.push({key:d,value:true});
+            })
             return _.map(data, function(d) {
                 var ll = _.keys(d.LANDEDCOST);
                 for (var i = 1; i <= ll.length; i++) {
@@ -34,13 +42,13 @@ angular.module('App.quoteComparisionCtrl')
         }
         cl.prototype.addTm = function(temp){
             var TOOLMAKER=[];
+         
             Object.keys(temp[0].ToolmakerPref).forEach(function(d){
                 var z = {
                     headerName: d,
                     field: "ToolmakerPref."+d,
                     editable: true,
                     cellEditorSelector:function (params){
-                        debugger;
                            return {
                                component: 'moodEditor',
                                params: {values:  _.map(params.data.TOOLMAKER,'ID') }
@@ -54,6 +62,68 @@ angular.module('App.quoteComparisionCtrl')
                 headerName: 'Toolmaker Preference',
                 children:TOOLMAKER
             };
+        }
+        cl.prototype.addTmLP = function (data){
+                 var tp = data.columnDefs.filter(function(d){
+                     return d.headerName == "Toolmaker Preference";
+                 });
+                 if(tp.length > 0){
+                    //  var t = "P"+tp[0].children.length;
+                     //tp[0].children.push({headerName:t, field: "ToolmakerPref."+t});
+                     tp[0].children.push(angular.copy(tp[0].children[tp[0].children.length - 1]));
+                 }
+                 tp[0].children[tp[0].children.length -1].headerName = "P"+tp[0].children.length;
+                 tp[0].children[tp[0].children.length -1].field =  "ToolmakerPref.P"+tp[0].children.length;
+                 
+                   var tl =  _.max(_.map(data.columnDefs,"headerName").filter(function(d){
+                        return d.match(/L[0-9]/);
+                    }));
+                    var tlArr = angular.copy(data.columnDefs.filter(function(d){
+                        return d.headerName == tl;
+                    })[0]);
+                    
+                    tlArr.headerName = "L"+ (Number(tl.replace("L",""))+1);
+                    data.api.forEachLeafNode(function(n,i){
+                        n.data[tlArr.headerName] = {
+                            "LANDEDCOST": {
+                                "TOOLMAKERID": "",
+                                "TOOLMAKER": "",
+                                "VALUE": ""
+                            },
+                            "NOOFDIES": {
+                                "TOOLMAKERID": "",
+                                "TOOLMAKER": "",
+                                "VALUE": ""
+                            },
+                            "DIEWEIGHT": {
+                                "TOOLMAKERID": "",
+                                "TOOLMAKER": "",
+                                "VALUE": ""
+                            },
+                            "BASICCOST": {
+                                "TOOLMAKERID": "",
+                                "TOOLMAKER": "",
+                                "VALUE": ""
+                            },
+                            "COSTPERTON": {
+                                "TOOLMAKERID": "",
+                                "TOOLMAKER": "",
+                                "VALUE": ""
+                            }
+                        };
+    
+                    })
+                   
+
+                    tlArr.children.forEach(function(d){
+                        d.field = d.field.replace(tl,tlArr.headerName);
+                        d.editable = true;
+                    })
+
+                    data.columnDefs.push(tlArr);
+                    data.api.setColumnDefs(data.columnDefs);
+                    console.log(data);
+            
         }
         cl.prototype.addAuto = function(temp){
            var tmp = [];
@@ -83,19 +153,154 @@ angular.module('App.quoteComparisionCtrl')
             });
             return tmp;
         }
+       
     
         zz = new cl();
+        $scope.baseLineD = {};
+        $scope.addCol = function(){
+            console.log(zz.addTmLP($scope.gridOptions))   
+           }
+        $scope.baselineSave = function() {
+            console.log("baseline save", $scope.baseLineD);
+            console.log("cmm", cmm);
+
+
+            var qr = {
+                "new": {
+                    "ERFQ_BASELINE_MAIN": {
+                        //"BASELINE_SEQ":"",
+                        "PROJECT_CODE": cmm.projectCode,
+                        "BASELINE_NUM": Number(cmm.baslineNum)+ 1,
+                        "BASELINE_NAME": $scope.baseLineD.name,
+                        "BASELINE_REMARK": $scope.baseLineD.remark,
+                        "PREFERENCE": $scope.setting.menus.replace(/\s/g,'')
+                    }
+                }
+
+            };
+
+            $.cordys.ajax({
+                method: "UpdateErfqBaselineMain",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                dataType: "* json",
+                parameters: {
+                    "tuple": qr
+                },
+                success: function success(data) {
+                    $scope.data.erfq_toolmaker_master = $.cordys.json.findObjects(data, "ERFQ_BASELINE_MAIN");
+                    console.log("$scope.data.erfq_toolmaker_master=>", $scope.data.erfq_toolmaker_master);
+                    $.cordys.ajax({
+                        method: "GetQuoteComparisionbyProject",
+                        namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                        dataType: "* json",
+                        parameters: {
+                            ProjectCode: cmm.projectCode,
+                            //baselinenum:cmm.baslineNum,
+                            baselinenum: cmm.baslineNum,
+                            GROUP: ""
+                        },
+                        success: function(data) {
+                            var saveQrData = $.cordys.json.findObjects(data, "ERFQ_QUOTE_COMPARISON");
+                            if (saveQrData.length > 0) {
+                                var _t = [];
+                                saveQrData.forEach(function(_sd) {
+                                    // var tt = _sd;
+                                    // if (_sd.COMPARISON_SEQ)
+                                    //  delete tt.COMPARISON_SEQ;
+                                    // if (_sd.BASELINE_NUM)
+                                    //  tt.BASELINE_NUM = Number(cmm.baslineNum + 1);
+                                    // if (_sd.BASIC_COST_BLANKINGDIE == undefined)
+                                    //  tt.BASIC_COST_BLANKINGDIE = "Included";
+                                    if (_sd.COMPARISON_SEQ)
+                                        delete _sd.COMPARISON_SEQ;
+                                    if (_sd.BASELINE_NUM)
+                                        _sd.BASELINE_NUM = Number(cmm.baslineNum)+ 1;
+
+
+                                    _t.push({
+                                        "new": {
+                                            "ERFQ_QUOTE_COMPARISON": _sd
+                                        }
+                                    });
+                                })
+                                console.log("SNU=>", _t);
+
+
+                                $.cordys.ajax({
+                                    method: "UpdateErfqQuoteComparison",
+                                    namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                                    dataType: "* json",
+                                    parameters: {
+                                        "tuple": _t
+                                    },
+                                    success: function(data) {
+                                        console.log("success=>");
+                                        $scope.xlSave(Number(cmm.baslineNum + 1));
+                                    },
+                                    error: function() {}
+                                });
+
+
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {}
+                    });
+
+
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {}
+            });
+
+        }
+
+        $scope.settingFun =function(){
+            // $scope.$apply();
+            console.log("$scope.setting=>",$scope.setting);
+            console.log("$scope.gridOptions=>",$scope.gridOptions)
+            // var _pt=[],_pf=[];
+            // $scope.setting.p.forEach(function(d){
+            //     if(d.value == true)
+            //     _pt.push(d.key);
+            //     if(d.value == false)
+            //     _pf.push(d.key);
+            // })
+          //  $scope.gridOptions.columnApi.setColumnsVisible('PART_NUMBER', false);
+
+
+        //    $scope.gridOptions.columnDefs[0].hide = true;
+        //    $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
+        }
         $scope.setting = {
-            P:[],
+            p:[],
             l:[],
-            menus:[
-                {"key":"Base Cost","value":true},
-                {"key":"Landed Cost","value":true},
-                {"key":"No Of Dies","value":true},
-                {"key":"Die Weight","value":true},
-                {"key":"Cost per Tone","value":true}
-            ]
+            menus:"Landed Cost",
+            // menus:[
+            //     {"key":"Base Cost","value":true,"sval":"basecost"},
+            //     {"key":"Landed Cost","value":true,"sval":"landedcost"},
+            //     {"key":"No Of Dies","value":true,"sval":"noofdies"},
+            //     {"key":"Die Weight","value":true,"sval":"dieweight"},
+            //     {"key":"Cost per Tone","value":true,"sval":"costpertone"}
+            // ],
+            ps:{"key":"Select All","value":true,f:function(dt){
+                if(this.value==true){
+                    dt.map(function(d){
+                        d.value = true;
+                        return d;
+                       })
+                }
+            }},
+            ls:{"key":"Select All","value":true,f:function(dt){
+                if(this.value==true){
+                    dt.map(function(d){
+                        d.value = true;
+                        return d;
+                       })
+                }
+            }}
         };
+        $scope.setLab = function(d) {
+            $scope.cmm.label = d;
+        }
         $scope.tableDataSave =function(){
             
             var arr = [];
@@ -122,7 +327,7 @@ angular.module('App.quoteComparisionCtrl')
                     }
                 };
 
-                if(node.data.SeqPref!= undefined && node.data.SeqPref[d] != ""){
+                if(node.data.SeqPref!= undefined && node.data.SeqPref[d] != undefined && node.data.SeqPref[d] != ""){
                     temp.old =  {
                         ERFQ_COMPARISON_PREFERENCE: {
                             "PREFERENCE_SEQ": node.data.SeqPref[d]
@@ -175,7 +380,7 @@ angular.module('App.quoteComparisionCtrl')
            //  })
         }
         $scope.gridOptions = {
-            rowDrag: false,
+      
             columnDefs:[
                 {
                     headerName: "PART_NUMBER",
@@ -184,7 +389,17 @@ angular.module('App.quoteComparisionCtrl')
             ],
             components:{
                 moodEditor: DropDownTemplate
-            }
+            },
+            rowData: null
+            // ,onGridReady: function() {
+
+            //     $scope.gridOptions.api.addGlobalListener(function(type, event) {
+            //         if (type.indexOf('column') >= 0) {
+            //             console.log('Got column event: ', event);
+            //         }
+            //     });
+            // }
+
         };
         $scope.data ={};
         $scope.cmm = cmm;
@@ -219,7 +434,8 @@ angular.module('App.quoteComparisionCtrl')
                                 field: "PART_NUMBER"
                             }
                         ];
-                        $scope.gridOptions.data = zz.initPro(temp);
+                      //  $scope.gridOptions.data = zz.initPro(temp);
+                    temp =   zz.initPro(temp);
                         $scope.gridOptions.columnDefs.push(zz.addTm(temp));
                         
                        console.log("$scope.gridOptions.columnDefs=>",$scope.gridOptions.columnDefs);
@@ -236,12 +452,13 @@ angular.module('App.quoteComparisionCtrl')
                         $scope.gridOptions.columnDefs = _.concat($scope.gridOptions.columnDefs,zz.addAuto(temp));
 
                         $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
+                        console.log("show data=>",temp);
                         $scope.gridOptions.api.setRowData(temp);
                         
                         
                      
 
-                        console.log($scope.gridOptions.data);
+                        //console.log($scope.gridOptions.data);
              
                         $scope.$apply();
                     } else {
