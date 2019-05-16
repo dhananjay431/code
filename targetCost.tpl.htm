@@ -1,188 +1,194 @@
 
     <style>
-            .buttonAB {
-                float: left;
-                line-height: 1.5em;
-                border: 1px solid lightgrey;
-                border-radius: 16px;
-                font-weight: 700;
-                /* font-size: 1.1em; */
-                width: 80%;
-                height: 2em;
-                color: darkgray;
-                background-color: #e3e6ea;
-            }
-    .grid {
-      width: 100%;
-      height: 400px;
-    }
-    
-    .dicostRed{
-    background-color:#FFE8E8;
-    }
-        </style>
-    
-        <!--<p>Target Cost</p>-->
-        <div style="clear:both;padding-top:2%" class="row">
-            <div class="btn-group col-sm-9" data-toggle="buttons">
-                <div class="col-sm-1" style="padding:0%">
-                    <label for="" class="btn btn-primary col-sm-12 buttonAB" ng-class="{'active':cmm.label == 'A'}" ng-click="setLab('A')" style="float: left;line-height: 1.5em;border: 2px solid lightgrey;border-radius: 16px;">
-                        <input type="radio" ng-model="cmm.label" value="A" style="display:none">A</label>
-                </div>
-                <div class="col-sm-1" style="padding:0%">
-                    <label for="" class="btn btn-primary col-sm-12 buttonAB" ng-click="setLab('B')" ng-class="{'active':cmm.label == 'B'}" style="float: left;line-height: 1.5em;border: 2px solid lightgrey;border-radius: 16px;">
-                        <input type="radio" ng-model="cmm.label" value="B" style="display:none">B</label>
-                </div>
-                <div class="col-sm-10"></div>
+        .buttonAB {
+            float: left;
+            line-height: 1.5em;
+            border: 1px solid lightgrey;
+            border-radius: 16px;
+            font-weight: 700;
+            /* font-size: 1.1em; */
+            width: 80%;
+            height: 2em;
+            color: darkgray;
+            background-color: #e3e6ea;
+        }
+.grid {
+  width: 100%;
+  height: 400px;
+}
+
+.dicostRed{
+background-color:#FFE8E8;
+}
+.ToolmakerPref::after {
+    float:right;
+   font-family: "Font Awesome 5 Free"; 
+   font-weight: 900;
+   content: "\f0d7";
+  }
+    </style>
+
+    <!--<p>Target Cost</p>-->
+    <div style="clear:both;padding-top:2%" class="row">
+        <div class="btn-group col-sm-9" data-toggle="buttons">
+            <div class="col-sm-1" style="padding:0%">
+                <label for="" class="btn btn-primary col-sm-12 buttonAB" ng-class="{'active':cmm.label == 'A'}" ng-click="setLab('A')" style="float: left;line-height: 1.5em;border: 2px solid lightgrey;border-radius: 16px;">
+                    <input type="radio" ng-model="cmm.label" value="A" style="display:none">A</label>
             </div>
-            <div class="col-sm-3">
-                <div class="col-sm-8" style="float:left;padding-right: 0%;" align="right">
-                    <input type="image" src="assets/images/filterIcon.svg" alt="filter" width="35" height="35" style="filter: invert(100%);background-color: #202121;border-radius: 15%;"  ng-click="openFilterBox('0')" id="filterBtn" data-toggle="modal" data-target="#exampleModal" data-whatever="@filt" style="">
-                </div>
-    
-                <div class="col-sm-1" align="right" style="float: left;">
-                    <button style="margin-top: 0%;border-color: 0px;border: 0px;border-radius: 13%;background-color: #dc3545;height: 2em;padding-top: 0%;"  ng-click="openpreFBox('0')" id="preFBtn" data-toggle="modal" data-target="#preferencModal">
-                        <i class="fas fa-cog" style="color: white;padding: 0.2em;"></i>
-                    </button>
-                </div>
+            <div class="col-sm-1" style="padding:0%">
+                <label for="" class="btn btn-primary col-sm-12 buttonAB" ng-click="setLab('B')" ng-class="{'active':cmm.label == 'B'}" style="float: left;line-height: 1.5em;border: 2px solid lightgrey;border-radius: 16px;">
+                    <input type="radio" ng-model="cmm.label" value="B" style="display:none">B</label>
+            </div>
+            <div class="col-sm-10"></div>
+        </div>
+        <div class="col-sm-3">
+            <div class="col-sm-8" style="float:left;padding-right: 0%;" align="right">
+                <input type="image" src="assets/images/filterIcon.svg" alt="filter" width="35" height="35" style="filter: invert(100%);background-color: #202121;border-radius: 15%;"  ng-click="openFilterBox('0')" id="filterBtn" data-toggle="modal" data-target="#exampleModal" data-whatever="@filt" style="">
+            </div>
+
+            <div class="col-sm-1" align="right" style="float: left;">
+                <button style="margin-top: 0%;border-color: 0px;border: 0px;border-radius: 13%;background-color: #dc3545;height: 2em;padding-top: 0%;"  ng-click="openpreFBox('0')" id="preFBtn" data-toggle="modal" data-target="#preferencModal">
+                    <i class="fas fa-cog" style="color: white;padding: 0.2em;"></i>
+                </button>
             </div>
         </div>
+    </div>
+
+    <!-- class="grid" -->
+    <!-- <div id="grid1" class="grid mt-2 mb-3 border" ui-grid="gridOptions" ui-grid-edit style="height:30px;" ng-if="gridOptions.data" ui-grid-pinning></div> -->
+    <div ag-grid="gridOptions" class="ag-theme-fresh" style="height:300px;"></div>
+    <!-- ui-grid -->
+ 
     
-        <!-- class="grid" -->
-        <!-- <div id="grid1" class="grid mt-2 mb-3 border" ui-grid="gridOptions" ui-grid-edit style="height:30px;" ng-if="gridOptions.data" ui-grid-pinning></div> -->
-        <div ag-grid="gridOptions" class="ag-theme-balham" style="height:300px;"></div>
-        <!-- ui-grid -->
-     
-        
-        <div style="width: 48%;">
-            <label>Note</label>
-            <div class="alert alert-primary" role="alert">
-                <ol>
-                    <li>Only Quoted Review Completed parts appear here.</li>
-                    <li>System will sort L1,L2,L3... based on Landed Cost as default.</li>
-                    <li>Change the preference to sort the L1,L2,L3...</li>
-                    <li>Click on Plus button to add the additional Project References.</li>
-                    <li>Target Cost Currency is based on Toolmaker Quoted Cost Currency.</li>
-                </ol>
-            </div>
+    <div style="width: 48%;">
+        <label>Note</label>
+        <div class="alert alert-primary" role="alert">
+            <ol>
+                <li>Only Quoted Review Completed parts appear here.</li>
+                <li>System will sort L1,L2,L3... based on Landed Cost as default.</li>
+                <li>Change the preference to sort the L1,L2,L3...</li>
+                <li>Click on Plus button to add the additional Project References.</li>
+                <li>Target Cost Currency is based on Toolmaker Quoted Cost Currency.</li>
+            </ol>
         </div>
-        <div class="row" style="clear:both;margin-top: 3%;">
-            <div class="col-sm-12 text-right">
-                <button type="button" class="btn btn-danger" ng-click="createExcel" style="background-color: darkgray;border-color: darkgrey;">
-                    <i id="some-create-element3" class="fas fa-file-download"></i> Export Excel</button>
-    
-                <button type="button" ng-click="xlSave()" id="SaveButton" class="btn btn-danger">
-                    <i id="some-create-element3" class="fas fa-save"></i> Save</button>
-    
-            </div>
+    </div>
+    <div class="row" style="clear:both;margin-top: 3%;">
+        <div class="col-sm-12 text-right">
+            <button type="button" class="btn btn-danger" ng-click="createExcel" style="background-color: darkgray;border-color: darkgrey;">
+                <i id="some-create-element3" class="fas fa-file-download"></i> Export Excel</button>
+
+            <button type="button" ng-click="xlSave()" id="SaveButton" class="btn btn-danger">
+                <i id="some-create-element3" class="fas fa-save"></i> Save</button>
+
         </div>
-    
-     <!---child page start here--->
-        <div class="mainK modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-init="inbDataK()">
-            <div class="modal-dialog" id="modalDi1" style="top: 41%;left: 30%;" role="document">
-                <div class="modal-content" style="width: 100%;margin-right: 50%;">
-                    <div class="row" style="margin: 1%;">
-                        <div class="col-sm-6">
-                            <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Material Grade</p>
-                            <input type="text" ng-model="filterMG" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;">
-                        </div>
-                        <div class="col-sm-6">
-                            <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Budgeted Toolmaker</p>
-                            <!---<input class="rfqPrjCDV" type="text" name="erfqPrjC"/>--->
-                            <select class="btnJha" ng-model="filterBT" id="filProjCode" style="color: grey;height: 40px;display: block; border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;">
-                                 <option value="">Select</option>
-                                <option ng-repeat="x in toolmakerDropdown" value={{x.value}}>{{x.value}}</option>
-                            </select>
-    
-                        </div>
+    </div>
+
+ <!---child page start here--->
+    <div class="mainK modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-init="inbDataK()">
+        <div class="modal-dialog" id="modalDi1" style="top: 41%;left: 30%;" role="document">
+            <div class="modal-content" style="width: 100%;margin-right: 50%;">
+                <div class="row" style="margin: 1%;">
+                    <div class="col-sm-6">
+                        <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Material Grade</p>
+                        <input type="text" ng-model="filterMG" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;">
                     </div>
-                    <div class="row" style="margin: 1%;">
-                        <div class="col-sm-6">
-                            <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Toolmaker</p>
-                            <select ng-model="filterTM" class="form-control input-lg" ng-change="passEventCode(eventRow,$index)" class="form-control">
-                                <option value="">Select</option>
-                                <option ng-repeat="x in abcd" value={{x.value}}>{{x.value}}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Panel Group</p>
-                            <!---<input class="rfqPrjCDV" type="text" name="erfqPrjC"/>--->
-                            <select ng-model="filterPG" class="form-control input-lg" ng-change="passEventCode(eventRow,$index)" class="form-control">
-                                <option value="">Select</option>
-                                <option ng-repeat="x in PanelGrpDrpdwn" value={{x.grp}}>{{x.grp}}</option>
-                            </select>
-    
-                        </div>
-                    </div>
-    
-                    <div class="reAppBTN" style="height: 10%;">
-                        <!-- <div class="reAppBTNB" style="float: left;height: 90%;width: 40%;"></div> -->
-                        <div class="reAppBTNb" style="height: 90%;width: 60%;">
-                            <div class="reAppRes" style="width: 50%;">
-                                <!--<input class="btn btn-primary" type="reset" value="Reset" ng-click="clearAllField()">-->
-                                <button type="button" class="btn btn-primary;btn btn-danger" ng-click="clearAllField()" style="float: right;width: 75%; margin-right: 5%;">
-                                    <i id="some-create-element3" class="far fa-times-circle"></i> Reset</button>
-    
-                            </div>
-                            <div class="reAppK" style="width: 50%;">
-                                <!---<input class="btn btn-primary" type="submit" value="Apply" ng-click="prepareSerRequest()">--->
-                                <button type="button" class="btn btn-primary;btn btn-danger" ng-click="filter()" style="margin-left: 5%;width: 75%;" data-dismiss="modal">
-                                    <i id="some-create-element3" class="fas fa-check-double"></i> Apply</button>
-    
-                            </div>
-                        </div>
+                    <div class="col-sm-6">
+                        <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Budgeted Toolmaker</p>
+                        <!---<input class="rfqPrjCDV" type="text" name="erfqPrjC"/>--->
+                        <select class="btnJha" ng-model="filterBT" id="filProjCode" style="color: grey;height: 40px;display: block; border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;">
+                             <option value="">Select</option>
+                            <option ng-repeat="x in toolmakerDropdown" value={{x.value}}>{{x.value}}</option>
+                        </select>
+
                     </div>
                 </div>
-            </div>
-        </div>
-        <!---end here--->
-        
-        <!---preferences popup--->
-        <div id="preferencModal" class="modal" style="" role="dialog">
-            <div class="modal-dialog"  style="top:40%;left: 5%;">
-                <!-- Modal content-->
-                <div class="modal-content" style="width: 175%;">
-                    <div class="modal-body">
-                        <button type="button" style="float:right" class="close" data-dismiss="modal">x</button>
-                        <div class="row" style="margin-top: 3%;margin-bottom: 2%;">
-                            <div class="col-sm-4" style="padding-right: 0;padding-left: 5%;">
-                                <h6 style="font-weight: bold;font-size: 14px;">Project Reference Preference</h6>
-                                <div class="form-check" ng-repeat="a in proref">
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="a" id="prfpCB{{$index}}" ng-click="formpreFStr(a,$index)"  ng-if="a.check" checked>
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="a" id="prfpCB{{$index}}" ng-click="formpreFStr(a,$index)"  ng-if="!a.check">
-                                    <label class="form-check-label" style="margin-left: 10%;">{{a}}</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <h6 style="font-weight: bold;font-size: 14px;">Level Preference</h6>
-                                <div class="form-check" ng-repeat="b in preflevel">
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="b" id="lpCB{{$index}}" ng-click="formpreFStr(b,$index)"  ng-if="b.check" checked>
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="b" id="lpCB{{$index}}" ng-click="formpreFStr(b,$index)"  ng-if="!b.check">
-                                    <label class="form-check-label" style="margin-left: 20%;">{{b}}</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <h6 style="font-weight: bold;font-size: 14px;">Toolmaker Preference</h6>
-                                <div class="form-check" ng-repeat="c in preferTM">
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="c" id="tpCB{{$index}}" ng-click="formpreFStr(c,$index)"  ng-if="c.check" checked>
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="c" id="tpCB{{$index}}" ng-click="formpreFStr(c,$index)"  ng-if="!c.check">
-                                    <label class="form-check-label" style="margin-left: 13%;">{{c}}</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <h6 style="font-weight: bold;font-size: 14px;">View Preference</h6>
-                                <div class="form-check" ng-repeat="d in preferences">
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="d" id="customCB{{$index}}" ng-click="formpreFStr(d,$index)"  ng-if="d.check" checked>
-                                    <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="d" id="customCB{{$index}}" ng-click="formpreFStr(d,$index)"  ng-if="!d.check">
-                                    <label class="form-check-label" style="margin-left: 13%;">{{d}}</label>
-                                </div>
-                            </div>
+                <div class="row" style="margin: 1%;">
+                    <div class="col-sm-6">
+                        <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Toolmaker</p>
+                        <select ng-model="filterTM" class="form-control input-lg" ng-change="passEventCode(eventRow,$index)" class="form-control">
+                            <option value="">Select</option>
+                            <option ng-repeat="x in abcd" value={{x.value}}>{{x.value}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Panel Group</p>
+                        <!---<input class="rfqPrjCDV" type="text" name="erfqPrjC"/>--->
+                        <select ng-model="filterPG" class="form-control input-lg" ng-change="passEventCode(eventRow,$index)" class="form-control">
+                            <option value="">Select</option>
+                            <option ng-repeat="x in PanelGrpDrpdwn" value={{x.grp}}>{{x.grp}}</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="reAppBTN" style="height: 10%;">
+                    <!-- <div class="reAppBTNB" style="float: left;height: 90%;width: 40%;"></div> -->
+                    <div class="reAppBTNb" style="height: 90%;width: 60%;">
+                        <div class="reAppRes" style="width: 50%;">
+                            <!--<input class="btn btn-primary" type="reset" value="Reset" ng-click="clearAllField()">-->
+                            <button type="button" class="btn btn-primary;btn btn-danger" ng-click="clearAllField()" style="float: right;width: 75%; margin-right: 5%;">
+                                <i id="some-create-element3" class="far fa-times-circle"></i> Reset</button>
+
                         </div>
-                        <button type="button" class="enbtn btn btn-primary btn-block" ng-click="applypreF()" style="width: auto;float: right;">
-                        <i class="fas fa-save" data-dismiss="modal" style=""></i> Apply</button>
+                        <div class="reAppK" style="width: 50%;">
+                            <!---<input class="btn btn-primary" type="submit" value="Apply" ng-click="prepareSerRequest()">--->
+                            <button type="button" class="btn btn-primary;btn btn-danger" ng-click="filter()" style="margin-left: 5%;width: 75%;" data-dismiss="modal">
+                                <i id="some-create-element3" class="fas fa-check-double"></i> Apply</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!---it ends here--->	
-        
+    </div>
+    <!---end here--->
+    
+    <!---preferences popup--->
+    <div id="preferencModal" class="modal" style="" role="dialog">
+        <div class="modal-dialog"  style="top:40%;left: 5%;">
+            <!-- Modal content-->
+            <div class="modal-content" style="width: 175%;">
+                <div class="modal-body">
+                    <button type="button" style="float:right" class="close" data-dismiss="modal">x</button>
+                    <div class="row" style="margin-top: 3%;margin-bottom: 2%;">
+                        <div class="col-sm-4" style="padding-right: 0;padding-left: 5%;">
+                            <h6 style="font-weight: bold;font-size: 14px;">Project Reference Preference</h6>
+                            <div class="form-check" ng-repeat="a in proref">
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="a" id="prfpCB{{$index}}" ng-click="formpreFStr(a,$index)"  ng-if="a.check" checked>
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="a" id="prfpCB{{$index}}" ng-click="formpreFStr(a,$index)"  ng-if="!a.check">
+                                <label class="form-check-label" style="margin-left: 10%;">{{a}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <h6 style="font-weight: bold;font-size: 14px;">Level Preference</h6>
+                            <div class="form-check" ng-repeat="b in preflevel">
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="b" id="lpCB{{$index}}" ng-click="formpreFStr(b,$index)"  ng-if="b.check" checked>
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="b" id="lpCB{{$index}}" ng-click="formpreFStr(b,$index)"  ng-if="!b.check">
+                                <label class="form-check-label" style="margin-left: 20%;">{{b}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <h6 style="font-weight: bold;font-size: 14px;">Toolmaker Preference</h6>
+                            <div class="form-check" ng-repeat="c in preferTM">
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="c" id="tpCB{{$index}}" ng-click="formpreFStr(c,$index)"  ng-if="c.check" checked>
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="c" id="tpCB{{$index}}" ng-click="formpreFStr(c,$index)"  ng-if="!c.check">
+                                <label class="form-check-label" style="margin-left: 13%;">{{c}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <h6 style="font-weight: bold;font-size: 14px;">View Preference</h6>
+                            <div class="form-check" ng-repeat="d in preferences">
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="d" id="customCB{{$index}}" ng-click="formpreFStr(d,$index)"  ng-if="d.check" checked>
+                                <input type="checkbox" class="form-check-input" style="margin-left: 2%;" value="d" id="customCB{{$index}}" ng-click="formpreFStr(d,$index)"  ng-if="!d.check">
+                                <label class="form-check-label" style="margin-left: 13%;">{{d}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="enbtn btn btn-primary btn-block" ng-click="applypreF()" style="width: auto;float: right;">
+                    <i class="fas fa-save" data-dismiss="modal" style=""></i> Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---it ends here--->	
+    

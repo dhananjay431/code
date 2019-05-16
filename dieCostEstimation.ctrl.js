@@ -1,0 +1,575 @@
+angular.module('App.dieCostEstimationController', ['ui.router', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'App.plugins'])
+    .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+        $stateProvider
+            .state('dieCostEstimation', {
+                url: '/dieCostEstimation',
+                templateUrl: 'app/dieCostEstimation/dieCostEstimation.tpl.htm',
+                controller: 'dieCostEstimationController as vm',
+                params: {
+                    rowNo: null,
+                    rowDetails: null,
+                    projDetails: null
+                }
+            });
+
+    })
+
+    .controller('dieCostEstimationController', function($scope, $stateParams, $state) {
+        var vm = this;
+        $scope.loggedUserID = [];
+
+
+
+        $.cordys.ajax({
+            method: "GetLoggedInUserID",
+            namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+            dataType: "* json",
+            async: false,
+            success: function success(e) {
+                console.log(e);
+                $scope.loggedUserID = $.cordys.json.findObjects(e, "getLoggedInUserID")[0];
+                $scope.username = $scope.loggedUserID.getLoggedInUserID;
+            },
+            error: function error(jqXHR, textStatus, errorThrown) {
+                //debugger;
+                alert("Error in loading data");
+            }
+        });
+        $.cordys.ajax({
+
+            method: "GetRoles", //GetListOfActiveUser
+            namespace: "http://schemas.cordys.com/1.0/ldap",
+            parameters: {
+                dn: "",
+                depth: ""
+            },
+            dataType: "* json",
+            async: false,
+            success: function(e) {
+                console.log(e);
+                $scope.roles1 = $.cordys.json.findObjects(e, "user");
+                for (var i = 0; i < $scope.roles1[0].role.length; i++) {
+                    $scope.CordysRole = $scope.CordysRole + "," + $scope.roles1[0].role[i].description;
+                }
+                if ($scope.CordysRole.includes("MSIE")) {
+                    $scope.roles = "MSIE";
+                }
+                if ($scope.CordysRole.includes("Toolmaker")) {
+                    $scope.roles = "Toolmaker";
+                }
+
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                //debugger;
+                toastr.error("Error in loading data");
+            }
+        });
+        $scope.status = function(d) {
+            $scope.statusFlag = d;
+        }
+        $scope.saveStatus = function() {
+            console.log("$scope.statusFlag=>", $scope.statusFlag);
+            console.log("$scope.PROCESS_PARTS_SEQ=>", $scope.PROCESS_PARTS_SEQ);
+            console.log("data", $scope.data);
+            $scope.saveDecisionCur($scope.PROCESS_PARTS_SEQ, $scope.statusFlag, $scope.data.curr);
+        }
+        //Edited by kautilay for saving decision and currency in erfq_process_parts - 29/03/2019
+        $scope.saveDecisionCur = function(seq, decision, curr) {
+            $.cordys.ajax({
+
+                method: "UpdateErfqProcessParts", //GetListOfActiveUser
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                parameters: {
+                    "tuple": {
+                        "old": {
+                            "ERFQ_PROCESS_PARTS": {
+                                PROCESS_PARTS_SEQ: seq
+                            }
+                        },
+                        "new": {
+                            "ERFQ_PROCESS_PARTS": {
+                                DIE_COST_DECISION: decision,
+                                CURRENCY_UNIT: curr
+                            }
+                        }
+                    }
+                },
+                dataType: "* json",
+                async: false,
+                success: function(e) {
+                    toastr.success("Successfully Saved");
+                    $state.go('erfqInbox');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //debugger;
+                    toastr.error("Error while saving currency and decision in process parts.");
+                }
+            });
+        }
+        //End 
+        if (
+            ($stateParams.rowDetails != null && $stateParams.rowDetails != undefined && $stateParams.rowDetails != null && $stateParams.rowDetails != undefined) &&
+            ($stateParams.projDetails != null && $stateParams.projDetails != undefined && $stateParams.projDetails != null && $stateParams.projDetails != undefined) &&
+            ($stateParams.rowNo != null && $stateParams.rowNo != undefined && $stateParams.rowNo != null && $stateParams.rowNo != undefined)
+        ) {
+            $scope.data = angular.copy($stateParams);
+            $scope.data.curr = "INR";
+            $.cordys.ajax({
+                method: "GetFactorsbyProject",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                parameters: {
+                    projectCode: $scope.data.projDetails.PROJECT_CODE,
+                    factor: 'Currency'
+                               },
+                dataType: "* json",
+                async: false,
+                success: function success(e) {
+      console.log("CUS")
+      
+                var  curr =  $.cordys.json.findObjects(e, "ERFQFACTOR");
+               $scope.curr =  curr.map(function(d){
+                    return {key:d.FACTOR,value:d.FACTOR_NAME};
+                })
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {
+    
+                }
+            });
+
+            //$scope.data.Date = moment().format('DD/MM/YYYY');
+            $scope.data.Date = new Date();
+
+            $scope.dataArr = [];
+            console.log("$scope.data=>", $scope.data);
+            // 
+            $.cordys.ajax({
+                method: "GetSeqNoByErfqAndPartNumber",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                dataType: "* json",
+                parameters: {
+                    "erfqNumber": $scope.data.projDetails.ERFQ_NUMBER,
+                    "partNumber": $scope.data.rowDetails.PART_NUMBER
+                },
+                success: function(data) {
+                    //debugger;
+
+                    $scope.PROCESS_PARTS_SEQ = $.cordys.json.findObjects(data, "erfq_process_parts")[0].PROCESS_PARTS_SEQ;
+
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //debugger;
+                    toastr.error("Error in loading data");
+                }
+            });
+
+            $.cordys.ajax({
+                method: "GetDieCostByPartandERFQNo",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                parameters: {
+                    ERFQNum: $scope.data.projDetails.ERFQ_NUMBER,
+                    partNumber: $scope.data.rowDetails.PART_NUMBER
+                },
+                dataType: "* json",
+                async: false,
+                success: function success(e) {
+                    console.log("GetDieCostByPartandERFQNo=>", $.cordys.json.findObjects(e, "ERFQ_DIE_COST_DATA"));
+                    var prevData = $.cordys.json.findObjects(e, "ERFQ_DIE_COST_DATA");
+                    if (prevData.length == 0) {
+                        vm.data = {
+
+                            "PROJECT_CODE": $scope.data.projDetails.PROJECT_CODE,
+                            "ERFQ_NUMBER": $scope.data.projDetails.ERFQ_NUMBER,
+                            "PART_NUMBER": $scope.data.rowDetails.PART_NUMBER,
+                            "PART_NAME": $scope.data.rowDetails.NOMENCLATURE,
+                            "OP_NUMBER": "",
+                            "OP_NAME": "",
+                            "TOOL_SIZE_L_TO_R": "",
+                            "TOOL_SIZE_F_TO_B": "",
+                            "TOOL_SIZE_SH": "",
+                            "TOOL_WEIGHT": "",
+                            "DIE_CFQTY": "",
+                            "SIMULATION_HR": "",
+                            "SIMULATION_COST": "",
+                            "DIE_DESIGN_HRS": "",
+                            "DIE_DESIGN_COST": "",
+                            "CNC_PROGRAM_COST": "",
+                            "CNC_PROGRAM_HRS": "",
+                            "CASTING_WEIGHT": "",
+                            "TOOL_STEEL_WEIGHT": "",
+                            "RAW_MATERIAL_INCL_CASTING": "",
+                            "MATERIAL_COST_STD_ITEMS": "",
+                            "MACHINING_HRS": "",
+                            "MACHINING_COST": "",
+                            "ASSY_FINISHING_HRS": "",
+                            "ASSY_FINISHING_COST": "",
+                            "TRYOUT_HRS": "",
+                            "TRYOUT_COST": "",
+                            "TOTAL_MANUFACTURING_COST": "",
+                            "FOB_CHARGE": "",
+                            "FOB_TOTAL": "",
+                            "ESTIMATED_TONNAGE": "",
+                            "SPM_COMMITTED": "",
+                            "YIELD": "",
+                            "EST_BANK": "",
+                            "NO_OF_DIES": "",
+                            "NO_OF_CHECKING_FIXTURE": "",
+                            "TOTAL_WEIGHT": "",
+                            "COST_TON": "",
+                            "TOTAL_COST": "",
+                            "NO_OF_PARTS": "",
+                            "DIE_COST_ROW_NUM": "",
+                            "DIE_COST_REVISION": 1
+                        };
+                        // start 
+
+                        for (var i = 0; i < (14); i++) {
+                            $scope.dataArr.push(angular.copy(vm.data));
+                            $scope.dataArr[i].DIE_COST_ROW_NUM = i + 1;
+                        }
+                        $scope.dataArr = _.chunk($scope.dataArr, 14);
+                        console.log("vm.dataArr=>", $scope.dataArr);
+                        // end
+
+                    } else {
+                        var prev = _.max(_.map(prevData, 'DIE_COST_REVISION'));
+                        vm.data = {
+
+                            "PROJECT_CODE": $scope.data.projDetails.PROJECT_CODE,
+                            "ERFQ_NUMBER": $scope.data.projDetails.ERFQ_NUMBER,
+                            "PART_NUMBER": $scope.data.rowDetails.PART_NUMBER,
+                            "PART_NAME": $scope.data.rowDetails.NOMENCLATURE,
+                            "OP_NUMBER": "",
+                            "OP_NAME": "",
+                            "TOOL_SIZE_L_TO_R": "",
+                            "TOOL_SIZE_F_TO_B": "",
+                            "TOOL_SIZE_SH": "",
+                            "TOOL_WEIGHT": "",
+                            "DIE_CFQTY": "",
+                            "SIMULATION_HR": "",
+                            "SIMULATION_COST": "",
+                            "DIE_DESIGN_HRS": "",
+                            "DIE_DESIGN_COST": "",
+                            "CNC_PROGRAM_COST": "",
+                            "CNC_PROGRAM_HRS": "",
+                            "CASTING_WEIGHT": "",
+                            "TOOL_STEEL_WEIGHT": "",
+                            "RAW_MATERIAL_INCL_CASTING": "",
+                            "MATERIAL_COST_STD_ITEMS": "",
+                            "MACHINING_HRS": "",
+                            "MACHINING_COST": "",
+                            "ASSY_FINISHING_HRS": "",
+                            "ASSY_FINISHING_COST": "",
+                            "TRYOUT_HRS": "",
+                            "TRYOUT_COST": "",
+                            "TOTAL_MANUFACTURING_COST": "",
+                            "FOB_CHARGE": "",
+                            "FOB_TOTAL": "",
+                            "ESTIMATED_TONNAGE": "",
+                            "SPM_COMMITTED": "",
+                            "YIELD": "",
+                            "EST_BANK": "",
+                            "NO_OF_DIES": "",
+                            "NO_OF_CHECKING_FIXTURE": "",
+                            "TOTAL_WEIGHT": "",
+                            "COST_TON": "",
+                            "TOTAL_COST": "",
+                            "NO_OF_PARTS": "",
+                            "DIE_COST_ROW_NUM": "",
+                            "DIE_COST_REVISION": Number(prev) + 1
+                        };
+                        // start 
+                        if ($scope.roles != "MSIE")
+                            for (var i = 0; i < (14); i++) {
+                                vm.data.DIE_COST_ROW_NUM = i + 1;
+                                var t = prevData.push(angular.copy(vm.data));
+                            }
+                        $scope.dataArr = [];
+
+                        var tt = _.groupBy(_.sortBy(prevData, [(o) => {
+                            return Number(o.DIE_COST_REVISION)
+                        }]), "DIE_COST_REVISION");
+
+                        for (d in tt) {
+                            $scope.dataArr.push(tt[d].sort(function(o1, o2) {
+                                if (Number(o1.DIE_COST_ROW_NUM) > Number(o2.DIE_COST_ROW_NUM)) return 1;
+                                else return -1;
+                            }))
+                        }
+                        console.log("vm dataArr before=>", $scope.dataArr);
+                        $scope.dataArr = $scope.dataArr.reverse();
+                        $scope.$apply();
+                        console.log("vm dataArr after=>", $scope.dataArr);
+
+
+                    }
+
+
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {
+
+                    alert("Error in loading data");
+                }
+            });
+            $.cordys.ajax({
+                method: "GetDetailsforDieCostByPartNum",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                parameters: {
+                    ERFQNum: $scope.data.projDetails.ERFQ_NUMBER,
+                    partNumber: $scope.data.rowDetails.PART_NUMBER
+                },
+                dataType: "* json",
+                async: false,
+                success: function success(e) {
+                    var d = $.cordys.json.findObjects(e, 'ERFQ_PROCESS_PARTS');
+                    $scope.statusFlag = d[0].DIE_COST_DECISION;
+                    if(d[0].CURRENCY_UNIT!=null && d[0].CURRENCY_UNIT!=undefined)
+                    $scope.data.curr = d[0].CURRENCY_UNIT;
+                    
+                    $scope.data.toolmaker_name = d[0].TOOLMAKER_NAME;
+                    console.log("GetDetailsforDieCostByPartNum=>", d);
+                    //   console.log($.cordys.json.findObjects(data, "ERFQ_EVENT_MASTER"));
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {
+
+                    alert("Error in loading data");
+                }
+            });
+            // 
+        } else {
+            console.log("alert");
+        }
+        //$scope.dataArr = [];
+        //          $scope.$watchCollection('dataArr', function(newValue, oldValue) {
+        //   console.log("newValue=>",newValue);
+        //   console.log("oldValue=>",oldValue);
+        // });
+
+        // setTimeout(function(){
+        //     $("[data-cal='DIE_CFQTY']").on('keydown keyup change',function(){ 
+        //     vm.dataArr[0][6].DIE_CFQTY=0;
+        //     for(var i=0;i<=5;i++){
+        //     if(vm.dataArr[0][i].DIE_CFQTY != undefined && vm.dataArr[0][i].DIE_CFQTY != null && vm.dataArr[0][i].DIE_CFQTY != "")
+        //     {
+        //         vm.dataArr[0][6].DIE_CFQTY+= Number(vm.dataArr[0][i].DIE_CFQTY);
+        //     }     
+        //     }
+        // })
+        // },1000);
+
+        $scope.valCh = function() {
+            $scope.dataArr[0][6].TOOL_WEIGHT = 0;
+            $scope.dataArr[0][6].DIE_CFQTY = 0;
+            $scope.dataArr[0][6].SIMULATION_HR = 0;
+            $scope.dataArr[0][6].SIMULATION_COST = 0;
+            $scope.dataArr[0][6].DIE_DESIGN_HRS = 0;
+            $scope.dataArr[0][6].DIE_DESIGN_COST = 0;
+            $scope.dataArr[0][6].CNC_PROGRAM_HRS = 0;
+            $scope.dataArr[0][6].CNC_PROGRAM_COST = 0;
+            $scope.dataArr[0][6].CASTING_WEIGHT = 0;
+            $scope.dataArr[0][6].TOOL_STEEL_WEIGHT = 0;
+            $scope.dataArr[0][6].RAW_MATERIAL_INCL_CASTING = 0;
+            $scope.dataArr[0][6].MATERIAL_COST_STD_ITEMS = 0;
+            $scope.dataArr[0][6].MACHINING_HRS = 0;
+            $scope.dataArr[0][6].MACHINING_COST = 0;
+            $scope.dataArr[0][6].ASSY_FINISHING_HRS = 0;
+            $scope.dataArr[0][6].ASSY_FINISHING_COST = 0;
+            $scope.dataArr[0][6].TRYOUT_HRS = 0;
+            $scope.dataArr[0][6].TRYOUT_COST = 0;
+            $scope.dataArr[0][6].TOTAL_MANUFACTURING_COST = 0;
+            $scope.dataArr[0][6].FOB_CHARGE = 0;
+            $scope.dataArr[0][6].FOB_TOTAL = 0;
+            $scope.dataArr[0][13].FOB_TOTAL = 0;
+            //
+            for (var i = 0; i <= 5; i++) {
+                var rowCnt = 0;
+                if ($scope.dataArr[0][i].TOOL_WEIGHT != undefined && $scope.dataArr[0][i].TOOL_WEIGHT != null && $scope.dataArr[0][i].TOOL_WEIGHT != "") {
+                    $scope.dataArr[0][6].TOOL_WEIGHT += Number($scope.dataArr[0][i].TOOL_WEIGHT);
+                    // rowCnt+=Number($scope.dataArr[0][i].DIE_CFQTY);
+                }
+                if ($scope.dataArr[0][i].DIE_CFQTY != undefined && $scope.dataArr[0][i].DIE_CFQTY != null && $scope.dataArr[0][i].DIE_CFQTY != "") {
+                    $scope.dataArr[0][6].DIE_CFQTY += Number($scope.dataArr[0][i].DIE_CFQTY);
+                    // rowCnt+=Number($scope.dataArr[0][i].DIE_CFQTY);
+                }
+                if ($scope.dataArr[0][i].SIMULATION_HR != undefined && $scope.dataArr[0][i].SIMULATION_HR != null && $scope.dataArr[0][i].SIMULATION_HR != "") {
+                    $scope.dataArr[0][6].SIMULATION_HR += Number($scope.dataArr[0][i].SIMULATION_HR);
+                    // rowCnt+=Number($scope.dataArr[0][i].SIMULATION_HR);
+                }
+                if ($scope.dataArr[0][i].SIMULATION_COST != undefined && $scope.dataArr[0][i].SIMULATION_COST != null && $scope.dataArr[0][i].SIMULATION_COST != "") {
+                    $scope.dataArr[0][6].SIMULATION_COST += Number($scope.dataArr[0][i].SIMULATION_COST);
+                    rowCnt += Number($scope.dataArr[0][i].SIMULATION_COST);
+                }
+                if ($scope.dataArr[0][i].DIE_DESIGN_HRS != undefined && $scope.dataArr[0][i].DIE_DESIGN_HRS != null && $scope.dataArr[0][i].DIE_DESIGN_HRS != "") {
+                    $scope.dataArr[0][6].DIE_DESIGN_HRS += Number($scope.dataArr[0][i].DIE_DESIGN_HRS);
+                    //rowCnt+=Number($scope.dataArr[0][i].DIE_DESIGN_HRS);
+                }
+                if ($scope.dataArr[0][i].DIE_DESIGN_COST != undefined && $scope.dataArr[0][i].DIE_DESIGN_COST != null && $scope.dataArr[0][i].DIE_DESIGN_COST != "") {
+                    $scope.dataArr[0][6].DIE_DESIGN_COST += Number($scope.dataArr[0][i].DIE_DESIGN_COST);
+                    rowCnt += Number($scope.dataArr[0][i].DIE_DESIGN_COST);
+                }
+                if ($scope.dataArr[0][i].CNC_PROGRAM_HRS != undefined && $scope.dataArr[0][i].CNC_PROGRAM_HRS != null && $scope.dataArr[0][i].CNC_PROGRAM_HRS != "") {
+                    $scope.dataArr[0][6].CNC_PROGRAM_HRS += Number($scope.dataArr[0][i].CNC_PROGRAM_HRS);
+                    //  rowCnt+=Number($scope.dataArr[0][i].CNC_PROGRAM_HRS);
+                }
+                if ($scope.dataArr[0][i].CNC_PROGRAM_COST != undefined && $scope.dataArr[0][i].CNC_PROGRAM_COST != null && $scope.dataArr[0][i].CNC_PROGRAM_COST != "") {
+                    $scope.dataArr[0][6].CNC_PROGRAM_COST += Number($scope.dataArr[0][i].CNC_PROGRAM_COST);
+                    rowCnt += Number($scope.dataArr[0][i].CNC_PROGRAM_COST);
+                }
+                if ($scope.dataArr[0][i].CASTING_WEIGHT != undefined && $scope.dataArr[0][i].CASTING_WEIGHT != null && $scope.dataArr[0][i].CASTING_WEIGHT != "") {
+                    $scope.dataArr[0][6].CASTING_WEIGHT += Number($scope.dataArr[0][i].CASTING_WEIGHT);
+                    // rowCnt+=Number($scope.dataArr[0][i].CASTING_WEIGHT);
+                }
+                if ($scope.dataArr[0][i].TOOL_STEEL_WEIGHT != undefined && $scope.dataArr[0][i].TOOL_STEEL_WEIGHT != null && $scope.dataArr[0][i].TOOL_STEEL_WEIGHT != "") {
+                    $scope.dataArr[0][6].TOOL_STEEL_WEIGHT += Number($scope.dataArr[0][i].TOOL_STEEL_WEIGHT);
+                    // rowCnt+=Number($scope.dataArr[0][i].CASTING_WEIGHT);
+                }
+                if ($scope.dataArr[0][i].RAW_MATERIAL_INCL_CASTING != undefined && $scope.dataArr[0][i].RAW_MATERIAL_INCL_CASTING != null && $scope.dataArr[0][i].RAW_MATERIAL_INCL_CASTING != "") {
+                    $scope.dataArr[0][6].RAW_MATERIAL_INCL_CASTING += Number($scope.dataArr[0][i].RAW_MATERIAL_INCL_CASTING);
+                    rowCnt += Number($scope.dataArr[0][i].RAW_MATERIAL_INCL_CASTING);
+                }
+                if ($scope.dataArr[0][i].MATERIAL_COST_STD_ITEMS != undefined && $scope.dataArr[0][i].MATERIAL_COST_STD_ITEMS != null && $scope.dataArr[0][i].MATERIAL_COST_STD_ITEMS != "") {
+                    $scope.dataArr[0][6].MATERIAL_COST_STD_ITEMS += Number($scope.dataArr[0][i].MATERIAL_COST_STD_ITEMS);
+                    rowCnt += Number($scope.dataArr[0][i].MATERIAL_COST_STD_ITEMS);
+                }
+                if ($scope.dataArr[0][i].MACHINING_HRS != undefined && $scope.dataArr[0][i].MACHINING_HRS != null && $scope.dataArr[0][i].MACHINING_HRS != "") {
+                    $scope.dataArr[0][6].MACHINING_HRS += Number($scope.dataArr[0][i].MACHINING_HRS);
+                    // rowCnt+=Number($scope.dataArr[0][i].MACHINING_HRS);
+                }
+                if ($scope.dataArr[0][i].MACHINING_COST != undefined && $scope.dataArr[0][i].MACHINING_COST != null && $scope.dataArr[0][i].MACHINING_COST != "") {
+                    $scope.dataArr[0][6].MACHINING_COST += Number($scope.dataArr[0][i].MACHINING_COST);
+                    rowCnt += Number($scope.dataArr[0][i].MACHINING_COST);
+                }
+                if ($scope.dataArr[0][i].ASSY_FINISHING_HRS != undefined && $scope.dataArr[0][i].ASSY_FINISHING_HRS != null && $scope.dataArr[0][i].ASSY_FINISHING_HRS != "") {
+                    $scope.dataArr[0][6].ASSY_FINISHING_HRS += Number($scope.dataArr[0][i].ASSY_FINISHING_HRS);
+                    // rowCnt+=Number($scope.dataArr[0][i].ASSY_FINISHING_HRS);
+                }
+                if ($scope.dataArr[0][i].ASSY_FINISHING_COST != undefined && $scope.dataArr[0][i].ASSY_FINISHING_COST != null && $scope.dataArr[0][i].ASSY_FINISHING_COST != "") {
+                    $scope.dataArr[0][6].ASSY_FINISHING_COST += Number($scope.dataArr[0][i].ASSY_FINISHING_COST);
+                    rowCnt += Number($scope.dataArr[0][i].ASSY_FINISHING_COST);
+                }
+                if ($scope.dataArr[0][i].TRYOUT_HRS != undefined && $scope.dataArr[0][i].TRYOUT_HRS != null && $scope.dataArr[0][i].TRYOUT_HRS != "") {
+                    $scope.dataArr[0][6].TRYOUT_HRS += Number($scope.dataArr[0][i].TRYOUT_HRS);
+                    //  rowCnt+=Number($scope.dataArr[0][i].TRYOUT_HRS);
+                }
+                if ($scope.dataArr[0][i].TRYOUT_COST != undefined && $scope.dataArr[0][i].TRYOUT_COST != null && $scope.dataArr[0][i].TRYOUT_COST != "") {
+                    $scope.dataArr[0][6].TRYOUT_COST += Number($scope.dataArr[0][i].TRYOUT_COST);
+                    rowCnt += Number($scope.dataArr[0][i].TRYOUT_COST);
+                }
+                $scope.dataArr[0][i].TOTAL_MANUFACTURING_COST = rowCnt;
+                $scope.dataArr[0][i].FOB_TOTAL = 0;
+                if ($scope.dataArr[0][i].TOTAL_MANUFACTURING_COST != undefined && $scope.dataArr[0][i].TOTAL_MANUFACTURING_COST != null && $scope.dataArr[0][i].TOTAL_MANUFACTURING_COST != "") {
+                    $scope.dataArr[0][6].TOTAL_MANUFACTURING_COST += Number($scope.dataArr[0][i].TOTAL_MANUFACTURING_COST);
+                    $scope.dataArr[0][i].FOB_TOTAL += Number($scope.dataArr[0][i].TOTAL_MANUFACTURING_COST);
+                }
+                if ($scope.dataArr[0][i].FOB_CHARGE != undefined && $scope.dataArr[0][i].FOB_CHARGE != null && $scope.dataArr[0][i].FOB_CHARGE != "") {
+                    $scope.dataArr[0][6].FOB_CHARGE += Number($scope.dataArr[0][i].FOB_CHARGE);
+                    $scope.dataArr[0][i].FOB_TOTAL += Number($scope.dataArr[0][i].FOB_CHARGE);
+
+                }
+                if ($scope.dataArr[0][i].FOB_TOTAL != undefined && $scope.dataArr[0][i].FOB_TOTAL != null && $scope.dataArr[0][i].FOB_TOTAL != "") {
+
+                    $scope.dataArr[0][6].FOB_TOTAL += Number($scope.dataArr[0][i].FOB_TOTAL);
+
+                }
+
+
+
+            }
+            $scope.dataArr[0][13].FOB_CHARGE = 0;
+
+            $scope.dataArr[0][13].TOTAL_MANUFACTURING_COST = 0;
+            $scope.dataArr[0][13].FOB_CHARGE = 0;
+            for (var j = 6; j <= 12; j++) {
+
+                $scope.dataArr[0][j].FOB_TOTAL = (Number($scope.dataArr[0][j].TOTAL_MANUFACTURING_COST) == NaN ? Number(0) : Number($scope.dataArr[0][j].TOTAL_MANUFACTURING_COST)) + ((Number($scope.dataArr[0][j].FOB_CHARGE) == NaN) ? Number(0) : Number($scope.dataArr[0][j].FOB_CHARGE));
+
+                $scope.dataArr[0][13].TOTAL_MANUFACTURING_COST += (Number($scope.dataArr[0][j].TOTAL_MANUFACTURING_COST) == NaN ? Number(0) : Number($scope.dataArr[0][j].TOTAL_MANUFACTURING_COST));
+                $scope.dataArr[0][13].FOB_CHARGE += (Number($scope.dataArr[0][j].FOB_CHARGE) == NaN ? Number(0) : Number($scope.dataArr[0][j].FOB_CHARGE));
+                $scope.dataArr[0][13].FOB_TOTAL += (Number($scope.dataArr[0][j].FOB_TOTAL) == NaN ? Number(0) : Number($scope.dataArr[0][j].FOB_TOTAL));
+            }
+
+
+
+
+            // $scope.dataArr[0][13].FOB_CHARGE = 0;
+            // if (
+            //     ($scope.dataArr[0][6].FOB_CHARGE != undefined && $scope.dataArr[0][6].FOB_CHARGE != null && $scope.dataArr[0][6].FOB_CHARGE != "") &&
+            //     ($scope.dataArr[0][9].FOB_CHARGE != undefined && $scope.dataArr[0][9].FOB_CHARGE != null && $scope.dataArr[0][9].FOB_CHARGE != "")
+            // )
+            //     $scope.dataArr[0][13].FOB_CHARGE = Number($scope.dataArr[0][6].FOB_CHARGE) + Number($scope.dataArr[0][9].FOB_CHARGE);
+
+            $scope.dataArr[0][0].NO_OF_DIES = 0;
+            if ($scope.dataArr[0][6].DIE_CFQTY != undefined && $scope.dataArr[0][6].DIE_CFQTY != null && $scope.dataArr[0][6].DIE_CFQTY != "")
+                $scope.dataArr[0][0].NO_OF_DIES = $scope.dataArr[0][6].DIE_CFQTY;
+            $scope.dataArr[0][0].NO_OF_CHECKING_FIXTURE = 0;
+            if ($scope.dataArr[0][9].DIE_CFQTY != undefined && $scope.dataArr[0][9].DIE_CFQTY != null && $scope.dataArr[0][9].DIE_CFQTY != "")
+                $scope.dataArr[0][0].NO_OF_CHECKING_FIXTURE = Number($scope.dataArr[0][9].DIE_CFQTY);
+            $scope.dataArr[0][0].TOTAL_WEIGHT = 0;
+            if ($scope.dataArr[0][6].TOOL_WEIGHT != undefined && $scope.dataArr[0][6].TOOL_WEIGHT != null && $scope.dataArr[0][6].TOOL_WEIGHT != "")
+                $scope.dataArr[0][0].TOTAL_WEIGHT = Number($scope.dataArr[0][6].TOOL_WEIGHT);
+            $scope.dataArr[0][0].COST_TON = 0;
+            if (
+                ($scope.dataArr[0][13].FOB_TOTAL != undefined && $scope.dataArr[0][13].FOB_TOTAL != null && $scope.dataArr[0][13].FOB_TOTAL != "") &&
+                ($scope.dataArr[0][6].TOOL_WEIGHT != undefined && $scope.dataArr[0][6].TOOL_WEIGHT != null && $scope.dataArr[0][6].TOOL_WEIGHT != "")
+            )
+                $scope.dataArr[0][0].COST_TON = Math.floor(Number($scope.dataArr[0][13].FOB_TOTAL) / Number($scope.dataArr[0][6].TOOL_WEIGHT));
+            $scope.dataArr[0][0].TOTAL_COST = 0;
+            if ($scope.dataArr[0][13].FOB_TOTAL != undefined && $scope.dataArr[0][13].FOB_TOTAL != null && $scope.dataArr[0][13].FOB_TOTAL != "")
+                $scope.dataArr[0][0].TOTAL_COST = Number($scope.dataArr[0][13].FOB_TOTAL);
+
+        };
+
+        $scope.save = function() {
+			//edited by kautilay for validating currency value before saving the data - 25/04/2019
+			if(!($('#exampleFormControlSelect2').val()=='? string:USD($) ?')){
+
+            $.cordys.ajax({
+                method: "UpdateErfqProcessParts",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                parameters: {},
+                dataType: "* json",
+                async: false,
+                success: function success(e) {
+
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+
+            $.cordys.ajax({
+                method: "UpdateErfqDieCostData",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                parameters: {
+                    tuple: _.map($scope.dataArr[0], (d) => {
+                        return {
+                            "new": {
+                                "ERFQ_DIE_COST_DATA": d
+                            }
+                        };
+                    })
+                },
+                dataType: "* json",
+                async: false,
+                success: function success(e) {
+
+                    toastr.info("Quote submitted sucessfully");
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {
+
+                    alert("Error in loading data");
+                }
+            });
+
+            console.log("vm dataArr=>", $scope.dataArr)
+
+        }
+else{
+			toastr.info("Please select currency unit.");
+		}
+		}//end - 25/04/2019
+        /*         "DIE_COST_SEQ": "00", */
+
+    })

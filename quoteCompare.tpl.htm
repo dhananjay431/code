@@ -1,0 +1,285 @@
+<!--<db-nav></db-nav>-->
+<!--<p>Quote Comparision</p>-->
+<style>
+    .ng-table-pager.ng-scope {
+        display: none;
+    }
+    
+    .nav {
+        margin-bottom: 0%;
+        width: 100%;
+    }
+    
+    .nav-pills .nav-link {
+        border-radius: 0.25rem;
+    }
+    
+    .nav-pills > li > a {
+        background-color: #e3e6ea;
+        -webkit-text-fill-color: darkgray;
+        font-weight: 700;
+        font-size: 0.8em;
+    }
+    
+    .nav-pills > li.active > a,
+    .nav-pills > li.active > a:hover,
+    .nav-pills > li.active > a:focus {
+        color: #fff;
+        background-color: #dc3545;
+        border-radius: 0.25rem;
+        -webkit-text-fill-color: white;
+    }
+    
+    .btn-default {
+        font-family: Raleway-SemiBold;
+        font-size: 1em;
+        color: lightgrey;
+        letter-spacing: 1px;
+        line-height: 1.5em;
+        border: 2px solid lightgrey;
+        border-radius: 16px;
+        background: transparent;
+        transition: all 0.3s ease 0s;
+    }
+
+.showDiv{
+}
+.hideDiv{
+  display:none;
+}
+</style>
+<section>
+    <img src="assets/images/msPrintImage.png" alt="" style="float:left;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="topNav"> <a style="margin-right: 100px;color: white;">CME Stamping </a>
+                </li>
+                <li class="nav-item"> <a style="color: white;" class="nav-link" ui-sref="main"> Home </a>
+                </li>
+                <li class="topNav"> <a style="color: white;"> | </a>
+                </li>
+                <li class="nav-item"> <a style="color: white;" class="nav-link" ui-sref="main"> Sitemap </a>
+                </li>
+                <li class="topNav"> <a style="color: white;"> | </a>
+                </li>
+                <li class="nav-item"> <a style="color: white;" class="nav-link" ui-sref="main"> Contact Us </a>
+                </li>
+                <li class="topNav"> <a style="color: white;"> | </a>
+                </li>
+                <li class="nav-item"> <a style="color: white;" class="nav-link" ui-sref="main"> Feedback </a>
+                </li>
+                <li class="topNav"> <a style="margin-left: 400px;color: white;"> {{username}} </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>
+
+<div class="container" style="max-width: 100%;margin-left: 0.5%;margin-right: 0.5%;">
+    <div class="row" style="padding-top: 2%;">
+        <div class="col-sm-2">
+            <p style="font-size: 1.4em;font-weight: 500;" class="ng-scope">Quote Comparison</p>
+        </div>
+        <div class="col-sm-10" style="">
+            <ul class="breadcrumb" style="width: 100%;">
+                <li class="breadcrumb-item green" style="font-size: small;font-weight: 700;width: 8%;">eRFQ Float</li>
+                <li class="breadcrumb-item green" style="font-size: small;font-weight: 700;padding: 0%;width: 20%;">Toolmaker Process Submission</li>
+                <li class="breadcrumb-item green" style="font-size: small;font-weight: 700;width: 17%;">CME Acceptance/Feedback</li>
+                <li class="breadcrumb-item green" style="font-size: small;font-weight: 700;width: 14%;">Quote Submission</li>
+                <!--<li class="breadcrumb-item green"  style="font-size: small;font-weight: 700;">Quote Review</li>-->
+                <li class="breadcrumb-item arrow_box" style="font-size: small;font-weight: 700;width: 14%;">Quote Comparison</li>
+                <li class="breadcrumb-item" style="font-size: small;font-weight: 700;width: 13%;">Final Target Cost</li>
+                <li class="breadcrumb-item" style="font-size: small;font-weight: 700;width: 14%;">Finalize Toolmaker</li>
+            </ul>
+        </div>
+    </div>
+    <a id="dwnldLnk" style="display:none;"></a>
+
+    <div class="row" style="width:100%;padding-bottom: 2%;">
+        <div class="col-sm-3" style="width:100%">
+            <p style="font-size: 0.9em;font-weight: 700;margin-bottom:0%;">Project Code</p>
+            <input type="text" ng-model="Plist" id="Plist" autocomplete="off" uib-typeahead="state as state.AFSPM_POJ_CODE for state in PrjMembers | filter:{AFSPM_POJ_CODE:$viewValue}" class="form-control" typeahead-template-url="customTemplate.html" typeahead-on-select="passProjectCode($item,$model,$label)" name="PrjDrpdn" style="width:100%" ui-sref="quoteComparisionCtrl.quoteComparision" ng-change="ShowHide()">
+        </div>
+		<div class="col-sm-3" style="width:100%">
+			<p style="font-size: 0.9em;font-weight: 700;margin-bottom:0%;">Baseline</p>
+			<select ng-model="baselineDrp" class="form-control input-lg" ng-change="baseLineChange(baselineDrp)" id="selectBaseLine">
+				<!--<option value="">Select</option>-->
+                                <!--<option value="1">BASELINE 1</option>
+                                <option value="1">BASELINE 2</option>-->
+				<option ng-repeat="x in baseLineDropdown1"  ng-value="x.baselineNum">{{x.baselineValue}}</option>
+			</select>
+        </div>
+		<div class="col-sm-3" style="width:100%;padding-top: 1.5%;" ng-if="IsVisible">	
+			<div class="btn-group dropup">
+				<button type="button" id="SaveButton" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i id="some-create-element3" class="fab fa-gitter fa-rotate-90"></i> Baseline
+				</button>
+				<div class="dropdown-menu p-2" style="left: -50!important;">
+					Baseline Name*
+					<input type="text" ng-model="baseLineD.name"> Remarks*
+					<textarea rows="4" ng-model="baseLineD.remark">
+					</textarea>
+					<div class="row">
+						<div class="col-12">
+							<button type="button" ng-click="baselineSave()" class="btn btn-danger">
+								<i id="some-create-element3" class="fab fa-gitter fa-rotate-90"></i> DONE
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+       </div>
+    </div>
+    
+
+    <!--button tabs-->
+    
+	<div ng-if="IsVisible">
+
+	  <uib-tabset type="pills" class='navtop' active="activeTab"  >
+		
+		<!--revise Panel-->
+		<uib-tab heading="Revise Panel Group" id="revtab1" active="selected ==1" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.quoteComparision">
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<uib-tab heading="Revise Panel Group"   id="revtab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--revise panel-->
+		
+		
+		<!--No Of Dies-->
+		<uib-tab heading="No Of Dies" id="tab1" ui-sref="quoteComparisionCtrl.noOfDie"  active="selected == 2" style="font-weight: bold;color: darkgray;" ng-click="function1()">
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		 </uib-tab>
+		<uib-tab heading="No Of Dies"   id="tab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptil-->
+
+		<!--DieWeight-->
+		<uib-tab heading="Die Weight" select="alertMe()" id="dietab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.dieWeight">
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<uib-tab heading="Die Weight"   id="dietab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptill-->
+		
+		
+		<!--basic cost-->
+			<uib-tab heading="Basic Cost" select="alertMe()" id="basictab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.basicCost">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+			</uib-tab>
+			<uib-tab heading="Basic Cost"   id="basictab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptil-->
+			
+			<!--landed cost-->
+			<uib-tab heading="Landed Cost" select="alertMe()" id="landedtab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.landedCost">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+			 </uib-tab>
+			 <uib-tab heading="Landed Cost"   id="landedtab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptill-->
+			
+			<!--cost per ton-->
+			<uib-tab heading="Cost per Ton" select="alertMe()" id="costtab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.costPerTon">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+			</uib-tab>
+			<uib-tab heading="Cost per Ton"   id="costtab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptill-->
+			
+			
+			<!--Best Quoted-->
+			<uib-tab heading="Best Quoted" select="alertMe()" id="besttab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.bestQuoted">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+			</uib-tab>
+			<uib-tab heading="Best Quoted"   id="besttab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptill-->
+			
+			
+			<!--pref toolmaker-->
+			<uib-tab heading="Preference Toolmaker & Compare" select="alertMe()" id="preftab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.prefTmkComp">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+			</uib-tab>
+			<uib-tab heading="Preference Toolmaker & Compare"   id="preftab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;font-size: 1rem;" ng-click="function1()">
+			<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+			<!--uptill-->
+			
+			
+			<!--Target cost-->
+			<uib-tab heading="Target Cost" select="alertMe()"  id="targettab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.targetCost">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+			</uib-tab>
+			<uib-tab heading="Target Cost"   id="targettab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color: darkgray;padding: 0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+			<!--uptill-->
+			
+			<!--submit toolmaker-->
+		   <uib-tab heading="Submit to Toolmaker" select="alertMe()" id="subtab1" active="selected == 3" style="font-weight: bold;color: darkgray;" ui-sref="quoteComparisionCtrl.submitTmk">
+				<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+				</uib-tab>
+			<uib-tab heading="Submit to Toolmaker"   id="subtab2" class="btn btn-info btn-lg" data-toggle="modal"   data-target="#myModal" data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="font-weight: bold;color:darkgray;padding:0;
+		font-size: 1rem;" ng-click="function1()"  >
+		<hr style="margin:0%;padding:0%;background-color: #dc3545;height: 0.2%;">
+		</uib-tab>
+		<!--uptill-->
+		
+		
+		</uib-tabset>
+		<ui-view></ui-view>
+	</div>
+
+    <!--closing buttons-->
+    <div class="row" style="clear:both;margin-top: 3%;">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3">
+                  <div style="float:left;margin-left:4%">
+                <button type="button" ng-click="approve()" id="approveButton" class="btn btn-primary;btn btn-danger" id="hideApprove">
+                    <i id="some-create-element3" class="fas fa-save"></i> Approve</button>
+            </div>
+			<div style="float:left;margin-left:4%">
+                <button type="button" ng-click="reject()" id="rejectButton" class="btn btn-primary;btn btn-danger" id="hideReject">
+                    <i id="some-create-element3" class="fas fa-save"></i> Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--child page-->
+<div id="myModal" class="modal fade" style="margin-top: 0%;" role="dialog">
+	<div class="modal-dialog ">
+    <!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" style="float:right" class="close" data-dismiss="modal">x</button>
+				<p>Do you want to save the changes?</p>
+				<div class="row">
+				<div class="col-sm-6">
+				<button class="btn btn-primary btn-block" type="submit" ng-disabled="SaveDetailsForm.$invalid" ng-click="SaveDetails()" data-dismiss="modal" style="float: right;background-color:#d83c3c;color:white;padding-top: 5%;margin-top: 16%;">  <i class="fas fa-save" style="color:white"></i><span style="color:white;padding-left: 8%;font-weight: 500;">Yes</span></button></div> 
+				<div class="col-sm-6">
+				<button class="btn btn-primary btn-block" type="submit" ng-disabled="SaveDetailsForm.$invalid" ng-click="DontSave()" data-dismiss="modal" style="float: right;background-color:#d83c3c;color:white;padding-top: 5%;margin-top: 16%;">  <i class="fas fa-save" style="color:white"></i><span style="color:white;padding-left: 8%;font-weight: 500;">No</span></button></div> 
+				 </div> 
+			</div>
+		</div>
+	</div>
+</div>
+<!--ends here-->

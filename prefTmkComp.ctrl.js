@@ -1,10 +1,13 @@
 angular.module('App.quoteComparisionCtrl')
     .controller('prefTmkCompCtrl', function($scope, Upload, $window, $log, $state, cmm) { 
+
         function cl(){
             this.data = {};
         }
         cl.prototype.gridInit = function(){
             return {
+                headerHeight: 40,
+	        rowHeight: 40,
                 rowDrag: false,
                 columnDefs:[
                     {
@@ -48,10 +51,14 @@ angular.module('App.quoteComparisionCtrl')
                     headerName: d,
                     field: "ToolmakerPref."+d,
                     editable: true,
+                    cellClass: ['ToolmakerPref'],
+               //    cellRenderer: 'medalCellRenderer' ,
                     cellEditorSelector:function (params){
+                        arr = ['Select'];
+                        arr =  _.concat(arr,_.map(params.data.TOOLMAKER,'NAME'));
                            return {
                                component: 'moodEditor',
-                               params: {values:  _.map(params.data.TOOLMAKER,'ID') }
+                               params: {values:  arr }
                            };
                        }
                 }
@@ -173,7 +180,8 @@ angular.module('App.quoteComparisionCtrl')
                         "BASELINE_NUM": Number(cmm.baslineNum)+ 1,
                         "BASELINE_NAME": $scope.baseLineD.name,
                         "BASELINE_REMARK": $scope.baseLineD.remark,
-                        "PREFERENCE": $scope.setting.menus.replace(/\s/g,'')
+                        "PREFERENCE": $scope.setting.menus.replace(/\s/g,''),
+                        "BASELINE_STATUS":"QUCO"
                     }
                 }
 
@@ -188,6 +196,7 @@ angular.module('App.quoteComparisionCtrl')
                 },
                 success: function success(data) {
                     $scope.data.erfq_toolmaker_master = $.cordys.json.findObjects(data, "ERFQ_BASELINE_MAIN");
+                    cmm.baslineNum = (cmm.baslineNum!=undefined)?(Number(cmm.baslineNum)+1):1;
                     console.log("$scope.data.erfq_toolmaker_master=>", $scope.data.erfq_toolmaker_master);
                     $.cordys.ajax({
                         method: "GetQuoteComparisionbyProject",
@@ -201,46 +210,50 @@ angular.module('App.quoteComparisionCtrl')
                         },
                         success: function(data) {
                             var saveQrData = $.cordys.json.findObjects(data, "ERFQ_QUOTE_COMPARISON");
-                            if (saveQrData.length > 0) {
-                                var _t = [];
-                                saveQrData.forEach(function(_sd) {
-                                    // var tt = _sd;
-                                    // if (_sd.COMPARISON_SEQ)
-                                    //  delete tt.COMPARISON_SEQ;
-                                    // if (_sd.BASELINE_NUM)
-                                    //  tt.BASELINE_NUM = Number(cmm.baslineNum + 1);
-                                    // if (_sd.BASIC_COST_BLANKINGDIE == undefined)
-                                    //  tt.BASIC_COST_BLANKINGDIE = "Included";
-                                    if (_sd.COMPARISON_SEQ)
-                                        delete _sd.COMPARISON_SEQ;
-                                    if (_sd.BASELINE_NUM)
-                                        _sd.BASELINE_NUM = Number(cmm.baslineNum)+ 1;
-
-
-                                    _t.push({
-                                        "new": {
-                                            "ERFQ_QUOTE_COMPARISON": _sd
-                                        }
-                                    });
-                                })
-                                console.log("SNU=>", _t);
-
-
+                            if (saveQrData.length == 0) {
+                                var _a=[];
+                                $scope.gridOptions.api.forEachNode(function(n,i){
+                                    
+                                    _a.push(
+                                        {
+                                            "new": {
+                                              "ERFQ_QUOTE_COMPARISON": {
+                                                "PROJECT_CODE": cmm.projectCode,
+                                                "PART_NUMBER": n.data.PART_NUMBER,
+                                                "NEW_PART_GROUP": "",
+                                                "BASELINE_NUM": cmm.baslineNum,
+                                                "PART_GROUP": cmm.label
+                                              }
+                                            }
+                                        })
+                                });
+                                // var _t = [];
+                                // saveQrData.forEach(function(_sd) {
+                                //     if (_sd.COMPARISON_SEQ)
+                                //         delete _sd.COMPARISON_SEQ;
+                                //     if (_sd.BASELINE_NUM)
+                                //         _sd.BASELINE_NUM = Number(cmm.baslineNum)+ 1;
+                                //     _t.push({
+                                //         "new": {
+                                //             "ERFQ_QUOTE_COMPARISON": _sd
+                                //         }
+                                //     });
+                                // })
+                                //console.log("SNU=>", _t);
                                 $.cordys.ajax({
                                     method: "UpdateErfqQuoteComparison",
                                     namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
                                     dataType: "* json",
                                     parameters: {
-                                        "tuple": _t
+                                        "tuple": _a
                                     },
                                     success: function(data) {
                                         console.log("success=>");
-                                        $scope.xlSave(Number(cmm.baslineNum + 1));
+                                    //    $scope.xlSave(Number(cmm.baslineNum + 1));
+                                    $scope.tableDataSave()
                                     },
                                     error: function() {}
                                 });
-
-
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {}
@@ -257,18 +270,21 @@ angular.module('App.quoteComparisionCtrl')
             // $scope.$apply();
             console.log("$scope.setting=>",$scope.setting);
             console.log("$scope.gridOptions=>",$scope.gridOptions)
-            // var _pt=[],_pf=[];
-            // $scope.setting.p.forEach(function(d){
-            //     if(d.value == true)
-            //     _pt.push(d.key);
-            //     if(d.value == false)
-            //     _pf.push(d.key);
-            // })
-          //  $scope.gridOptions.columnApi.setColumnsVisible('PART_NUMBER', false);
-
-
-        //    $scope.gridOptions.columnDefs[0].hide = true;
-        //    $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
+            
+			$scope.hideAll($scope.setting.p.length,$scope.setting.l.length);
+			for (i=0;i<$scope.setting.p.length;i++) {
+				if ($scope.setting.p[i].value == true) {
+					temp = i+1;
+					$scope.gridOptions.columnApi.setColumnVisible(['ToolmakerPref.P'+temp+''], true);
+				}
+			}
+			for (j=0;j<$scope.setting.l.length;j++) {
+				if ($scope.setting.l[j].value == true) {
+					tmp = j+1;
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.'+$scope.setting.menus+'.VALUE'], true);
+				}
+			}
+			
         }
         $scope.setting = {
             p:[],
@@ -308,6 +324,7 @@ angular.module('App.quoteComparisionCtrl')
 
               
               _.keys(node.data.ToolmakerPref).forEach(function(d){
+                  
                 var temp = {
                     "new": {
                         ERFQ_COMPARISON_PREFERENCE: {
@@ -315,7 +332,7 @@ angular.module('App.quoteComparisionCtrl')
                             "PROJECT_CODE": cmm.projectCode,
                             "PART_NUMBER": node.data.PART_NUMBER,
                             "BASELINE_NUM": cmm.baslineNum,
-                            "LEVEL_PREFERNCE": node.data[d.replace("P","L")].BASICCOST.TOOLMAKER,
+                            "LEVEL_PREFERNCE":(node.data[d.replace("P","L")] == undefined ||  node.data[d.replace("P","L")].BASICCOST == undefined ||  node.data[d.replace("P","L")].BASICCOST.TOOLMAKER)?"":node.data[d.replace("P","L")].BASICCOST.TOOLMAKER,
                           //  "TOOLMAKER":node.data[d.replace("P","L")].BASICCOST.TOOLMAKER,
                             //"LEVEL_PREFERNCE": d.ToolmakerPref[d3.replace("L", "P")].TOOLMAKER,
                             "TOOLMAKER_PREFERNCE": node.data.ToolmakerPref[d],
@@ -388,7 +405,8 @@ angular.module('App.quoteComparisionCtrl')
                 }
             ],
             components:{
-                moodEditor: DropDownTemplate
+                moodEditor: DropDownTemplate,
+               //medalCellRenderer: MedalCellRenderer
             },
             rowData: null
             // ,onGridReady: function() {
@@ -406,6 +424,11 @@ angular.module('App.quoteComparisionCtrl')
         $scope.cmm.label = 'A';
         console.log(cmm);
         $scope.changePrj = function(projectCode, panelGroup, bNum) {
+            if(cmm.baslineNum == undefined){
+                cmm.baslineNum ="";
+            }else{
+                cmm.baslineNum = Number(cmm.baslineNum);
+            }
             $.cordys.ajax({
                 method: "GetERFQComparisonData",
                 namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
@@ -414,7 +437,7 @@ angular.module('App.quoteComparisionCtrl')
                     "comparisonType": "Preference",
                     "panelGroup": panelGroup,
                     "projectCode": projectCode,
-                    "baselineNum": Number(cmm.baslineNum),
+                    "baselineNum": cmm.baslineNum,
                     "budgeted": "",
                     "partNum": "",
                     "decimalPlace": "5",
@@ -541,6 +564,19 @@ angular.module('App.quoteComparisionCtrl')
             })
 
         }
+
+		$scope.hideAll = function(countPTm,countLCols) {
+			for(i=1;i<=countPTm;i++) {
+				$scope.gridOptions.columnApi.setColumnVisible(['ToolmakerPref.P'+i+''], false);
+			}
+			for(j=1;j<=countLCols;j++) {
+				$scope.gridOptions.columnApi.setColumnVisible(['L'+j+'.BASICCOST.VALUE'], false);
+				$scope.gridOptions.columnApi.setColumnVisible(['L'+j+'.LANDEDCOST.VALUE'], false);
+				$scope.gridOptions.columnApi.setColumnVisible(['L'+j+'.NOOFDIES.VALUE'], false);
+				$scope.gridOptions.columnApi.setColumnVisible(['L'+j+'.DIEWEIGHT.VALUE'], false);
+				$scope.gridOptions.columnApi.setColumnVisible(['L'+j+'.COSTPERTON.VALUE'], false);
+			}
+		}
 
         $scope.$watchCollection('cmm', function(newValue, oldValue) {
             $scope.data.dynamicCnt = 1;
