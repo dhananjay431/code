@@ -2,12 +2,11 @@
   "name": "code",
   "version": "1.0.0",
   "description": "",
-  "main": "panelGrouping.ctrl.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "babel": {
-   
+    "min": "babel erfq -w --minified --no-comments --compact -d lib",
+    "com": "babel erfq -w --no-comments  -d lib | gulp",
+    "bh": "babel --help"
   },
   "repository": {
     "type": "git",
@@ -21,6 +20,15 @@
   "homepage": "https://github.com/dhananjay431/code#readme",
   "devDependencies": {
     "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4"
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "gulp-babel": "^8.0.0"
+  },
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-html-prettify": "0.0.1",
+    "gulp-remove-html-comments": "^1.0.1",
+    "jstransformer-babel": "^2.1.0"
   }
 }

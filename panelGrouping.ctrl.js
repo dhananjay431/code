@@ -12,6 +12,11 @@ angular.module('App.mainApp').controller('panelGroupingCtrl', function ($scope, 
         var myElement = angular.element(document.querySelectorAll(".custom-csv-link-location"));
         $scope.gridApi.exporter.csvExport("ALL", "ALL", myElement);
     };
+if(localStorage.role !='MSIE')
+{
+ $state.go('main');
+}
+
      vm.ssave = function () {
     var dd=[];
     for(var d in $scope.gridOptions.data){
@@ -360,7 +365,8 @@ function redimp(grid, row, col, rowRenderIndex, colRenderIndex) {
                 name: 'Part Group',
                 field: 'PART_GROUP',
                  width: '*',minWidth: 200, maxWidth: 2000,
-                cellTemplate:'<div><div ng-if="row.entity.CATEGORY==\'A\'"><select ng-disabled="row.entity.DELETED_DATA == \'1\'" class="redd" style="width:1'*'%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>A1</option> <option>A2</option> <option>A3</option> <option>A4</option> <option>A5</option> <option>A6</option> <option>A7</option> <option>A8</option> <option>A9</option> <option>A10</option> <option>A11</option> <option>A12</option> <option>A13</option> <option>A14</option> <option>A15</option> </select> </div> <div ng-if="row.entity.CATEGORY==\'B\'"><select ng-disabled="row.entity.DELETED_DATA == \'1\'" class="redd" style="width:1'*'%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>B1</option> <option>B2</option> <option>B3</option> <option>B4</option> <option>B5</option> <option>B6</option> <option>B7</option> <option>B8</option> <option>B9</option> <option>B10</option> <option>B11</option> <option>B12</option> <option>B13</option> <option>B14</option> <option>B15</option> </select></div></div>'
+                //cellTemplate:'<div><div ng-if="row.entity.CATEGORY==\'A\'"><select ng-disabled="row.entity.DELETED_DATA == \'1\'" class="redd" style="width:1'*'%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>A1</option> <option>A2</option> <option>A3</option> <option>A4</option> <option>A5</option> <option>A6</option> <option>A7</option> <option>A8</option> <option>A9</option> <option>A10</option> <option>A11</option> <option>A12</option> <option>A13</option> <option>A14</option> <option>A15</option> </select> </div> <div ng-if="row.entity.CATEGORY==\'B\'"><select ng-disabled="row.entity.DELETED_DATA == \'1\'" class="redd" style="width:1'*'%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>B1</option> <option>B2</option> <option>B3</option> <option>B4</option> <option>B5</option> <option>B6</option> <option>B7</option> <option>B8</option> <option>B9</option> <option>B10</option> <option>B11</option> <option>B12</option> <option>B13</option> <option>B14</option> <option>B15</option> </select></div></div>'
+                cellTemplate: `<div><div ng-if="row.entity.CATEGORY=='A'"><select ng-disabled="row.entity.DELETED_DATA == 1" class="redd" style="width:100%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>A1</option> <option>A2</option> <option>A3</option> <option>A4</option> <option>A5</option> <option>A6</option> <option>A7</option> <option>A8</option> <option>A9</option> <option>A10</option> <option>A11</option> <option>A12</option> <option>A13</option> <option>A14</option> <option>A15</option> </select> </div> <div ng-if="row.entity.CATEGORY=='B'"><select ng-disabled="row.entity.DELETED_DATA == 1" class="redd" style="width:100%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>B1</option> <option>B2</option> <option>B3</option> <option>B4</option> <option>B5</option> <option>B6</option> <option>B7</option> <option>B8</option> <option>B9</option> <option>B10</option> <option>B11</option> <option>B12</option> <option>B13</option> <option>B14</option> <option>B15</option> </select></div></div>`
             }
         }
     };

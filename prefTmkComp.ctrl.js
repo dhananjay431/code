@@ -1,6 +1,11 @@
 angular.module('App.quoteComparisionCtrl')
     .controller('prefTmkCompCtrl', function($scope, Upload, $window, $log, $state, cmm) { 
 
+		$scope.toolmakerDropdown = [];
+		$scope.PanelGrpDrpdwn = [];
+		$scope.budgetedToolmk = [];
+		$scope.MaterialGrades = [];
+		
         function cl(){
             this.data = {};
         }
@@ -13,6 +18,7 @@ angular.module('App.quoteComparisionCtrl')
                     {
                         headerName: "PART_NUMBER",
                         field: "PART_NUMBER",
+                        resizable: true
                     }
                 ],
                 components:{
@@ -51,6 +57,7 @@ angular.module('App.quoteComparisionCtrl')
                     headerName: d,
                     field: "ToolmakerPref."+d,
                     editable: true,
+                    resizable: true,
                     cellClass: ['ToolmakerPref'],
                //    cellRenderer: 'medalCellRenderer' ,
                     cellEditorSelector:function (params){
@@ -66,68 +73,68 @@ angular.module('App.quoteComparisionCtrl')
                
             })
            return { 
-                headerName: 'Toolmaker Preference',
-                children:TOOLMAKER
+                headerName: 'Toolmaker Preference <div class="float-right"> <i id="subFun" ng-click="addCol()" class="border rounded-circle bg-danger text-light fas fa-minus" style="font-size: 25px;"></i> <i id="addFun" ng-click="addSub()" class="border rounded-circle bg-success text-light   fas fa-plus " style="font-size: 25px;"></i> </div>',
+                children:TOOLMAKER,
+                headerGroupComponent: 'customHeaderGroupComponent'
             };
         }
         cl.prototype.addTmLP = function (data){
                  var tp = data.columnDefs.filter(function(d){
-                     return d.headerName == "Toolmaker Preference";
+                     return d.headerName.match(/^Toolmaker Preference/i);
                  });
                  if(tp.length > 0){
-                    //  var t = "P"+tp[0].children.length;
-                     //tp[0].children.push({headerName:t, field: "ToolmakerPref."+t});
+
                      tp[0].children.push(angular.copy(tp[0].children[tp[0].children.length - 1]));
                  }
                  tp[0].children[tp[0].children.length -1].headerName = "P"+tp[0].children.length;
                  tp[0].children[tp[0].children.length -1].field =  "ToolmakerPref.P"+tp[0].children.length;
                  
-                   var tl =  _.max(_.map(data.columnDefs,"headerName").filter(function(d){
-                        return d.match(/L[0-9]/);
-                    }));
-                    var tlArr = angular.copy(data.columnDefs.filter(function(d){
-                        return d.headerName == tl;
-                    })[0]);
+                //    var tl =  _.max(_.map(data.columnDefs,"headerName").filter(function(d){
+                //         return d.match(/L[0-9]/);
+                //     }));
+                //     var tlArr = angular.copy(data.columnDefs.filter(function(d){
+                //         return d.headerName == tl;
+                //     })[0]);
                     
-                    tlArr.headerName = "L"+ (Number(tl.replace("L",""))+1);
-                    data.api.forEachLeafNode(function(n,i){
-                        n.data[tlArr.headerName] = {
-                            "LANDEDCOST": {
-                                "TOOLMAKERID": "",
-                                "TOOLMAKER": "",
-                                "VALUE": ""
-                            },
-                            "NOOFDIES": {
-                                "TOOLMAKERID": "",
-                                "TOOLMAKER": "",
-                                "VALUE": ""
-                            },
-                            "DIEWEIGHT": {
-                                "TOOLMAKERID": "",
-                                "TOOLMAKER": "",
-                                "VALUE": ""
-                            },
-                            "BASICCOST": {
-                                "TOOLMAKERID": "",
-                                "TOOLMAKER": "",
-                                "VALUE": ""
-                            },
-                            "COSTPERTON": {
-                                "TOOLMAKERID": "",
-                                "TOOLMAKER": "",
-                                "VALUE": ""
-                            }
-                        };
+                //     tlArr.headerName = "L"+ (Number(tl.replace("L",""))+1);
+                //     data.api.forEachLeafNode(function(n,i){
+                //         n.data[tlArr.headerName] = {
+                //             "LANDEDCOST": {
+                //                 "TOOLMAKERID": "",
+                //                 "TOOLMAKER": "",
+                //                 "VALUE": ""
+                //             },
+                //             "NOOFDIES": {
+                //                 "TOOLMAKERID": "",
+                //                 "TOOLMAKER": "",
+                //                 "VALUE": ""
+                //             },
+                //             "DIEWEIGHT": {
+                //                 "TOOLMAKERID": "",
+                //                 "TOOLMAKER": "",
+                //                 "VALUE": ""
+                //             },
+                //             "BASICCOST": {
+                //                 "TOOLMAKERID": "",
+                //                 "TOOLMAKER": "",
+                //                 "VALUE": ""
+                //             },
+                //             "COSTPERTON": {
+                //                 "TOOLMAKERID": "",
+                //                 "TOOLMAKER": "",
+                //                 "VALUE": ""
+                //             }
+                //         };
     
-                    })
+                //     })
                    
 
-                    tlArr.children.forEach(function(d){
-                        d.field = d.field.replace(tl,tlArr.headerName);
-                        d.editable = true;
-                    })
+                //     tlArr.children.forEach(function(d){
+                //         d.field = d.field.replace(tl,tlArr.headerName);
+                //         d.editable = true;
+                //     })
 
-                    data.columnDefs.push(tlArr);
+                    //data.columnDefs.push(tlArr);
                     data.api.setColumnDefs(data.columnDefs);
                     console.log(data);
             
@@ -138,35 +145,129 @@ angular.module('App.quoteComparisionCtrl')
                 return d.match(/L[0-9]/);
             }).forEach(function(d){
                 var arr=[];
-                arr.push(
-                    {
-                        headerName: "Base Cost",
-                        field: d+".BASICCOST.VALUE",
-                        // use font awesome for first col, with numbers for sort
-                        icons: {
-                            menu: '<i class="fas fa-file-download"/>',
-                            filter: '<i class="fas fa-file-download"/>',
-                            columns: '<i class="fas fa-file-download"/>',
-                            sortAscending: '<i class="fas fa-file-download"/>',
-                            sortDescending: '<i class="fas fa-file-download"/>'
-                        },
-                    }
-                );
-                arr.push( { headerName: "Landed Cost", field: d+".LANDEDCOST.VALUE" } );
-                arr.push( { headerName: "No Of Dies", field: d+".NOOFDIES.VALUE" } );
-                arr.push( { headerName: "Die Weight", field: d+".DIEWEIGHT.VALUE" } );
-                arr.push( { headerName: "Cost Per Ton", field: d+".COSTPERTON.VALUE" } );
-                tmp.push( { headerName:d, children:arr } );
+                arr.push( {resizable: true, headerName: "Toolmaker", field: d+".BASICCOST.TOOLMAKER", } );
+                arr.push( {resizable: true, headerName: "Base Cost", field: d+".BASICCOST.VALUE", } );
+                arr.push( {resizable: true, headerName: "Landed Cost", field: d+".LANDEDCOST.VALUE" } );
+                arr.push( {resizable: true, headerName: "No Of Dies", field: d+".NOOFDIES.VALUE" } );
+                arr.push( {resizable: true, headerName: "Die Weight", field: d+".DIEWEIGHT.VALUE" } );
+                arr.push( {resizable: true, headerName: "Cost Per Ton", field: d+".COSTPERTON.VALUE" } );
+                tmp.push( {resizable: true, headerName:d, children:arr } );
             });
             return tmp;
         }
-       
-    
         zz = new cl();
         $scope.baseLineD = {};
+
         $scope.addCol = function(){
-            console.log(zz.addTmLP($scope.gridOptions))   
-           }
+             
+      
+
+            //var tmCol = _.find($scope.gridOptions.columnDefs,{headerName: "Toolmaker Preference"});
+            var tmCol = _.find($scope.gridOptions.columnDefs,function(d){ return d.headerName.match(/^Toolmaker Preference/i) });
+            if(tmCol.children.length  < $scope.gridOptions.api.getRowNode(0).data.TOOLMAKER.length){
+                zz.addTmLP($scope.gridOptions);
+                $("#addFun").click(function(){
+                    console.log("addFun");
+                    $scope.addCol();
+                })
+                $("#subFun").click(function(){
+                    console.log("subFun");
+                    $scope.addSub();
+                })
+            }
+            
+            else
+            {
+                toastr.info("Not Valid");
+                $scope.gridOptions.columnApi.autoSizeColumns($scope.gridOptions.columnDefs);
+            }
+            $scope.setting.p = [];
+            $scope.setting.l = [];
+            _.find($scope.gridOptions.columnDefs,function(d){ return d.headerName.match(/^Toolmaker Preference/i) }).children.forEach(function(d){
+                $scope.setting.p.push({key:d.headerName,value:true});
+            })
+            
+            _.map($scope.gridOptions.columnDefs,'headerName').filter(function(d){ return d.match(/^L[0-9]/);}).map(function(d){
+                $scope.setting.l.push({key:d,value:true});
+            })
+            
+
+
+            
+          }
+          $scope.addSub = function(){
+
+
+            //var tmCol = _.find($scope.gridOptions.columnDefs,{headerName: "Toolmaker Preference"});
+            var tmCol = _.find($scope.gridOptions.columnDefs,function(d){ return d.headerName.match(/^Toolmaker Preference/i) });
+            if(tmCol.children.length > 1)
+            {
+               var rem = tmCol.children.pop();
+               var remArr=[];
+               $scope.gridOptions.api.forEachLeafNode(function(n,i){
+                   if(n.data.SeqPref != undefined && n.data.SeqPref[rem.headerName] != undefined)
+                    remArr.push({
+                        old:{
+                            ERFQ_COMPARISON_PREFERENCE: {
+                                "PREFERENCE_SEQ": n.data.SeqPref[rem.headerName]
+                            }
+                    }});
+
+                    
+
+               })
+               console.log("removeArr=>",remArr);
+
+               $.cordys.ajax({
+                method: "UpdateErfqComparisonPreference",
+                namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+                dataType: "* json",
+                parameters: {
+                    "tuple": remArr
+                },
+                success: function(data) {
+                    $scope.changePrj(cmm.projectCode, cmm.label, cmm.baslineNum);
+                    console.log("successfully data deleted");
+                },
+                error: function error(jqXHR, textStatus, errorThrown) {
+                    console.log("error");
+                }
+            });
+
+
+                $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
+                $("#addFun").click(function(){
+                    console.log("addFun");
+                    $scope.addCol();
+                })
+                $("#subFun").click(function(){
+                    console.log("subFun");
+                    $scope.addSub();
+                })
+                
+                toastr.success("Successfully Deleted");
+            }else{
+                toastr.info("Not Valid");
+            }
+            $scope.setting.p = [];
+            $scope.setting.l = [];
+            //_.find($scope.gridOptions.columnDefs,{headerName: "Toolmaker Preference"}).children.forEach(function(d){
+            var tmCol = _.find($scope.gridOptions.columnDefs,function(d){ return d.headerName.match(/^Toolmaker Preference/i) }).children.forEach(function(d){
+                $scope.setting.p.push({key:d.headerName,value:true});
+            })
+            
+            _.map($scope.gridOptions.columnDefs,'headerName').filter(function(d){ return d.match(/^L[0-9]/);}).map(function(d){
+                $scope.setting.l.push({key:d,value:true});
+            })
+            // setTimeout(function(){
+                           
+       
+            //     $("#addFun").click(function(){
+            //         console.log("addFun");
+            //         $scope.addCol();
+            //     })
+            // },1000);
+          }
         $scope.baselineSave = function() {
             console.log("baseline save", $scope.baseLineD);
             console.log("cmm", cmm);
@@ -281,15 +382,19 @@ angular.module('App.quoteComparisionCtrl')
 			for (j=0;j<$scope.setting.l.length;j++) {
 				if ($scope.setting.l[j].value == true) {
 					tmp = j+1;
-					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.'+$scope.setting.menus+'.VALUE'], true);
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.BASICCOST.TOOLMAKER'], true);
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.BASICCOST.VALUE'], true);
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.LANDEDCOST.VALUE'], true);
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.NOOFDIES.VALUE'], true);
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.DIEWEIGHT.VALUE'], true);
+					$scope.gridOptions.columnApi.setColumnVisible(['L'+tmp+'.COSTPERTON.VALUE'], true);
 				}
 			}
-			
         }
         $scope.setting = {
             p:[],
             l:[],
-            menus:"Landed Cost",
+            menus:"LANDEDCOST",
             // menus:[
             //     {"key":"Base Cost","value":true,"sval":"basecost"},
             //     {"key":"Landed Cost","value":true,"sval":"landedcost"},
@@ -397,7 +502,15 @@ angular.module('App.quoteComparisionCtrl')
            //  })
         }
         $scope.gridOptions = {
-      
+            defaultColDef: {
+                resizable: true,
+				 sortable: true
+            },
+            headerHeight: 40,
+            rowHeight: 40,
+			pagination: true,
+			paginationPageSize: 10,
+			
             columnDefs:[
                 {
                     headerName: "PART_NUMBER",
@@ -406,7 +519,8 @@ angular.module('App.quoteComparisionCtrl')
             ],
             components:{
                 moodEditor: DropDownTemplate,
-               //medalCellRenderer: MedalCellRenderer
+                customHeaderGroupComponent:htmlText
+                
             },
             rowData: null
             // ,onGridReady: function() {
@@ -468,6 +582,7 @@ angular.module('App.quoteComparisionCtrl')
                             {
                                 headerName: "Justification",
                                 field: "JUSTIFICATION",
+                                resizable: true,
                                 editable: true
 
                             }
@@ -478,12 +593,24 @@ angular.module('App.quoteComparisionCtrl')
                         console.log("show data=>",temp);
                         $scope.gridOptions.api.setRowData(temp);
                         
-                        
+                        $scope.makeHeader();
+						$scope.settleData();
                      
 
                         //console.log($scope.gridOptions.data);
              
                         $scope.$apply();
+                        setTimeout(function(){
+                           
+                            $("#subFun").click(function(){
+                                console.log("subFun");
+                                $scope.addSub();
+                            })
+                            $("#addFun").click(function(){
+                                console.log("addFun");
+                                $scope.addCol();
+                            })
+                        },1000);
                     } else {
                         console.log("no data on base line ");
                         // 
@@ -585,8 +712,336 @@ angular.module('App.quoteComparisionCtrl')
         }, true);
    
 
+
+// main filter box scripts
+		$scope.fillValue1 = function (v1) {
+			$scope.filterMG = v1;
+
+		}
+		$scope.fillValue2 = function (v1) {
+			$scope.filterBT = v1;
+
+		}
+		$scope.fillValue3 = function (v1) {
+			$scope.filterPG = v1;
+
+		}
+		$scope.makeHeader = function () {
+			$.cordys.ajax({
+				method: "GetERFQComparisonData",
+				namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+				dataType: "* json",
+				parameters: {
+					//cursor
+					"comparisonType": "BasicCost",
+					"panelGroup": $scope.cmm.label,
+					"projectCode": $scope.cmm.projectCode,
+					"budgeted": '',
+					"partNum": "",
+					"baselineNum": $scope.cmm.baslineNum,
+					"decimalPlace": "",
+					"preferences": "",
+					"ComparePref": "",
+					"toolmakersRequired": '',
+					"panelGrouping": '',
+					"materialGrade": ''
+
+
+				},
+				success: function (data) {
+					$scope.gridOptions.data1 = $.cordys.json.findObjects(data, "COMPARISON");
+					for (var i = 0; i < $scope.gridOptions.data1.length; i++) {
+
+						$scope.callFunction1($scope.gridOptions.data1[i])
+					}
+					/*data = $scope.tableArray;
+					$scope.dataCallFunction(data);*/
+
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+
+					toastr.error("Unable to load data. Please try refreshing the page.");
+				}
+			});
+
+
+		}
+		$scope.settleData = function () {
+
+			if (cmm.filtObj != null || cmm.filtObj != undefined) {
+				$scope.filtObj = cmm.filtObj;
+
+			}
+			if ($scope.filtObj != undefined && $scope.filtObj != "" && $scope.filtObj != null) {
+
+				$scope.fillValue1($scope.filtObj.filterMG);
+				$scope.fillValue2($scope.filtObj.filterBT);
+				$scope.fillValue3($scope.filtObj.filterPG);
+
+				if ($scope.toolmakerDropdown.length != 0) {
+					var tk = cmm.filtObj.filtertmk
+
+					for (var t = 0; t < tk.length; t++) {
+
+						var a = tk[t];
+						$scope.toolmakerDropdown[a].selected1 = true;
+					}
+					//$scope.filterPG = $scope.filtObj.filterPG;
+				}
+
+				$scope.tmkReq = $scope.filtObj.tmkReq;
+				$scope.setArr = $scope.filtObj.setArr;
+			}
+		}
+
+
+		$scope.adddrp = function (value1) {
+			//const { length } = $scope.budgetedToolmk;
+			if ($scope.budgetedToolmk.length != 0) {
+				for (var t = 0; t < $scope.budgetedToolmk.length; t++) {
+					if ($scope.budgetedToolmk[t].value === value1.value) {
+						return 1;
+					}
+
+				}
+			} else {
+				$scope.budgetedToolmk.push($scope.value);
+				return 1;
+			}
+		}
+
+		//addMaterial
+		$scope.addMaterial = function (value2) {
+
+			if ($scope.MaterialGrades.length != 0) {
+				for (var t = 0; t < $scope.MaterialGrades.length; t++) {
+
+					if ($scope.MaterialGrades[t].grp === value2.grp) {
+						return 1;
+					}
+				}
+			} else {
+				$scope.MaterialGrades.push(value2);
+				return 1;
+			}
+		}
+		//for distinct Panel group push
+		$scope.addPaneldrp = function (value2) {
+
+			if ($scope.PanelGrpDrpdwn.length != 0) {
+				for (var t = 0; t < $scope.PanelGrpDrpdwn.length; t++) {
+
+					if ($scope.PanelGrpDrpdwn[t].grp === value2.grp) {
+						return 1;
+					}
+				}
+			} else {
+				$scope.PanelGrpDrpdwn.push(value2);
+				return 1;
+			}
+		}
+		$scope.callFunction1 = function (obj) {
+			for (key in obj) {
+				if (obj.hasOwnProperty(key)) {
+
+					if (key.startsWith("BUDGETED_TOOLMAKER")) {
+
+
+						$scope.value = {
+							value: obj[key]
+						}
+
+						var ret = 0;
+						ret = $scope.adddrp($scope.value);
+						if (ret == undefined || ret == 0) {
+							$scope.budgetedToolmk.push($scope.value)
+						}
+
+					}
+					//--------------------	
+					if (key.startsWith("PART_GROUP")) {
+						$scope.value1 = {
+							grp: obj[key]
+						}
+
+						var ret1 = 0;
+						ret1 = $scope.addPaneldrp($scope.value1);
+						if (ret1 == undefined || ret1 == 0) {
+							$scope.PanelGrpDrpdwn.push($scope.value1)
+						}
+
+					}
+
+					if (key.startsWith("MATERIAL")) {
+						$scope.value2 = {
+							grp: obj[key]
+						}
+
+						var ret1 = 0;
+						ret1 = $scope.addMaterial($scope.value2);
+						if (ret1 == undefined || ret1 == 0) {
+							$scope.MaterialGrades.push($scope.value2)
+						}
+
+					}
+
+					//uptill
+				}
+			}
+		}
+		$scope.tmkReq = [];
+		$scope.makeTmkArray = function (a) {
+			debugger;
+			//console.log(a.TOOLMAKER_ID);
+			if (a.selected1 == true) {
+				$scope.tmkReq.push(a.TOOLMAKER_ID)
+				var set = $scope.toolmakerDropdown.indexOf(a);
+				$scope.setArr.push(set);
+			}
+			if (a.selected1 == false) {
+				var indxOfObj = $scope.tmkReq.indexOf(a.TOOLMAKER_ID);
+				//var ind = $scope.toolArray.indexOf(a);
+				$scope.tmkReq.splice(indxOfObj, 1);
+
+				var set = $scope.toolmakerDropdown.indexOf(a);
+				var s = $scope.setArr.indexOf(set)
+				$scope.setArr.splice(s, 1);
+
+			}
+
+
+		}
+		$scope.filter = function () {
+
+document.getElementById("myDropdown").classList.toggle("show");
+			array = $scope.tmkReq;
+			var flags = [],
+				output = [],
+				l = array.length,
+				i;
+
+			for (i = 0; i < l; i++) {
+
+				if (flags[array[i]])
+					continue;
+
+				flags[array[i]] = true;
+
+				output.push(array[i]);
+
+			}
+			$scope.tmkReq = output;
+			if ($scope.tmkReq.length > 0) {
+				$scope.tmkarg = ""
+				for (var i = 0; i < $scope.tmkReq.length; i++) {
+					if ($scope.tmkarg != "") {
+						$scope.tmkarg += ","
+					}
+					$scope.tmkarg = $scope.tmkarg + "'" + $scope.tmkReq[i] + "'"
+				}
+			} else {
+				$scope.tmkarg = ''
+			}
+			if ($scope.filterMG == undefined) {
+				$scope.filterMG = ''
+			}
+			if ($scope.filterBT == undefined) {
+				$scope.filterBT = ''
+			}
+			if ($scope.filterPG == undefined) {
+				$scope.filterPG = ''
+			}
+
+			$scope.filtObj = {
+				"filterMG": $scope.filterMG,
+				"filterBT": $scope.filterBT,
+				"filtertmk": $scope.setArr,
+				"filterPG": $scope.filterPG,
+				"filtReq": $scope.tmkarg,
+				"tmkReq": $scope.tmkReq,
+				"setArr": $scope.setArr
+			};
+			cmm.filtObj = $scope.filtObj;
+
+			$scope.triggerRequest();
+
+		}
+
+		$scope.triggerRequest = function () {
+			$.cordys.ajax({
+				method: "GetERFQComparisonData",
+				namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
+				dataType: "* json",
+				parameters: {
+					//cursor
+					"comparisonType": "Preference",
+					"panelGroup": $scope.cmm.label,
+					"projectCode": $scope.cmm.projectCode,
+					"budgeted": (cmm.filtObj != undefined && cmm.filtObj.filterBT != undefined) ? cmm.filtObj.filterBT : '',
+					"partNum": "",
+					"baselineNum": $scope.cmm.baslineNum,
+					"decimalPlace": "5",
+					"preferences": "",
+					"ComparePref": "LandedCost",
+					"toolmakersRequired": (cmm.filtObj != undefined && cmm.filtObj.filtReq != undefined) ? cmm.filtObj.filtReq : '',
+					"panelGrouping": (cmm.filtObj != undefined && cmm.filtObj.filterPG != undefined) ? cmm.filtObj.filterPG : '',
+					"materialGrade": (cmm.filtObj != undefined && cmm.filtObj.filterMG != undefined) ? cmm.filtObj.filterMG : ''
+
+				},
+				success: function (data) {
+					$scope.gridOptions.data = $.cordys.json.findObjects(data, "COMPARISON");
+					console.log("filtered: ", $scope.gridOptions.data);
+					$scope.gridOptions2.api.setRowData($scope.gridOptions.data);
+					$scope.gridOptions2.columnDefs.splice(7);
+
+					$scope.colAdd($scope.gridOptions.data);
+					$scope.settleData();
+					console.log("Filtered BasicCost: ",$scope.gridOptions2.columnDefs);
+					$scope.$apply();
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+
+					toastr.error("Unable to load data. Please try refreshing the page.");
+				}
+			});
+		}
+
+$scope.openDD =function() {
+document.getElementById("myDropdown").classList.toggle("show");
+}
+		$scope.clearAllField = function () {
+			$scope.filterMG = "";
+			$scope.filterBT = ""
+			$scope.setArr = [];
+			$scope.filterPG = "";
+			$scope.tmkarg = "";
+			$scope.tmkReq = [];
+document.getElementById("myDropdown").classList.toggle("show");
+
+			for (i = 0; i < $scope.toolmakerDropdown.length; i++) {
+				if ($scope.toolmakerDropdown[i].selected1 != undefined && $scope.toolmakerDropdown[i].selected1 == true) {
+					$scope.toolmakerDropdown[i].selected1 = false;
+				}
+			}
+			$scope.filtObj = {
+				"filterMG": $scope.filterMG,
+				"filterBT": $scope.filterBT,
+				"filtertmk": $scope.setArr,
+				"filterPG": $scope.filterPG,
+				"filtReq": $scope.tmkarg,
+				"tmkReq": $scope.tmkReq,
+				"setArr": $scope.setArr
+			};
+			cmm.filtObj = $scope.filtObj;
+			$scope.changePrj($scope.cmm.projectCode, $scope.cmm.label, $scope.cmm.baslineNum);
+		}
+
+
         if ((cmm.projectCode == undefined))
         toastr.warning("Select ProjectCode");
             else
         $scope.changePrj(cmm.projectCode, cmm.label, cmm.baslineNum);
-    });
+    });		
+	
