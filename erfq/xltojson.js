@@ -1,7 +1,7 @@
 class xlsx{
   write(data,fileName,sheetName){
     let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "sheetName",{compression:true});
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), sheetName,{compression:true});
     XLSX.writeFile(wb, fileName); 
   }
   read(target,cb){
