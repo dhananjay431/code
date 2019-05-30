@@ -1,11 +1,16 @@
 <db-nav></db-nav>
 <div class="pr-5 pl-5 pt-2 pb-2" style="width:100%;">
-<div class="row rounded border border-dark"> 
-<div class="col-sm-2 form-group">
-<label for="exampleInputEmail1">Project</label>
-<input type="email" class="form-control" id="exampleInputEmail1"  ng-model="data.projDetails.PROJECT_CODE" aria-describedby="emailHelp" style="pointer-events: none;">
-</div>    
-<div class="col-sm-2 form-group">
+    <div class="row rounded border border-dark">
+    
+    <div class="col-sm-2 form-group">
+        <label for="exampleInputEmail1">Project</label>
+        <input type="email" class="form-control" id="exampleInputEmail1"  ng-model="data.projDetails.PROJECT_CODE" aria-describedby="emailHelp" style="pointer-events: none;">
+    </div>    
+    <!-- <div class="col-sm-2 form-group">
+        <label for="exampleInputEmail1">Quotation rev</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  style="pointer-events: none;">
+    </div>         -->
+    <div class="col-sm-2 form-group">
         <label for="exampleInputEmail1">Date</label>
         <input type="date" class="form-control" id="exampleInputEmail1"  ng-model="data.Date" aria-describedby="emailHelp"  style="pointer-events: none;">
     </div>        
@@ -20,13 +25,14 @@
         Currency Unit:
         <select ng-model="data.curr" class="form-control" id="exampleFormControlSelect2">
           <option ng-repeat="d in curr">{{d.value}}</option>
-          
         </select>
-      
     </div>    
-
-
-
+    <div class="col-sm-4 form-group" style="position:relative;">
+        <div style="position:absolute;bottom:0;right:0;" class="pr-2">
+            <label for="exampleInputEmail1">File Download</label>
+            <i ng-click="downloadXl()"class="fas fa-download"></i>
+        </div>
+    </div>
 </div>
 </div>
 <div class="ritz grid-container p-2" dir="ltr" style="overflow:scroll;height:500px;">

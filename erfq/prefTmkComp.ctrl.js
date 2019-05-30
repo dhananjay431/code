@@ -71,12 +71,9 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
         editable: true,
         resizable: true,
         cellClass: ['ToolmakerPref'],
-        //    cellRenderer: 'medalCellRenderer' ,
         cellEditorSelector: function cellEditorSelector(params) {
           var arr = ['Select'];
-          
-
-          arr = _.concat(arr, _.map((_.isArray(params.data.TOOLMAKER)?params.data.TOOLMAKER:[params.data.TOOLMAKER]), 'NAME'));
+          arr = _.concat(arr, _.map(_.isArray(params.data.TOOLMAKER) ? params.data.TOOLMAKER : [params.data.TOOLMAKER], 'NAME'));
           return {
             component: 'moodEditor',
             params: {
@@ -285,7 +282,6 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
     var qr = {
       "new": {
         "ERFQ_BASELINE_MAIN": {
-          //"BASELINE_SEQ":"",
           "PROJECT_CODE": cmm.projectCode,
           "BASELINE_NUM": Number(cmm.baslineNum) + 1,
           "BASELINE_NAME": $scope.baseLineD.name,
@@ -356,19 +352,18 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
   };
 
   $scope.settingFun = function () {
-    // $scope.$apply();
     console.log("$scope.setting=>", $scope.setting);
     console.log("$scope.gridOptions=>", $scope.gridOptions);
     $scope.hideAll($scope.setting.p.length, $scope.setting.l.length);
-
-    for (i = 0; i < $scope.setting.p.length; i++) {
+  var temp="";
+    for (var i = 0; i < $scope.setting.p.length; i++) {
       if ($scope.setting.p[i].value == true) {
         temp = i + 1;
         $scope.gridOptions.columnApi.setColumnVisible(['ToolmakerPref.P' + temp + ''], true);
       }
     }
-
-    for (j = 0; j < $scope.setting.l.length; j++) {
+   var tmp="";
+    for (var j = 0; j < $scope.setting.l.length; j++) {
       if ($scope.setting.l[j].value == true) {
         tmp = j + 1;
         $scope.gridOptions.columnApi.setColumnVisible(['L' + tmp + '.BASICCOST.TOOLMAKER'], true);
@@ -422,14 +417,11 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
         var temp = {
           "new": {
             ERFQ_COMPARISON_PREFERENCE: {
-              //"PREFERENCE_SEQ": d.ToolmakerPref[d3.replace("L", "P")].PREFERENCESEQ,
               "PROJECT_CODE": cmm.projectCode,
               "PART_NUMBER": node.data.PART_NUMBER,
               "BASELINE_NUM": cmm.baslineNum,
               "LEVEL_PREFERNCE": node.data[d.replace("P", "L")] == undefined || node.data[d.replace("P", "L")].BASICCOST == undefined || node.data[d.replace("P", "L")].BASICCOST.TOOLMAKER ? "" : node.data[d.replace("P", "L")].BASICCOST.TOOLMAKER,
-              //  "TOOLMAKER":node.data[d.replace("P","L")].BASICCOST.TOOLMAKER,
-              //"LEVEL_PREFERNCE": d.ToolmakerPref[d3.replace("L", "P")].TOOLMAKER,
-              "TOOLMAKER_PREFERNCE": node.data.ToolmakerPref[d],
+              "TOOLMAKER_PREFERNCE": node.data.ToolmakerPref[d] != undefined ? node.data.ToolmakerPref[d] : "",
               "PREFERENCE_NUM": d,
               "JUSTIFICATION": node.data.JUSTIFICATION,
               "CATEGORY": cmm.label
@@ -537,8 +529,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
           $scope.gridOptions.columnDefs = [{
             headerName: "PART_NUMBER",
             field: "PART_NUMBER"
-          }]; //  $scope.gridOptions.data = zz.initPro(temp);
-
+          }];
           temp = zz.initPro(temp);
           $scope.gridOptions.columnDefs.push(zz.addTm(temp));
           console.log("$scope.gridOptions.columnDefs=>", $scope.gridOptions.columnDefs);
@@ -549,28 +540,28 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
             editable: true
           });
           $scope.gridOptions.columnDefs = _.concat($scope.gridOptions.columnDefs, zz.addAuto(temp));
-          $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
-          console.log("show data=>", temp);
-          $scope.gridOptions.api.setRowData(temp);
-          $scope.makeHeader();
-          $scope.settleData(); //console.log($scope.gridOptions.data);
 
-          $scope.$apply();
-          setTimeout(function () {
-            $("#subFun").click(function () {
-              console.log("subFun");
-              $scope.addSub();
-            });
-            $("#addFun").click(function () {
-              console.log("addFun");
-              $scope.addCol();
-            });
-          }, 1000);
-          autoSizeAll($scope.gridOptions);
+          if (window.location.hash.match(/prefTmkComp/g)) {
+            $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
+            console.log("show data=>", temp);
+            $scope.gridOptions.api.setRowData(temp);
+            $scope.makeHeader();
+            $scope.settleData();
+            $scope.$apply();
+            setTimeout(function () {
+              $("#subFun").click(function () {
+                console.log("subFun");
+                $scope.addSub();
+              });
+              $("#addFun").click(function () {
+                console.log("addFun");
+                $scope.addCol();
+              });
+            }, 1000);
+            autoSizeAll($scope.gridOptions);
+          }
         } else {
-          console.log("no data on base line "); // 
-          //    $scope.tableDataGet();
-          // 
+          console.log("no data on base line ");
         }
       },
       error: function error(jqXHR, textStatus, errorThrown) {}
@@ -638,11 +629,11 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
   };
 
   $scope.hideAll = function (countPTm, countLCols) {
-    for (i = 1; i <= countPTm; i++) {
+    for (var i = 1; i <= countPTm; i++) {
       $scope.gridOptions.columnApi.setColumnVisible(['ToolmakerPref.P' + i + ''], false);
     }
 
-    for (j = 1; j <= countLCols; j++) {
+    for (var j = 1; j <= countLCols; j++) {
       $scope.gridOptions.columnApi.setColumnVisible(['L' + j + '.BASICCOST.VALUE'], false);
       $scope.gridOptions.columnApi.setColumnVisible(['L' + j + '.LANDEDCOST.VALUE'], false);
       $scope.gridOptions.columnApi.setColumnVisible(['L' + j + '.NOOFDIES.VALUE'], false);
@@ -674,7 +665,6 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
       namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
       dataType: "* json",
       parameters: {
-        //cursor
         "comparisonType": "BasicCost",
         "panelGroup": $scope.cmm.label,
         "projectCode": $scope.cmm.projectCode,
@@ -726,7 +716,6 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
   };
 
   $scope.adddrp = function (value1) {
-    //const { length } = $scope.budgetedToolmk;
     if ($scope.budgetedToolmk.length != 0) {
       for (var t = 0; t < $scope.budgetedToolmk.length; t++) {
         if ($scope.budgetedToolmk[t].value === value1.value) {
@@ -737,8 +726,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
       $scope.budgetedToolmk.push($scope.value);
       return 1;
     }
-  }; //addMaterial
-
+  };
 
   $scope.addMaterial = function (value2) {
     if ($scope.MaterialGrades.length != 0) {
@@ -751,8 +739,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
       $scope.MaterialGrades.push(value2);
       return 1;
     }
-  }; //for distinct Panel group push
-
+  };
 
   $scope.addPaneldrp = function (value2) {
     if ($scope.PanelGrpDrpdwn.length != 0) {
@@ -780,8 +767,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
           if (ret == undefined || ret == 0) {
             $scope.budgetedToolmk.push($scope.value);
           }
-        } //--------------------	
-
+        }
 
         if (key.startsWith("PART_GROUP")) {
           $scope.value1 = {
@@ -805,8 +791,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
           if (ret1 == undefined || ret1 == 0) {
             $scope.MaterialGrades.push($scope.value2);
           }
-        } //uptill
-
+        }
       }
     }
   };
@@ -814,7 +799,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
   $scope.tmkReq = [];
 
   $scope.makeTmkArray = function (a) {
-    debugger; //console.log(a.TOOLMAKER_ID);
+    debugger;
 
     if (a.selected1 == true) {
       $scope.tmkReq.push(a.TOOLMAKER_ID);
@@ -823,8 +808,7 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
     }
 
     if (a.selected1 == false) {
-      var indxOfObj = $scope.tmkReq.indexOf(a.TOOLMAKER_ID); //var ind = $scope.toolArray.indexOf(a);
-
+      var indxOfObj = $scope.tmkReq.indexOf(a.TOOLMAKER_ID);
       $scope.tmkReq.splice(indxOfObj, 1);
       var set = $scope.toolmakerDropdown.indexOf(a);
       var s = $scope.setArr.indexOf(set);
@@ -893,7 +877,6 @@ angular.module('App.quoteComparisionCtrl').controller('prefTmkCompCtrl', functio
       namespace: "http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage",
       dataType: "* json",
       parameters: {
-        //cursor
         "comparisonType": "Preference",
         "panelGroup": $scope.cmm.label,
         "projectCode": $scope.cmm.projectCode,

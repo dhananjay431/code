@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "min": "babel erfq -w --minified --no-comments --compact -d lib",
-    "com": "babel erfq -w --no-comments  -d lib | gulp",
-    "bh": "babel --help"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dhananjay431/code.git"
@@ -18,6 +13,12 @@
     "url": "https://github.com/dhananjay431/code/issues"
   },
   "homepage": "https://github.com/dhananjay431/code#readme",
+  "scripts": {
+    "start":"npm run start:min | npm run start:com",
+    "start:min": "babel erfq -w --minified --no-comments --compact -d min",
+    "start:com": "babel erfq -w --no-comments  -d lib | gulp",
+    "bh": "babel --help"
+  },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
@@ -28,6 +29,7 @@
   "dependencies": {
     "gulp": "^4.0.2",
     "gulp-html-prettify": "0.0.1",
+    "gulp-remove-empty-lines": "^0.1.0",
     "gulp-remove-html-comments": "^1.0.1",
     "jstransformer-babel": "^2.1.0"
   }
