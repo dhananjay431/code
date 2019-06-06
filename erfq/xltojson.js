@@ -8,12 +8,15 @@ class xlsx{
     let reader = new FileReader();
     reader.onload = function(e) {
     let data = e.target.result; 
+    var result = {};
     let workbook = XLSX.read(data, {type: 'binary' });
-    let first_sheet_name = workbook.SheetNames[0];
-    let worksheet = workbook.Sheets[first_sheet_name];
-    cb(XLSX.utils.sheet_to_json(worksheet,{raw:true}));
+    workbook.SheetNames.forEach(function(sheetName) {
+      var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {raw:true});
+      if(roa.length) result[sheetName] = roa;
+    });
+    cb(result);
     };
      reader.readAsBinaryString(target.files[0]); 
   }
 }
-window.xlsx = xlsx;
+window.xlsx = new xlsx();

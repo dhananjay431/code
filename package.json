@@ -15,8 +15,8 @@
   "homepage": "https://github.com/dhananjay431/code#readme",
   "scripts": {
     "start":"npm run start:min | npm run start:com",
-    "start:min": "babel erfq -w --minified --no-comments --compact -d min",
-    "start:com": "babel erfq -w --no-comments  -d lib | gulp",
+    "start:min": "babel erfq -w --minified --no-comments  -d min",
+    "start:com": "babel erfq -w --no-comments --compact false -d lib | gulp",
     "bh": "babel --help"
   },
   "devDependencies": {

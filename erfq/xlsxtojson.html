@@ -1,31 +1,29 @@
 <!doctype html>
 <html>
 <head>
+    
     <script src="https://cdn.rawgit.com/SheetJS/js-xlsx/master/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://raw.githack.com/dhananjay431/code/ag-grid/min/xltojson.js"></script>
-    
+    <script src="../min/xltojson.js"></script>
 </head>
 <body>
     <input type="file" id="myFile" multiple size="50">
     <pre id="djson"></pre>
     <script>
+        fetch('https://jsonresp.herokuapp.com/datatable')
+      .then(response => response.json())
+      .then(json => {
+        xlsx.write(json.data, new Date().getTime()+".xlsx", new Date().getTime().toString())
+      })
+
             $("#myFile").change(function(e) {
-                var x = new xlsx();
-                x.read(e.target, function(data) {
-                    console.log(data);
+                xlsx.read(e.target, function(data) {
+                //    xlsx.write(data, new Date().getTime()+".xlsx", new Date().getTime().toString())
+                console.log(data);
                 });
-                x.write([{
-                    foo: 123,
-                    bar: 234
-                }, {
-                    foo: 123,
-                    bar: 234
-                }, {
-                    foo: 123,
-                    bar: 234
-                }], "asdfsadfsdf.xlsx", "asdfsadfsdf")
+                
             });
+
         </script>
 </body>
 </html>

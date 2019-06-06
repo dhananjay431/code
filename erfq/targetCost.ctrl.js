@@ -19,58 +19,148 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
     }],
     rowData: null
   };
- $scope.xlSave = function(){
-  $scope.gridOptions.api.forEachLeafNode((n,i)=>{
-    var keys = _.keys(n.data).filter((d)=>{
-      return d.match(/^C/i);
-    })
 
+  $scope.xlSave = function () {
+    var temp = [];
+    $scope.gridOptions.api.forEachLeafNode(function (n, i) {
+      console.log("data=>", n.data);
+      var data = n.data;
 
+      _.keys(n.data).filter(function (d) {
+        return d.match(/^R[0-9]/i);
+      }).forEach(function (d1) {
+        var _t = {
+          "new": {
+            ERFQ_PROJECT_REFERENCES: {
+              PROJECT_CODE: $scope.cmm.projectCode,
+              ERFQ_NUMBER_COMPAIR: Number(i) + 1,
+              PART_NUMBER: 1,
+              PR_PROJECT_CODE: data[d1].PROJECTCODE,
+              PR_PARTNUMBER: data[d1].PARTNUMBER,
+              PR_NOMENCLATURE: data[d1].NOMENCLATURE,
+              PR_TOOLMAKERID: data[d1].TOOLMAKER,
+              PR_BASICCOST: data[d1].BASICCOST,
+              PR_LANDEDCOST: data[d1].LANDEDCOST,
+              PR_NOOFDIES: data[d1].NOOFDIES,
+              PR_DIEWEIGHT: data[d1].DIEWEIGHT,
+              PR_COSTPERTON: data[d1].COSTPERTON,
+              BASELINE_NUM: $scope.cmm.baslineNum,
+              PREFERENCE_PARAM: 1,
+              CATEGORY: $scope.cmm.label,
+              TARGET_COST: 1
+            }
+          }
+        };
+        temp.push(_t);
+      });
 
-  })
- }
+      _.keys(n.data).filter(function (d) {
+        return d.match(/^C[0-9]/i);
+      }).forEach(function (d1) {
+        var _t = {
+          "new": {
+            ERFQ_PROJECT_REFERENCES: {
+              PROJECT_CODE: $scope.cmm.projectCode,
+              ERFQ_NUMBER_COMPAIR: Number(i) + 1,
+              PART_NUMBER: 1,
+              PR_PROJECT_CODE: "",
+              PR_PARTNUMBER: "",
+              PR_NOMENCLATURE: "",
+              PR_TOOLMAKERID: data[d1].value,
+              PR_BASICCOST: "",
+              PR_LANDEDCOST: "",
+              PR_NOOFDIES: "",
+              PR_DIEWEIGHT: "",
+              PR_COSTPERTON: "",
+              BASELINE_NUM: $scope.cmm.baslineNum,
+              PREFERENCE_PARAM: 1,
+              CATEGORY: $scope.cmm.label,
+              TARGET_COST: 1
+            }
+          }
+        };
+        temp.push(_t);
+      });
+
+      _.keys(n.data).filter(function (d) {
+        return d.match(/^Toolmaker[0-9]/i);
+      }).forEach(function (d1) {
+        var _t = {
+          "new": {
+            ERFQ_PROJECT_REFERENCES: {
+              PROJECT_CODE: $scope.cmm.projectCode,
+              ERFQ_NUMBER_COMPAIR: Number(i) + 1,
+              PART_NUMBER: 1,
+              PR_PROJECT_CODE: "",
+              PR_PARTNUMBER: "",
+              PR_NOMENCLATURE: "",
+              PR_TOOLMAKERID: data[d1],
+              PR_BASICCOST: "",
+              PR_LANDEDCOST: "",
+              PR_NOOFDIES: "",
+              PR_DIEWEIGHT: "",
+              PR_COSTPERTON: "",
+              BASELINE_NUM: $scope.cmm.baslineNum,
+              PREFERENCE_PARAM: 1,
+              CATEGORY: $scope.cmm.label,
+              TARGET_COST: 1
+            }
+          }
+        };
+        temp.push(_t);
+      });
+    });
+    console.log("temp save data=>", temp);
+    console.log("temp save cmm=>", $scope.cmm);
+    post('UpdateErfqProjectReferences', temp, function (data) {
+      toastr.success("Record Successfully Saved");
+    }, function (e1, e2, e3) {});
+  };
+
   function jqCall() {
-    $("#rAdd").click(function () {
+    $("#rAdd").bind("click", function () {
       $scope.pushRcolDef();
     });
-    $("#rSub").click(function () {
+    $("#rSub").bind("click", function () {
       $scope.rmRcolDef();
     });
-    $("#cAdd").click(function () {
+    $("#cAdd").bind("click", function () {
       $scope.pushCcolDef();
     });
-    $("#cSub").click(function () {
+    $("#cSub").bind("click", function () {
       $scope.rmCcolDef();
     });
-    $("#tmkrAdd").click(()=>{
+    $("#tmkrAdd").bind("click", function () {
       tmkrAdd($scope.gridOptions);
-    })
-    $("#tmkrSub").click(()=>{
+    });
+    $("#tmkrSub").bind("click", function () {
       console.log("tmkrSub");
-    })
+    });
   }
-  $scope.htmTmkrAdd =function(){
+
+  $scope.htmTmkrAdd = function () {
     tmkrAdd($scope.gridOptions);
-  }
+  };
 
-  function tmkrAdd(gop){
-  var newAdd = "";
-  var rArr = gop.columnDefs.filter(function (d) {
-    return d.headerName.match(/Toolmaker Preference_$/i);
-  });
-  if (rArr.length > 0) {
-    newAdd = "Toolmaker" + (Number(rArr[0].children.length) + 1);
-  }
-  gop.api.forEachLeafNode(function (n, i) {
-    n.data[newAdd] = "";
-  });
+  function tmkrAdd(gop) {
+    var newAdd = "";
+    var rArr = gop.columnDefs.filter(function (d) {
+      return d.headerName.match(/Toolmaker Preference_$/i);
+    });
 
-  if (rArr.length > 0) {
-    rArr[0].children.push(
-      {
+    if (rArr.length > 0) {
+      newAdd = "Toolmaker" + (Number(rArr[0].children.length) + 1);
+    }
+
+    gop.api.forEachLeafNode(function (n, i) {
+      n.data[newAdd] = "";
+    });
+
+    if (rArr.length > 0) {
+      rArr[0].children.push({
         headerName: newAdd,
         field: newAdd,
-        editable: true, 
+        editable: true,
         cellRenderer: 'genderCellRenderer',
         cellRendererParams: function cellRendererParams(params) {
           var _t = _.map(params.data.dropTm, function (d) {
@@ -79,14 +169,19 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
               key: d.TOOLMAKER_ID
             };
           });
+
           return {
             params2: _t
           };
         },
         cellEditorSelector: function cellEditorSelector(params) {
           var _t = _.map(params.data.dropTm, function (d) {
-            return { text: d.TOOLMAKER_NAME, value: d.TOOLMAKER_ID };
+            return {
+              text: d.TOOLMAKER_NAME,
+              value: d.TOOLMAKER_ID
+            };
           });
+
           return {
             component: 'cellSelect',
             params: {
@@ -94,16 +189,15 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
             }
           };
         }
-      }
-    )
-    console.log("gop.columnDefs R ADDED=>", gop.columnDefs);
-    gop.api.setColumnDefs(angular.copy(gop.columnDefs));
-    setTimeout(()=>{
-      jqCall();
-    },500);
+      });
+      console.log("gop.columnDefs R ADDED=>", gop.columnDefs);
+      gop.api.setColumnDefs(angular.copy(gop.columnDefs));
+      setTimeout(function () {
+        jqCall();
+      }, 500);
+    }
   }
-  
-  }
+
   function xmltojson(data, key) {
     return $.cordys.json.findObjects(data, key);
   }
@@ -157,10 +251,13 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
           BASICCOST: d.BASICCOST['L' + i],
           COSTPERTON: d.BASICCOST['L' + i]
         };
-      };
+      }
+
+      ;
       return d;
     });
   }
+
   function commDisc(data) {
     var cArr = _.filter(_.keys(data[0]), function (d) {
       return d.match(/^C[0-9]/);
@@ -174,33 +271,42 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
         };
       });
     }
+
     var tmkr = _.filter(_.keys(data[0]), function (d) {
       return d.match(/^Toolmaker[0-9]/);
     });
+
     if (tmkr.length == 0) {
       data.forEach(function (d) {
         d.Toolmaker1 = "";
       });
     }
+
     if (_.keys(data[0]).indexOf("Remark") == -1) {
       data.forEach(function (d) {
         d.Remark = "";
       });
     }
   }
+
   function rmC(gop) {
     var t = gop.columnDefs.filter(function (d) {
       return d.headerName.match(/^C[0-9]/i);
     });
+
     if (t.length > 1) {
       var id = _.findIndex(gop.columnDefs, t[t.length - 1]);
+
       gop.columnDefs.splice(id, 1);
       console.log(gop.columnDefs);
       gop.api.setColumnDefs(angular.copy(gop.columnDefs));
     } else {
       toastr.warning("Not a Valid");
     }
-    jqCall();
+
+    setTimeout(function () {
+      jqCall();
+    }, 500);
   }
 
   function rmR(gop) {
@@ -218,7 +324,9 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
       toastr.warning("Not a Valid");
     }
 
-    jqCall();
+    setTimeout(function () {
+      jqCall();
+    }, 500);
   }
 
   function pushC(gop) {
@@ -293,7 +401,9 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
         headerGroupComponent: 'customHeaderGroupComponent'
       });
       gop.api.setColumnDefs(angular.copy(gop.columnDefs));
-      jqCall();
+      setTimeout(function () {
+        jqCall();
+      }, 500);
     }
   }
 
@@ -333,7 +443,9 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
       gop.api.setColumnDefs(angular.copy(gop.columnDefs));
     }
 
-    jqCall();
+    setTimeout(function () {
+      jqCall();
+    }, 500);
   }
 
   function rCol(colKey) {
@@ -449,7 +561,6 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
         headerName: d,
         field: "ToolmakerPref." + d,
         cellClass: ['ToolmakerPref'],
-        // columnGroupShow: 'open',
         editable: true,
         cellRenderer: 'genderCellRenderer',
         cellRendererParams: function cellRendererParams(params) {
@@ -479,16 +590,6 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
             }
           };
         }
-        // editable: true,
-        // cellEditorSelector: function cellEditorSelector(params) {
-        //   debugger;
-        //   return {
-        //     component: 'moodEditor',
-        //     params: {
-        //       values: _.map(params.data.TOOLMAKER, 'ID')
-        //     }
-        //   };
-        // }
       };
       TOOLMAKER.push(z);
     });
@@ -503,12 +604,15 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
 
   function addTmkColDef(temp) {
     var tmp = [];
+
     _.filter(_.keys(temp[0]), function (d) {
       return d.match(/^Toolmaker[0-9]/i);
     }).forEach(function (d) {
       var arr = [];
-      arr.push({ headerName: d, field: d, 
-        editable: true, 
+      arr.push({
+        headerName: d,
+        field: d,
+        editable: true,
         cellRenderer: 'genderCellRenderer',
         cellRendererParams: function cellRendererParams(params) {
           var _t = _.map(params.data.dropTm, function (d) {
@@ -517,14 +621,19 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
               key: d.TOOLMAKER_ID
             };
           });
+
           return {
             params2: _t
           };
         },
         cellEditorSelector: function cellEditorSelector(params) {
           var _t = _.map(params.data.dropTm, function (d) {
-            return { text: d.TOOLMAKER_NAME, value: d.TOOLMAKER_ID };
+            return {
+              text: d.TOOLMAKER_NAME,
+              value: d.TOOLMAKER_ID
+            };
           });
+
           return {
             component: 'cellSelect',
             params: {
@@ -534,12 +643,9 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
         }
       });
       tmp.push({
-        width:300,
-        headerName: '<div class="float-right"><i id="tmkrSub" class="border rounded-circle bg-danger text-light fas fa-minus" style="font-size: 25px;"></i> <i id="tmkrAdd"  class="border rounded-circle bg-success text-light   fas fa-plus " style="font-size: 25px;"></i></div>'+'Toolmaker Preference_',
-        children: arr,
-        //Toolmaker Preference
-     //   headerGroupComponent: 'customHeaderGroupComponent'
-
+        width: 300,
+        headerName: '<div class="float-right"><i id="tmkrSub" class="border rounded-circle bg-danger text-light fas fa-minus" style="font-size: 25px;"></i> <i id="tmkrAdd"  class="border rounded-circle bg-success text-light   fas fa-plus " style="font-size: 25px;"></i></div>' + 'Toolmaker Preference_',
+        children: arr
       });
     });
 
@@ -660,9 +766,20 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
   }
 
   $scope.createExcel = function () {
-    $scope.gridOptions.api.forEachNode(function (node, index) {
-      console.log(node.data);
-    });
+    var params = {
+      "skipHeader": false,
+      "columnGroups": true,
+      "skipFooters": false,
+      "skipGroups": false,
+      "skipPinnedTop": false,
+      "skipPinnedBottom": false,
+      "allColumns": false,
+      "onlySelected": false,
+      "suppressQuotes": false,
+      "fileName": "",
+      "columnSeparator": ""
+    };
+    $scope.gridOptions.api.exportDataAsCsv(params);
   };
 
   $scope.addRColNewDef = function () {
@@ -703,13 +820,14 @@ angular.module('App.quoteComparisionCtrl').controller('targetCostCtrl', function
       $scope.gridOptions.columnDefs = _.concat($scope.gridOptions.columnDefs, addCommDisc(temp));
       $scope.gridOptions.columnDefs = _.concat($scope.gridOptions.columnDefs, addTmkColDef(temp));
       console.log("after add C col def=>", $scope.gridOptions.columnDefs);
-      $scope.gridOptions.columnDefs.forEach(d=>{
+      $scope.gridOptions.columnDefs.forEach(function (d) {
         d.width = 400;
-      })
-
+      });
       $scope.gridOptions.api.setColumnDefs($scope.gridOptions.columnDefs);
       autoSizeAll($scope.gridOptions);
-      jqCall();
+      setTimeout(function () {
+        jqCall();
+      }, 500);
     }, function (e1, e2, e3) {});
   }
 
