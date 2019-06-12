@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/dhananjay431/code#readme",
   "scripts": {
-    "start":"npm run start:min | npm run start:com",
+    "start": "npm run start:min | npm run start:com",
     "start:min": "babel erfq -w --minified --no-comments  -d min",
     "start:com": "babel erfq -w --no-comments --compact false -d lib | gulp",
     "bh": "babel --help"
@@ -31,6 +31,7 @@
     "gulp-html-prettify": "0.0.1",
     "gulp-remove-empty-lines": "^0.1.0",
     "gulp-remove-html-comments": "^1.0.1",
-    "jstransformer-babel": "^2.1.0"
+    "jstransformer-babel": "^2.1.0",
+    "rxjs": "^6.5.2"
   }
 }

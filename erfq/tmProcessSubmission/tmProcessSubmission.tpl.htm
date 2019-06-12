@@ -14,6 +14,15 @@
     .listofpartscombined{
     background-color: white!important;
   }
+  .freeze{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:#CCC;
+    opacity: 0.2;
+}
 </style>
 <section>
     <img src="assets/images/msPrintImage.png" alt="" style="float:left;">
@@ -74,20 +83,18 @@
         </table>
     </div>
     <div id="tableFixHead" class="tab-main">
-        <table ng-table="tableParams" class="table table-bordered">
-            <tr ng-repeat='row in records' id="row{{$index}}" ng-class="((noclicks[$index]) ? 'dRow' : '' )">
+        <table ng-table="tableParams" class="table table-bordered" id="tableCmp">
+            <tr ng-repeat='row in records' id="{{row.PART_NUMBER}}" ng-class="((noclicks[$index]) ? 'dRow' : '' )">
                 <td title="'Part No'">{{row.PART_NUMBER}}</td>
                 <td title="'Nomenclature'">{{row.NOMENCLATURE}}</td>
                 <td title="'Material Grade'">{{row.MATERIAL}}</td>
                 <td title="'CAD Thickness'">{{row.CAD_THICKNESS}}</td>
                 <td title="'CAD Data'"><a class="ml-2" style="text-decoration-line: underline; color: #d83c3c;" ng-click="downloadFile(row,$index)">{{row.CAD_DATA}}</a>
                 </td>
-                <!--data-target="#newUpload"-->
                 <td title="'Process Document'"><a ng-if="isView[$index]" class="ml-2" style="text-decoration-line: underline; color: #d83c3c;cursor: pointer;" data-toggle="modal" data-target="#newUpload" ng-click="getPartN(row,$index)">VIEW</a>
                 <i ng-if="!isView[$index] && tpsshow" class="ml-2 fas fa-file-upload" data-toggle="modal" data-target="#newUpload" ng-click="getPartN(row,$index)">  Upload Process Document</i>
                 </td>
                 <td title="'Process Combination'" ng-if="tpsshow || qsshow">
-                        <!-- {{row.part_combined}} / {{row.prcsCombo}} -->
                     <select ng-disabled="isValid[$index] || onerow" ng-model="row.prcsCombo" class="form-control input-lg" ng-change="enable(row.prcsCombo,$index)">
                         <option ng-repeat="x in combinations" value={{x}}>{{x}}</option>
                     </select>
@@ -95,18 +102,7 @@
                 <td title="'Process Combination'" ng-if="!tpsshow && !qsshow">{{row.PROCESS_COMBINATION}}</td>
                 <td title="'List of parts combined'" 
                 ng-if="tpsshow || qsshow">
-                <!-- {{row.part_combined}} -->
-                    <!-- <select ng-disabled="enableParts[$index]"  
-                    ng-change="calc(row.part_combined,$index)" 
-                    -->
-                    <select ng-disabled="!(row.prcsCombo=='Yes')" 
-                    ng-model="row.part_combined" 
-                    class="form-control input-lg listofpartscombined" 
-                    
-                    multiple="multiple" size="5"
-                    >
-                        <option ng-repeat="x in parts" value={{x.PART_NUMBER}}>{{x.PART_NUMBER}}</option>
-                    </select>
+                    <dbmultiple op="parts" model="row.part_combined" dbdisabled="row.prcsCombo" index="$index" scope="scope()"></dbmultiple>
                 </td>
                 <td title="'List of parts combined'" ng-if="!tpsshow && !qsshow">{{row.PART_COMBINED}}</td>
                 <td title="'Panel Quantity'">{{row.PANEL_QUANTITY}}</td>
@@ -130,6 +126,27 @@
                 <a ng-if="row.COST == null" ng-class="((noclicks[$index]) ? 'dLink' : '')" class="ml-2 fas fa-eye" style="text-decoration-line: underline; color: #d83c3c;cursor: pointer;" ng-click="estimateSheet(row,$index)">Details</a>
                 </td>
             </tr>
+            <tr ng-repeat="d in records |  filter:{freeze:true}" style="background-color:#ccc;">
+                    <td>{{d.PART_NUMBER}}</td>
+                    <td>{{row.NOMENCLATURE}}</td>
+                    <td>{{d.MATERIAL}}</td>
+                    <td>{{d.CAD_THICKNESS}}</td>
+                    <td>{{d.CAD_DATA}}</td>
+                    <td><i class="ml-2 fas fa-file-upload">  Upload Process Document</i></td>
+                    <td>  <select ng-disabled="true" ng-model="row.prcsCombo" class="form-control input-lg">
+                            <option ng-repeat="x in combinations" value={{x}}>{{x}}</option>
+                          </select>
+                        </td>
+                        <td>
+                                <select ng-disabled="true"  class="form-control input-lg">
+                                    <option>Select</option>
+                                  </select>
+                            </td>
+                    <td>{{row.PANEL_QUANTITY}}</td>
+                    <td>{{d.TOOLMAKER_REMARK}}</td>
+                  </tr>
+     
+
         </table>
     </div>
     <button type="button" ng-if="tpsshow" ng-click="processTemplate()" class="reject btn btn-primary btn-block" style="width: auto;margin: 1% 2% 0 0;" ng-class="((complete) ? 'noclick' : '' )">Download Process Template</button>

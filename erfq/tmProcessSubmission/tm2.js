@@ -1,39 +1,79 @@
 "use strict";
 
-angular.module('App.tmProcessSubmission', ['ui.router', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ngFileUpload']).component('dbmultiple', {
-  transclude: true,
-  template: "<div class=\"dropdown\" ng-transclude>\n    <button class=\"btn border dropdown-toggle\" \n    type=\"button\" \n    style=\"width:100%;\"\n    id=\"dropdownMenuButton\" \n    data-toggle=\"dropdown\" \n    aria-haspopup=\"true\" \n    aria-expanded=\"false\"\n    ng-class=\"{disabled:!($ctrl.dbdisabled=='Yes')}\"\n    >\n    <div class=\"float-left\">\n    </div>\n      Select\n    </button>\n    <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n    <span class=\"dropdown-item\" ng-repeat=\"d in $ctrl.op\">\n        <input type=\"checkbox\" class=\"m-2\" ng-model=\"$ctrl.arr[$index]\" ng-change=\"$ctrl.change($index)\">{{d.PART_NUMBER}}\n      </span>\n    </div>\n  </div>",
-  controller: function controller() {
-    var that = this;
-    this.arr = [];
-
-    this.$onInit = function () {
-      this.model = [];
-      console.log("this.op", this.op);
-      console.log("this.model", this.model);
-    };
-
-    this.change = function (id) {
-      if (that.model.find(function (dd) {
-        return dd == that.op[id];
-      }) == undefined) {
-        that.model.push(that.op[id]);
-      } else {
-        var index = that.model.findIndex(function (d) {
-          return d == that.op[id];
-        });
-        that.model.splice(index, 1);
+angular.module('App.tmProcessSubmission', ['ui.router', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ngFileUpload'])
+.component('dbmultiple',{
+    transclude: true,
+    template: `<div class="dropdown" ng-transclude>
+    <button class="btn border dropdown-toggle" 
+    type="button" 
+    style="width:100%;"
+    id="dropdownMenuButton" 
+    data-toggle="dropdown" 
+    aria-haspopup="true" 
+    aria-expanded="false"
+    ng-class="{disabled:!($ctrl.dbdisabled=='Yes')}"
+    >
+    <div class="float-left">
+    </div>
+      Select
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <span class="dropdown-item" ng-repeat="d in $ctrl.op">
+        <input type="checkbox" class="m-2" ng-model="$ctrl.arr[$index]" ng-change="$ctrl.change($index)">{{d.PART_NUMBER}}
+      </span>
+    </div>
+  </div>`,
+    controller: function($compile) {
+        // {{$ctrl.model.length > 2 ? "Select":($ctrl.model.length == 0 ? 'Select':$ctrl.model.toString())}}
+      var that = this;
+      this.arr=[];
+      this.$onInit = function(){
+        this.model = [];
+        console.log("this.op",this.op);
+        console.log("this.model",this.model);
+        console.log("this.scope",this.scope);
       }
-
-      console.log("that.model=>", that.model);
-    };
-  },
-  bindings: {
-    op: '<',
-    model: '=',
-    dbdisabled: '<'
-  }
-}).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+      this.change =function(id){
+        if(that.index == id){
+            toastr.error("Not Selected!");
+            return; 
+          }
+       if(_.find(that.model,(d)=>{ return (that.op[id].PART_NUMBER==d); }) == undefined){
+            $(`#${that.op[id].PART_NUMBER}`).hide();
+        //    var td = $(`#${that.op[id].PART_NUMBER} > td`);
+        //   for(var i=0;i<td.length;i++){
+        //     td[i].style = "position:relative;";
+        //     var div = document.createElement("div");  
+        //     div.classList.add("freeze");
+        //     td[i].appendChild(div);
+        //   }
+        that.op[id].freeze = true;
+            that.model.push(that.op[id].PART_NUMBER);
+       }else{
+          var index = _.findIndex(that.model,(d)=>{ return d==that.op[id].PART_NUMBER; });
+           $(`#${that.model[index]}`).show();
+        //  var td = $(`#${that.model[index]} > td`);
+        //   for(var i=0;i<td.length;i++){
+        //     td[i].innerHTML = td[i].innerHTML.replace('<div class="freeze"></div>', "");
+        //   }
+        
+        var _d = _.find(this.op,{PART_NUMBER:that.model[index]})
+        _d.freeze = false;
+          that.model.splice(index,1);
+       }
+      // $compile($('#tableCmp')[0])(that.scope);
+      console.log("this.op",this.op);
+       console.log("that.model=>",that.model);
+      }
+    },
+    bindings: {
+      op: '<',
+      model:'=',
+      dbdisabled:'<',
+      index:'<',
+      scope:'='
+    }
+  }).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
   $stateProvider.state('tmProcessSubmission', {
     url: '/tmProcessSubmission/:erfqID',
     templateUrl: 'app/TMProcessSubmission/tmProcessSubmission.tpl.htm',
@@ -44,6 +84,10 @@ angular.module('App.tmProcessSubmission', ['ui.router', 'ngAnimate', 'ngSanitize
     }
   });
 }).controller('tmProcessSubmission', function ($scope, NgTableParams, $state, Upload, $timeout) {
+var that = this;
+  $scope.scope = function(){
+    return $scope;
+  }
   if ($state.params.erfqDetails.hasOwnProperty("TASK_ID")) {
     $scope.obj = $state.params.erfqDetails;
     $scope.indix = $state.params.erfqID;
@@ -261,7 +305,7 @@ angular.module('App.tmProcessSubmission', ['ui.router', 'ngAnimate', 'ngSanitize
     }
   };
 
-  $scope.combinations = ["Yes", "No", " "];
+  $scope.combinations = ["Yes", "No"];
   var data = [];
   $scope.roleValue = [];
   $scope.roles = [];
@@ -381,12 +425,10 @@ angular.module('App.tmProcessSubmission', ['ui.router', 'ngAnimate', 'ngSanitize
       });
     }
   };
-
-  $scope.$watchGroup('records', function (newNames, oldNames) {
-    console.log("newNames=>", newNames);
-    console.log("oldNames=>", oldNames);
-  }, true);
-
+  $scope.$watchGroup('records', function(newNames, oldNames) {
+    console.log("newNames=>",newNames);
+    console.log("oldNames=>",oldNames);
+  },true);
   $scope.getDataForToolmaker = function () {
     $scope.getSLnMSIE();
     $scope.newERFQNum = $scope.obj.ERFQ_NUMBER;
@@ -1081,7 +1123,7 @@ angular.module('App.tmProcessSubmission', ['ui.router', 'ngAnimate', 'ngSanitize
   $scope.downloadFile = function (grid, myRow) {
     debugger;
     $scope.attachObj = grid;
-    filPath = window.location.href.split("com")[0] + grid.DOCUMENT_PATH.split("shared\\")[1];
+    var filPath = window.location.href.split("com")[0] + grid.DOCUMENT_PATH.split("shared\\")[1];
     var dnldFile = document.createElement("A");
     dnldFile.href = filPath;
     dnldFile.download = filPath.substr(filPath.lastIndexOf('/') + 1);

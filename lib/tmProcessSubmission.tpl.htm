@@ -77,9 +77,7 @@
       </td>
       <td title="'Process Combination'" ng-if="!tpsshow && !qsshow">{{row.PROCESS_COMBINATION}}</td>
       <td title="'List of parts combined'" ng-if="tpsshow || qsshow">
-        <select ng-disabled="!(row.prcsCombo=='Yes')" ng-model="row.part_combined" class="form-control input-lg listofpartscombined" multiple="multiple" size="5">
-          <option ng-repeat="x in parts" value={{x.PART_NUMBER}}>{{x.PART_NUMBER}}</option>
-        </select>
+        <dbmultiple op="parts" model="row.part_combined" dbdisabled="row.prcsCombo"></dbmultiple>
       </td>
       <td title="'List of parts combined'" ng-if="!tpsshow && !qsshow">{{row.PART_COMBINED}}</td>
       <td title="'Panel Quantity'">{{row.PANEL_QUANTITY}}</td>

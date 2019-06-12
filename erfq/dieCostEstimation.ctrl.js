@@ -222,6 +222,7 @@ angular.module('App.dieCostEstimationController', ['ui.router', 'ngAnimate', 'ng
             "TOOL_SIZE_L_TO_R": "",
             "TOOL_SIZE_F_TO_B": "",
             "TOOL_SIZE_SH": "",
+             
             "TOOL_WEIGHT": "",
             "DIE_CFQTY": "",
             "SIMULATION_HR": "",
@@ -254,15 +255,16 @@ angular.module('App.dieCostEstimationController', ['ui.router', 'ngAnimate', 'ng
             "TOTAL_COST": "",
             "NO_OF_PARTS": "",
             "DIE_COST_ROW_NUM": "",
-            "DIE_COST_REVISION": 1
+            "DIE_COST_REVISION": 1,
+            "DIE_COST_VERSION":"Latest",
           }; // start 
 
-          for (var i = 0; i < 14; i++) {
+          for (var i = 0; i < 15; i++) {
             $scope.dataArr.push(angular.copy(vm.data));
             $scope.dataArr[i].DIE_COST_ROW_NUM = i + 1;
           }
 
-          $scope.dataArr = _.chunk($scope.dataArr, 14);
+          $scope.dataArr = _.chunk($scope.dataArr, 15);
           console.log("vm.dataArr=>", $scope.dataArr); // end
         } else {
           var prev = _.max(_.map(prevData, 'DIE_COST_REVISION'));
@@ -549,6 +551,9 @@ angular.module('App.dieCostEstimationController', ['ui.router', 'ngAnimate', 'ng
     //edited by kautilay for validating currency value before saving the data - 25/04/2019
     if ($scope.data.curr != "" && $scope.data.curr != undefined) {
       console.log("$scope.ERFQ_PROCESS_PARTS=>", $scope.ERFQ_PROCESS_PARTS);
+      var rem = $scope.ERFQ_PROCESS_PARTS[0].DIE_COST_REMARK + $scope.roles + ":" + ($scope.data.remark == undefined ? "" : $scope.data.remark) + "\n";
+      rem = rem.replace(/null/g,"");
+
       var dd = {
         old: {
           "ERFQ_PROCESS_PARTS": {
@@ -559,7 +564,7 @@ angular.module('App.dieCostEstimationController', ['ui.router', 'ngAnimate', 'ng
           "ERFQ_PROCESS_PARTS": {
             //   PROCESS_PARTS_SEQ:$scope.ERFQ_PROCESS_PARTS[0].PROCESS_PARTS_SEQ,
             CURRENCY_UNIT: $scope.data.curr,
-            DIE_COST_REMARK: $scope.ERFQ_PROCESS_PARTS[0].DIE_COST_REMARK + $scope.roles + ":" + ($scope.data.remark == undefined ? "" : $scope.data.remark) + "\n",
+            DIE_COST_REMARK: rem,
             DIE_COST_STATUS: "saved"
           }
         }

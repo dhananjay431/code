@@ -13,7 +13,7 @@ var removeEmptyLines = require('gulp-remove-empty-lines');
 // }
 
 function htmlp(){
-  return src('./erfq/*.htm')
+  return src('./erfq/*/*.htm')
     .pipe(prettify({indent_char: ' ', indent_size: 2}))
     .pipe(removeHtmlComments())
     .pipe(removeEmptyLines())
@@ -21,5 +21,6 @@ function htmlp(){
 }
 exports.default = function() {
    // watch('./*.js', series(tstojs));
-    watch('./erfq/*.htm', series(htmlp));
+   
+    watch('./erfq/*/*.htm', series(htmlp));
   };
