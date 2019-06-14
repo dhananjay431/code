@@ -152,8 +152,8 @@ if(localStorage.role !='MSIE')
         else if (ext == '3DXML' || ext == '3dxml') return 'application/octet-stream';
         else if (ext == 'IGES' || ext == 'iges') return 'application/octet-stream';
         else if (ext == 'xml' || ext == 'XML') return 'text/xml';
-        data: application / octet - stream;
-        base64
+        // data: application / octet - stream;
+        // base64
     };
 
     $scope.downloadFile = function (grid, myRow) {

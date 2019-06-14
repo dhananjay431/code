@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('App.mainApp').controller('panelGroupingCtrl', function ($scope, Upload, $timeout, $window, $uibModal, $log, $document, $state, uiGridConstants, $compile) {
   var vm = this;
   vm.data = {};
@@ -128,8 +127,7 @@ angular.module('App.mainApp').controller('panelGroupingCtrl', function ($scope, 
       },
       error: function error(jqXHR, textStatus, errorThrown) {}
     });
-  } // ui grid
-
+  }
 
   $scope.animationsEnabled = true;
 
@@ -137,12 +135,7 @@ angular.module('App.mainApp').controller('panelGroupingCtrl', function ($scope, 
     var arr = ext.split(".");
     ext = arr[arr.length - 1];
     if (ext == 'jpg') return 'image/jpg';else if (ext == 'png') return 'image/png';else if (ext == 'jpeg') return 'image/jpeg';else if (ext == 'docx') return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';else if (ext == 'doc') return 'application/msword';else if (ext == 'txt') return 'text/plain';else if (ext == 'pdf') return 'application/pdf';else if (ext == 'xls' || ext == 'xlsx') return 'application/vnd.ms-excel';else if (ext == 'xsd' || ext == 'XSD') return 'application/octet-stream';else if (ext == 'igs' || ext == 'IGS') return 'application/octet-stream';else if (ext == '3DXML' || ext == '3dxml') return 'application/octet-stream';else if (ext == 'IGES' || ext == 'iges') return 'application/octet-stream';else if (ext == 'xml' || ext == 'XML') return 'text/xml';
-
-    data: application / octet - stream;
-
-    base64;
   };
-
   $scope.downloadFile = function (grid, myRow) {
     $.cordys.ajax({
       method: "DownloadERFQDocs",
@@ -158,12 +151,10 @@ angular.module('App.mainApp').controller('panelGroupingCtrl', function ($scope, 
           $scope.base64EncodedFile = e.tuple.old.downloadERFQDocs.downloadERFQDocs;
           var mimeType = $scope.contentTypeForImage(myRow.entity.DOCUMENT_NAME);
           var dlnk = document.getElementById("dwnldLnk");
-
           if (mimeType != undefined) {
             dlnk.href = 'data:' + mimeType + ';base64,' + $scope.base64EncodedFile;
             dlnk.download = myRow.entity.DOCUMENT_NAME;
           } else dlnk.href = 'data:application/octet-stream;base64,' + $scope.base64EncodedFile;
-
           dlnk.click();
         }
       },
@@ -212,22 +203,23 @@ angular.module('App.mainApp').controller('panelGroupingCtrl', function ($scope, 
   function redimp(grid, row, col, rowRenderIndex, colRenderIndex) {
     if (row.entity.DELETED_DATA == "1") return 'redd';
   }
-$scope.aChange = function(grid,row,status){
-  console.log("grid=>",grid);
-  console.log("row=>",row);
-  console.log("status=>",status);
-  
-  _.keys(row.entity).filter(d=>{
-    return d.match(/GROUP[0-9]/i);
-  }).forEach(d=>{
-    if(row.entity[d].VALUE == row.entity['PartGroup'].VALUE){
-      console.log("alredy selected");
-      toastr.error("Already Selected");
 
-      row.entity['PartGroup'].VALUE="";
-    }
-  })
-}
+  $scope.aChange = function (grid, row, status) {
+    console.log("grid=>", grid);
+    console.log("row=>", row);
+    console.log("status=>", status);
+
+    _.keys(row.entity).filter(function (d) {
+      return d.match(/GROUP[0-9]/i);
+    }).forEach(function (d) {
+      if (row.entity[d].VALUE == row.entity['PartGroup'].VALUE) {
+        console.log("alredy selected");
+        toastr.error("Already Selected");
+        row.entity['PartGroup'].VALUE = "";
+      }
+    });
+  };
+
   $scope.tableCol = {
     "PART_NUMBER": {
       value: 1,
@@ -383,51 +375,11 @@ $scope.aChange = function(grid,row,status){
         cellClass: redimp,
         visible: true,
         name: 'Part Group',
-        field: 'PART_GROUP',
+        field: 'PartGroup.VALUE',
         width: '*',
         minWidth: 200,
         maxWidth: 2000,
-        //cellTemplate:'<div><div ng-if="row.entity.CATEGORY==\'A\'"><select ng-disabled="row.entity.DELETED_DATA == \'1\'" class="redd" style="width:1'*'%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>A1</option> <option>A2</option> <option>A3</option> <option>A4</option> <option>A5</option> <option>A6</option> <option>A7</option> <option>A8</option> <option>A9</option> <option>A10</option> <option>A11</option> <option>A12</option> <option>A13</option> <option>A14</option> <option>A15</option> </select> </div> <div ng-if="row.entity.CATEGORY==\'B\'"><select ng-disabled="row.entity.DELETED_DATA == \'1\'" class="redd" style="width:1'*'%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE"> <option>B1</option> <option>B2</option> <option>B3</option> <option>B4</option> <option>B5</option> <option>B6</option> <option>B7</option> <option>B8</option> <option>B9</option> <option>B10</option> <option>B11</option> <option>B12</option> <option>B13</option> <option>B14</option> <option>B15</option> </select></div></div>'
-        cellTemplate: `<div>
-        <div ng-if="row.entity.CATEGORY=='A'">
-            <select ng-change="grid.appScope.aChange(grid, row,'A')" ng-disabled="row.entity.DELETED_DATA == 1" class="redd" style="width:100%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE">
-                <option>A1</option>
-                <option>A2</option>
-                <option>A3</option>
-                <option>A4</option>
-                <option>A5</option>
-                <option>A6</option>
-                <option>A7</option>
-                <option>A8</option>
-                <option>A9</option>
-                <option>A10</option>
-                <option>A11</option>
-                <option>A12</option>
-                <option>A13</option>
-                <option>A14</option>
-                <option>A15</option>
-            </select>
-        </div>
-        <div ng-if="row.entity.CATEGORY=='B'">
-            <select ng-change="grid.appScope.aChange(grid, row,'B')" ng-disabled="row.entity.DELETED_DATA == 1" class="redd" style="width:100%;height:100%;border:none;" ng-model="row.entity.PartGroup.VALUE">
-                <option>B1</option>
-                <option>B2</option>
-                <option>B3</option>
-                <option>B4</option>
-                <option>B5</option>
-                <option>B6</option>
-                <option>B7</option>
-                <option>B8</option>
-                <option>B9</option>
-                <option>B10</option>
-                <option>B11</option>
-                <option>B12</option>
-                <option>B13</option>
-                <option>B14</option>
-                <option>B15</option>
-            </select>
-        </div>
-    </div>`
+        cellTemplate: "<div>\n        <div ng-if=\"row.entity.CATEGORY=='A'\">\n            <select ng-change=\"grid.appScope.aChange(grid, row,'A')\" ng-disabled=\"row.entity.DELETED_DATA == 1\" class=\"redd\" style=\"width:100%;height:100%;border:none;\" ng-model=\"row.entity.PartGroup.VALUE\">\n                <option>A1</option>\n                <option>A2</option>\n                <option>A3</option>\n                <option>A4</option>\n                <option>A5</option>\n                <option>A6</option>\n                <option>A7</option>\n                <option>A8</option>\n                <option>A9</option>\n                <option>A10</option>\n                <option>A11</option>\n                <option>A12</option>\n                <option>A13</option>\n                <option>A14</option>\n                <option>A15</option>\n            </select>\n        </div>\n        <div ng-if=\"row.entity.CATEGORY=='B'\">\n            <select ng-change=\"grid.appScope.aChange(grid, row,'B')\" ng-disabled=\"row.entity.DELETED_DATA == 1\" class=\"redd\" style=\"width:100%;height:100%;border:none;\" ng-model=\"row.entity.PartGroup.VALUE\">\n                <option>B1</option>\n                <option>B2</option>\n                <option>B3</option>\n                <option>B4</option>\n                <option>B5</option>\n                <option>B6</option>\n                <option>B7</option>\n                <option>B8</option>\n                <option>B9</option>\n                <option>B10</option>\n                <option>B11</option>\n                <option>B12</option>\n                <option>B13</option>\n                <option>B14</option>\n                <option>B15</option>\n            </select>\n        </div>\n    </div>"
       }
     }
   };
@@ -438,7 +390,7 @@ $scope.aChange = function(grid,row,status){
     onRegisterApi: function onRegisterApi(gridApi) {
       $scope.gridApi = gridApi;
     }
-  }; // ui grid
+  };
 
   $scope.sh = function (data) {
     if (data.visible != undefined) data.visible = !data.visible;else data.visible = true;
@@ -448,12 +400,12 @@ $scope.aChange = function(grid,row,status){
   $scope.changechange = function (item, model, label) {
     vm.data.pass.E_BOM_Rev = label;
 
-if(label=="")
-    {
-label="001";
+    if (label == "") {
+      label = "001";
       toastr.error("No parts available for this project code. Please contact Admin.");
     }
-vm.data.pass.E_BOM_Rev = label;
+
+    vm.data.pass.E_BOM_Rev = label;
     localStorage.projectCode = JSON.stringify(vm.data.pass);
     $.cordys.ajax({
       method: "GetERFQRevisedEBOM",
@@ -494,7 +446,7 @@ vm.data.pass.E_BOM_Rev = label;
         for (var i = 0; i < $scope.keys.length; i++) {
           $scope.gridOptions.columnDefs.push({
             name: "Part Group Baseline " + (i + 1),
-            field: 'keys[i].VALUE',
+            field: `GROUP${i+1}.VALUE`,
             width: '*',
             minWidth: 200,
             maxWidth: 2000,
@@ -504,7 +456,6 @@ vm.data.pass.E_BOM_Rev = label;
             enableCellEdit: false,
             flagName: $scope.keys[i],
             cellClass: colordrop,
-            //ng-init="grid.appScope.sh123(grid,row,\'.PartGroupBaseline'+(i+1)+'\')"
             cellTemplate: '<div><div ng-if="row.entity.CATEGORY==\'A\'"><select  class="PartGroupBaseline' + (i + 1) + '"  style="width:100%;height:100%;border:none;" ng-model="row.entity.GROUP' + (i + 1) + '.VALUE"> <option>A1</option> <option>A2</option> <option>A3</option> <option>A4</option> <option>A5</option> <option>A6</option> <option>A7</option> <option>A8</option> <option>A9</option> <option>A10</option> <option>A11</option> <option>A12</option> <option>A13</option> <option>A14</option> <option>A15</option> </select> </div> <div ng-if="row.entity.CATEGORY==\'B\'"><select class="PartGroupBaseline' + (i + 1) + '"  style="width:100%;height:100%;border:none;"ng-model="row.entity.GROUP' + (i + 1) + '.VALUE"> <option>B1</option> <option>B2</option> <option>B3</option> <option>B4</option> <option>B5</option> <option>B6</option> <option>B7</option> <option>B8</option> <option>B9</option> <option>B10</option> <option>B11</option> <option>B12</option> <option>B13</option> <option>B14</option> <option>B15</option> </select></div></div>'
           });
         }
@@ -524,8 +475,7 @@ vm.data.pass.E_BOM_Rev = label;
         });
 
         if (temp_data.length > 0) {
-          $scope.gridOptions.columnDefs[$scope.gridOptions.columnDefs.length - 1].name = "Panel Group"; //delete $scope.gridOptions.columnDefs[$scope.gridOptions.columnDefs.length - 1].cellClass;
-
+          $scope.gridOptions.columnDefs[$scope.gridOptions.columnDefs.length - 1].name = "Panel Group";
           $scope.gridOptions.columnDefs[$scope.gridOptions.columnDefs.length - 1].cellClass;
         }
 
@@ -537,114 +487,25 @@ vm.data.pass.E_BOM_Rev = label;
   };
 
   $scope.download = function () {
-    $scope.fileName = 'report_' + new Date().toISOString();
-    $scope.exportData = []; // Headers:
-    // $scope.exportData.push(_.keys($scope.gridOptions.data[0]));
-
-    $scope.exportData.push(_.map($scope.gridOptions.columnDefs, 'field')); // Data:
-
-    angular.forEach($scope.gridOptions.data, function (value, key) {
-      var temp = [];
-
-      for (var i = 0; i < $scope.exportData[0].length; i++) {
-        temp.push(value[$scope.exportData[0][i]]);
-      }
-
-      $scope.exportData.push(temp);
-    });
-
-    function datenum(v, date1904) {
-      if (date1904) v += 1462;
-      var epoch = Date.parse(v);
-      return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
-    }
-
-    ;
-
-    function getSheet(data, opts) {
-      var ws = {};
-      var range = {
-        s: {
-          c: 10000000,
-          r: 10000000
-        },
-        e: {
-          c: 0,
-          r: 0
-        }
-      };
-
-      for (var R = 0; R != data.length; ++R) {
-        for (var C = 0; C != data[R].length; ++C) {
-          if (range.s.r > R) range.s.r = R;
-          if (range.s.c > C) range.s.c = C;
-          if (range.e.r < R) range.e.r = R;
-          if (range.e.c < C) range.e.c = C;
-          var cell = {
-            v: data[R][C]
-          };
-          if (cell.v == null) continue;
-          var cell_ref = XLSX.utils.encode_cell({
-            c: C,
-            r: R
-          });
-          if (typeof cell.v === 'number') cell.t = 'n';else if (typeof cell.v === 'boolean') cell.t = 'b';else if (cell.v instanceof Date) {
-            cell.t = 'n';
-            cell.z = XLSX.SSF._table[14];
-            cell.v = datenum(cell.v);
-          } else cell.t = 's';
-          ws[cell_ref] = cell;
-        }
-      }
-
-      if (range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
-      return ws;
-    }
-
-    ;
-
-    function Workbook() {
-      if (!(this instanceof Workbook)) return new Workbook();
-      this.SheetNames = [];
-      this.Sheets = {};
-    }
-
-    $scope.exportData[0] = _.map($scope.gridOptions.columnDefs, 'name');
-    var wb = new Workbook(),
-        ws = getSheet($scope.exportData);
-    /* add worksheet to workbook */
-
-    wb.SheetNames.push($scope.fileName);
-    wb.Sheets[$scope.fileName] = ws;
-    var wbout = XLSX.write(wb, {
-      bookType: 'xlsx',
-      bookSST: true,
-      type: 'binary'
-    });
-
-    function s2ab(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-
-      for (var i = 0; i != s.length; ++i) {
-        view[i] = s.charCodeAt(i) & 0xFF;
-      }
-
-      return buf;
-    }
-
-    saveAs(new Blob([s2ab(wbout)], {
-      type: "application/octet-stream"
-    }), $scope.fileName + '.xlsx');
-  }; /////////////////file upload//////////////
-
+    var _field = _.map($scope.gridOptions.columnDefs,'field');
+    var _name = _.map($scope.gridOptions.columnDefs,'name');
+    var _ARR=[];
+    angular.forEach($scope.gridOptions.data,(d)=>{
+      var _t = {};
+      _field.forEach((v,k)=>{
+        _t[_name[k]] = _.at(d, v)[0]!=undefined?_.at(d, v)[0]:" ";
+      })
+      _ARR.push(_t);
+    })
+    xlsx.write(_ARR, `data-${new Date().getTime()}.xlsx`);
+  };
 
   $scope.uploadFiles = function (files, errFiles) {
     if (files.length > 0) {
       var farr = files[0].name.split(".");
       var ext = farr[farr.length - 1];
-
-      if (ext == '3DXML' || ext == 'IGES' || ext == 'XML' || ext == 'XSD' || ext == 'IGS' || ext == '3dxml' || ext == 'iges' || ext == 'xml' || ext == 'xsd' || ext == 'igs') {
+      //if (ext == '3DXML' || ext == 'IGES' || ext == 'XML' || ext == 'XSD' || ext == 'IGS' || ext == '3dxml' || ext == 'iges' || ext == 'xml' || ext == 'xsd' || ext == 'igs') {
+      if (ext) {
         $scope.files = files;
         $scope.errFiles = errFiles;
         angular.forEach(files, function (file) {
@@ -688,7 +549,6 @@ vm.data.pass.E_BOM_Rev = label;
                     "DOCUMENT_NAME": $scope.files[0].name,
                     "DOCUMENT_PATH": $scope.ServerFilePath,
                     "DOCUMENT_TYPE": "CAD_DATA",
-                    //as per the screen
                     "REVISION": vm.selectedItem,
                     "DOCUMENT_DESC": "",
                     "PART_NUMBER": $scope.selectedRow.PART_NUMBER
@@ -697,7 +557,6 @@ vm.data.pass.E_BOM_Rev = label;
               }
             },
             success: function success(e) {
-              //console.log(e);
               $.cordys.json.findObjects(e, "ERFQ_UPLOADED_DOCUMENT")[0].DOCUMENT_ID;
               $scope.DOCUMENT_NAME1 = null;
               $scope.DOCUMENT_DESC1 = null;
@@ -706,7 +565,6 @@ vm.data.pass.E_BOM_Rev = label;
               $scope.changechange({}, {}, vm.selectedItem.value);
             },
             error: function error(jqXHR, textStatus, errorThrown) {
-              //debugger;
               alert("Error in uploading file");
             }
           });
@@ -739,13 +597,11 @@ vm.data.pass.E_BOM_Rev = label;
                 },
                 "new": {
                   "ERFQ_UPLOADED_DOCUMENT": {
-                    //check once
                     "DOCUMENT_ID": $scope.selectedRow.DOCUMENT_ID,
                     "PROJECT_CODE": vm.data.pass.ProjectCode,
                     "DOCUMENT_NAME": $scope.files[0].name,
                     "DOCUMENT_PATH": $scope.ServerFilePath,
                     "DOCUMENT_TYPE": "CAD_DATA",
-                    //as per the screen
                     "REVISION": vm.selectedItem,
                     "DOCUMENT_DESC": ""
                   }
@@ -761,7 +617,6 @@ vm.data.pass.E_BOM_Rev = label;
               $scope.changechange({}, {}, vm.selectedItem.value);
             },
             error: function error(jqXHR, textStatus, errorThrown) {
-              //debugger;
               alert("Error in loading data");
             }
           });

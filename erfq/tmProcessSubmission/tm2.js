@@ -1541,7 +1541,8 @@ var that = this;
                     PROCESS_COMBINATION: $scope.records[i].prcsCombo,
                     PART_COMBINED: $scope.records[i].part_combined,
                     PANEL_QUANTITY: $scope.records[i].PANEL_QUANTITY,
-                    TOOLMAKER_REMARK: $scope.records[i].TMRemarks
+                    TOOLMAKER_REMARK: $scope.records[i].TMRemarks,
+                    STATUS:"QUCO"
                   }
                 }
               }

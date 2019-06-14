@@ -1,0 +1,1310 @@
+<style>
+        .fileUploadMain  input {
+                      display: none;
+                    }
+      </style>
+      <db-nav></db-nav>
+      <div class="pr-5 pl-5 pt-2 pb-2" style="width:100%;">
+        <div class="row rounded border border-dark">
+          <div class="col-sm-2 form-group">
+            <label for="exampleInputEmail1">Project</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" ng-model="data.projDetails.PROJECT_CODE" aria-describedby="emailHelp" style="pointer-events: none;">
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="exampleInputEmail1">Date</label>
+            <input type="date" class="form-control" id="exampleInputEmail1" ng-model="data.Date" aria-describedby="emailHelp" style="pointer-events: none;">
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="exampleInputEmail1">Die Maker</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" ng-model="data.toolmaker_name" aria-describedby="emailHelp" style="pointer-events: none;">
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="exampleInputEmail1">Item No</label>
+            Currency Unit:
+            <select ng-model="data.curr" class="form-control" id="exampleFormControlSelect2">
+              <option ng-repeat="d in curr">{{d.value}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2 form-group" style="position:relative;">
+            <div style="position:absolute;bottom:0;right:0;" class="pr-2">
+              <label for="exampleInputEmail1">File Download</label>
+              <i ng-click="downloadXl()" class="fas fa-download"></i>
+            </div>
+          </div>
+          <div class="col-sm-2 form-group" style="position:relative;">
+            <div style="position:absolute;bottom:0;right:0;" class="pr-2 fileUploadMain">
+              <label for="exampleInputEmail1">File Upload</label>
+              <i class="fas fa-upload" id="fileUpload"></i>
+              <input type="file" name="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ritz grid-container p-2" dir="ltr" style="overflow:scroll;height:500px;">
+        <table class="waffle" cellspacing="0" cellpadding="0" ng-repeat="x in dataArr">
+          <thead>
+            <tr style='height:20px;'>
+              <td class="s0" rowspan="2">Sr no.</td>
+              <td class="s1" rowspan="2">Part Name and Image</td>
+              <td class="s1" rowspan="2">Part No.</td>
+              <td class="s2" rowspan="2">Op. No.</td>
+              <td class="s2">Operation</td>
+              <td class="s2" colspan="3">Tool Size</td>
+              <td class="s1" rowspan="2">Tool Weight (Tons)</td>
+              <td class="s1" rowspan="2">Die/CF Qty</td>
+              <td class="s2" colspan="4">DESIGN</td>
+              <td class="s2" colspan="2">CNC Program</td>
+              <td class="s1" colspan="2">Weight in ton</td>
+              <td class="s2" colspan="2">Material cost</td>
+              <td class="s2" colspan="2">Machining</td>
+              <td class="s2" colspan="2">Assy/Finishing</td>
+              <td class="s2" colspan="2">Try out</td>
+              <td class="s1" rowspan="2">Total
+                <br>(Manufacturing cost)</td>
+              <td class="s3" rowspan="2">F O B Charge</td>
+              <td class="s3" rowspan="2">FOB Total</td>
+              <td class="s1" rowspan="2">Estimated Tonnage</td>
+              <td class="s1" rowspan="2">SPM Committed</td>
+              <td class="s2" rowspan="2">Yield</td>
+              <td class="s1" rowspan="2">Est. Blank</td>
+              <td class="s2" rowspan="2">No. of Dies</td>
+              <td class="s1" rowspan="2">No. of Checking Fixture</td>
+              <td class="s2" rowspan="2">Total Weight</td>
+              <td class="s2" rowspan="2">Cost/Ton</td>
+              <td class="s2" rowspan="2">Total Cost</td>
+              <td class="s2" rowspan="2">No. of Parts</td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s2">Operation Name</td>
+              <td class="s2">L to R</td>
+              <td class="s2">F to B</td>
+              <td class="s2">SH</td>
+              <td class="s1">Simulation Hr</td>
+              <td class="s1">Simulation Cost</td>
+              <td class="s1">Die Design Hrs</td>
+              <td class="s1">Die Design Cost</td>
+              <td class="s2">Hrs</td>
+              <td class="s2">Cost</td>
+              <td class="s1">Casting Weight</td>
+              <td class="s1">Tool Steel Weight</td>
+              <td class="s4">Raw Material incl casting</td>
+              <td class="s5">
+                Std Items
+              </td>
+              <td class="s2">Hrs</td>
+              <td class="s2">Cost</td>
+              <td class="s2">Hrs</td>
+              <td class="s2">Cost</td>
+              <td class="s2">Hrs</td>
+              <td class="s2">Cost</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style='height:20px;'>
+              <td class="s6" dir="ltr">
+                <input ng-disabled=true onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].DIE_COST_ROW_NUM" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled=true onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].PART_NAME" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled=true onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].PART_NUMBER" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[0].OP_NUMBER='05'">05</td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[0].OP_NAME" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOOL_SIZE_L_TO_R" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOOL_SIZE_F_TO_B" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOOL_SIZE_SH" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOOL_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].SIMULATION_HR" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].SIMULATION_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].DIE_DESIGN_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].DIE_DESIGN_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].CNC_PROGRAM_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].CNC_PROGRAM_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].CASTING_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOOL_STEEL_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].MATERIAL_COST_STD_ITEMS" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].MACHINING_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].MACHINING_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].ASSY_FINISHING_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].ASSY_FINISHING_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TRYOUT_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TRYOUT_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOTAL_MANUFACTURING_COST" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].FOB_CHARGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].FOB_TOTAL" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].ESTIMATED_TONNAGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].SPM_COMMITTED" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].YIELD" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].EST_BANK" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s9">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].NO_OF_DIES" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s10">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].NO_OF_CHECKING_FIXTURE" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s9" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOTAL_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s9" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].COST_TON" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s9">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].TOTAL_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s9" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[0].NO_OF_PARTS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s6" dir="ltr">
+              </td>
+              <td class="s6" dir="ltr">
+              </td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[1].OP_NUMBER='10'">10</td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[1].OP_NAME" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TOOL_SIZE_L_TO_R" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TOOL_SIZE_F_TO_B" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" style="width:100%;" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TOOL_SIZE_SH">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TOOL_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].SIMULATION_HR" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].SIMULATION_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].DIE_DESIGN_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].DIE_DESIGN_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].CNC_PROGRAM_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].CNC_PROGRAM_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].CASTING_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TOOL_STEEL_WEIGHT" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].MATERIAL_COST_STD_ITEMS" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].MACHINING_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].MACHINING_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].ASSY_FINISHING_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].ASSY_FINISHING_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TRYOUT_HRS" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TRYOUT_COST" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].TOTAL_MANUFACTURING_COST" ng-change="valCh()" type="text"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].FOB_CHARGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].FOB_TOTAL" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].ESTIMATED_TONNAGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[1].SPM_COMMITTED" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[2].OP_NUMBER='20'">20</td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[2].OP_NAME" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TOOL_SIZE_L_TO_R" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TOOL_SIZE_F_TO_B" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TOOL_SIZE_SH" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TOOL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].DIE_DESIGN_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].DIE_DESIGN_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].CNC_PROGRAM_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].CNC_PROGRAM_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].CASTING_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TOOL_STEEL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].MATERIAL_COST_STD_ITEMS" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].MACHINING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].MACHINING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].ASSY_FINISHING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].ASSY_FINISHING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TRYOUT_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TRYOUT_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].ESTIMATED_TONNAGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[2].SPM_COMMITTED" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[3].OP_NUMBER='30'">30</td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[3].OP_NAME" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TOOL_SIZE_L_TO_R" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TOOL_SIZE_F_TO_B" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TOOL_SIZE_SH" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TOOL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].DIE_DESIGN_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].DIE_DESIGN_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].CNC_PROGRAM_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].CNC_PROGRAM_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].CASTING_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TOOL_STEEL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].MATERIAL_COST_STD_ITEMS" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].MACHINING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].MACHINING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].ASSY_FINISHING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].ASSY_FINISHING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TRYOUT_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TRYOUT_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].ESTIMATED_TONNAGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[3].SPM_COMMITTED" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[4].OP_NUMBER='40'">40</td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[4].OP_NAME" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TOOL_SIZE_L_TO_R" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TOOL_SIZE_F_TO_B" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TOOL_SIZE_SH" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TOOL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].DIE_DESIGN_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].DIE_DESIGN_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].CNC_PROGRAM_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].CNC_PROGRAM_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].CASTING_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TOOL_STEEL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].MATERIAL_COST_STD_ITEMS" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].MACHINING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].MACHINING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].ASSY_FINISHING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].ASSY_FINISHING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TRYOUT_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TRYOUT_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].ESTIMATED_TONNAGE" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s8">
+                <input ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[4].SPM_COMMITTED" ng-change="valCh()" type="text" style="width:100%;">
+              </td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[5].OP_NUMBER='50'">50</td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[5].OP_NAME" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TOOL_SIZE_L_TO_R" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TOOL_SIZE_F_TO_B" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TOOL_SIZE_SH" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TOOL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].DIE_DESIGN_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].DIE_DESIGN_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].CNC_PROGRAM_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].CNC_PROGRAM_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].CASTING_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TOOL_STEEL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].MATERIAL_COST_STD_ITEMS" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].MACHINING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].MACHINING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].ASSY_FINISHING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].ASSY_FINISHING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TRYOUT_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TRYOUT_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[5].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s7" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-init="x[6].OP_NUMBER='60'">60</td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" ng-model="x[6].OP_NAME" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TOOL_SIZE_L_TO_R" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TOOL_SIZE_F_TO_B" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TOOL_SIZE_SH" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TOOL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].DIE_DESIGN_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].DIE_DESIGN_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].CNC_PROGRAM_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].CNC_PROGRAM_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].CASTING_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TOOL_STEEL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].MATERIAL_COST_STD_ITEMS" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].MACHINING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].MACHINING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].ASSY_FINISHING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].ASSY_FINISHING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TRYOUT_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TRYOUT_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s6" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[6].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s8"></td>
+              <td class="s14">Dies total</td>
+              <td class="s14"></td>
+              <td class="s14"></td>
+              <td class="s14"></td>
+              <td class="s14">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].TOOL_WEIGHT" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].DIE_DESIGN_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].DIE_DESIGN_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].CNC_PROGRAM_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].CNC_PROGRAM_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].CASTING_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].TOOL_STEEL_WEIGHT" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].RAW_MATERIAL_INCL_CASTING" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].MATERIAL_COST_STD_ITEMS" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].MACHINING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].MACHINING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].ASSY_FINISHING_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].ASSY_FINISHING_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].TRYOUT_HRS" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].TRYOUT_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[7].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s15"></td>
+              <td class="s6">PVD coating for Draw Die</td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[8].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s8">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[8].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s17" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[8].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s15"></td>
+              <td class="s6">White line scanning</td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[9].TOTAL_MANUFACTURING_COST" style="width:100%"
+                ng-change="valCh()">
+              </td>
+              <td class="s8">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[9].FOB_CHARGE" style="width:100%" ng-change="valCh()">
+              </td>
+              <td class="s17" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[9].FOB_TOTAL" style="width:100%" ng-change="valCh()">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s6">Checking Fixture</td>
+              <td class="s6"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[10].DIE_CFQTY" ng-change="valCh()" data-cal="DIE_CFQTY"
+                style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[10].SIMULATION_HR" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[10].SIMULATION_COST" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[10].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[10].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s17" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[10].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s15"></td>
+              <td class="s6">
+                Panel Pressing Charges 150 parts (FOC as mentioned in RFQ)
+              </td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s6"></td>
+              <td class="s16"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[11].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[11].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s17" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[11].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s15"></td>
+              <td class="s6">Supervision charges (Home line trials)</td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[12].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s8">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[12].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s17" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[12].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s11"></td>
+              <td class="s15"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s16"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[13].TOTAL_MANUFACTURING_COST" ng-change="valCh()"
+                style="width:100%;">
+              </td>
+              <td class="s8">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[13].FOB_CHARGE" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s20" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[13].FOB_TOTAL" ng-change="valCh()" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s12"></td>
+              <td class="s11"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s13"></td>
+              <td class="s12"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6"></td>
+              <td class="s6"></td>
+              <td class="s6"></td>
+              <td class="s8"></td>
+              <td class="s14">TOTAL</td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[14].TOTAL_MANUFACTURING_COST" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[14].FOB_CHARGE" style="width:100%;">
+              </td>
+              <td class="s14" dir="ltr">
+                <input type="text" ng-disabled="$index!=0 || roles =='MSIE'" onkeydown="return ((event.keyCode>=48 &&  event.keyCode<=57)  || (event.keyCode == 9 || event.keyCode == 8 || event.keyCode == 13))" ng-model="x[14].FOB_TOTAL" style="width:100%;">
+              </td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s8"></td>
+              <td class="s6"></td>
+              <td class="s21"></td>
+              <td class="s21"></td>
+              <td class="s21"></td>
+              <td class="s21"></td>
+              <td class="s21"></td>
+              <td class="s8"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+              <td class="s22">__________</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex;align-items: center;" ng-if="roles=='MSIE'">
+        <i ng-click="status('Accept')" class="fas fa-check-circle text-white border rounded-circle ml-2" ng-class="{'text-success':statusFlag == 'Accept' }" style="font-size:40px;"></i> Accept
+        <i ng-click="status('Rework')" class="fas fa-check-circle text-white border rounded-circle ml-2" ng-class="{'text-danger':statusFlag == 'Rework' }" style="font-size:40px;"></i> Rework
+        <i ng-click="status('ConditionallyAccept')" class="fas fa-check-circle text-white border rounded-circle ml-2" ng-class="{'text-warning':statusFlag == 'ConditionallyAccept' }" style="font-size:40px;"></i>Conditionally Accept
+      </div>
+      <div class="form-group">
+        <div class="p-4">
+          <label for="exampleFormControlTextarea1">Remark</label>
+          <div class="row">
+            <div class="col-6">
+              <textarea ng-model="data.remark" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div class="col-6">
+              <textarea ng-model="ERFQ_PROCESS_PARTS[0].DIE_COST_REMARK" class="form-control" id="exampleFormControlTextarea2" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="float-right mt-2">
+            <button ng-if="roles!='MSIE'" type="button" class="btn btn-outline-danger" ng-click="save()"><i class="fas fa-save"></i> Save</button>
+            <button ng-if="roles=='MSIE'" type="button" class="btn btn-outline-danger" ng-click="saveStatus()"><i class="fas fa-save"></i> Save</button>
+          </div>
+        </div>
+      </div>
