@@ -1,7 +1,6 @@
 "use strict";
 
 angular.module('App.quoteComparisionCtrl').controller('proSelectionCtrl', function ($scope, Upload, $window, $log, $state, NgTableParams, cmm) {
-  console.log("cmm=>", cmm);
   $scope.data = {};
   $scope.cmm = cmm;
   $scope.PanelGrpDrpdwn = [];
@@ -18,7 +17,7 @@ angular.module('App.quoteComparisionCtrl').controller('proSelectionCtrl', functi
 
   $scope.PartCombinationSelectionFunInit = function (panelGroup, projectCode, baslineNum, selectedPart, PARTNUM, partNumIndex, rowIndex) {
     isInitialized = false;
-    $scope.PartCombinationSelectionFun('B');
+    $scope.PartCombinationSelectionFun('A');
   };
 
   $scope.PartCombinationSelectionFun = function (panelGroup, projectCode, baslineNum) {
@@ -48,7 +47,6 @@ angular.module('App.quoteComparisionCtrl').controller('proSelectionCtrl', functi
         },
         success: function success(data, rowIndex) {
           $scope.PartCombinationSelection = $.cordys.json.findObjects(data, 'PARTCOMBINATION');
-          console.log("PartCombinationSelection:", $scope.PartCombinationSelection);
           $scope.changePart($scope.PartCombinationSelection[0].PARTS);
           $scope.$apply();
         },
@@ -76,7 +74,6 @@ angular.module('App.quoteComparisionCtrl').controller('proSelectionCtrl', functi
           selectedPart.push(d.selected);
         }
 
-        console.log("selectedpart:", selectedPart);
         var dlabel = $scope.cmm.label;
         $scope.cmm.selectedPartNumber[dlabel] = selectedPart.join(",");
         d.isDisabled = false;
@@ -96,11 +93,31 @@ angular.module('App.quoteComparisionCtrl').controller('proSelectionCtrl', functi
       });
       return dd;
     });
-    console.log("part:", $scope.PartCombinationSelection[0].PARTS);
+  };
+
+  $scope.changePartSelected = function (data, id, sel) {
+    data.map(function (d) {
+      d.isDisabled = false;
+      return d;
+    }).forEach(function (d, i) {
+      if (i == id) d.selected = sel;
+    });
+    data.map(function (dd) {
+      if (dd.isDisabled == true) return dd;
+      dd.selected.split(";").forEach(function (ddd) {
+        if (ddd != dd.PARTNUM) {
+          var freez = _.find(data, {
+            "PARTNUM": ddd
+          });
+
+          freez.isDisabled = true;
+        }
+      });
+      return dd;
+    });
   };
 
   $scope.sendToRevPanel = function () {
-    console.log("selected part Number:", $scope.cmm.selectedPartNumber);
     $state.go('quoteComparisionCtrl.revisePanel');
   };
 

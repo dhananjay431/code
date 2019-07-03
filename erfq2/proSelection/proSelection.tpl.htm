@@ -40,7 +40,7 @@
 				<div class="col-sm-10"></div>
 			</div>
 		</div>
-		
+
 		<table class="table table-bordered mt-4" style="width:100%;">
 			<tr style=" background-color:#f3f3f3">
 				<th>Part Number</th>
@@ -51,15 +51,14 @@
 
 				<td><span >{{part.PARTNUM}} </span></td>
 				<td>
-					<select id="firstSelect" class='form-control' style="width:100%" ng-model="part.PARTDETAIL.PART[0]"  ng-disabled="part.isDisabled" ng-change="changePart(PartCombinationSelection[0].PARTS)">
+					<select id="firstSelect" class='form-control' style="width:100%" ng-model="part.selected"  ng-disabled="part.isDisabled" ng-change="changePartSelected(PartCombinationSelection[0].PARTS,$index,part.selected)">
 						<option  ng-repeat="partNum in part.PARTDETAIL.PART track by $index" >{{partNum}}</option>
 					</select>
 				</td>
 				<td><div ng-if="!part.isDisabled">
 					{{part.selected }}</div>
 				</td>
-            </tr>
-            
+			</tr>
 		</table>
 		<div class="row mt-4" >
 			<div class="col-sm-12">
