@@ -1,0 +1,897 @@
+<style>
+  td.tbdisabled {
+        background: lightgray;
+    }
+    .div-mydisabled
+    {
+      pointer-events: none;
+      opacity: 0.5;
+      background: #CCC;
+    }
+    .ng-table-pagination {
+        display: none;
+    }
+    .av-pagination {
+      color : black;
+      text-decoration: none;
+      display: inline-block;
+      padding: 0px 16px;
+      background-color: #CCCCCC;;
+    }
+    .av-pagination:hover {
+      background-color: #d83c3c;
+      border-color: #f5302e;
+      color: #ddd;
+    }
+    .av-round {
+      border-radius: 50%;
+    }
+    .md-calendar-date.md-focus.md-calendar-selected-date .md-calendar-date-selection-indicator  {
+        background: #dc3545;
+    }
+    .md-calendar-date.md-calendar-date-today .md-calendar-date-selection-indicator {
+        border: 1px solid rgb(220, 53, 69);
+    }
+    .md-calendar-day-header {
+        background-color: #dc3545;
+    }
+    .md-datepicker-open .md-datepicker-calendar-icon {
+        fill: #dc3545;
+    }
+    th.header {
+        cursor: default;
+    }
+    .md-datepicker-input-container {
+        pointer-events: none;
+        border-bottom-width: 0;
+        border-bottom-style: none;
+    }
+    datepicker-input {
+        margin: 5px;
+    }
+    .card-header {
+        padding:0;
+    }
+    .form-control-1{
+             height: calc(2.0625rem + 2px);
+             background-color: lightgrey;
+    }
+        .form-control{
+            height: calc(2.0625rem + 2px);
+        }
+       select {
+       background: url(images/chevron-sign-down.png) no-repeat right !important;
+       -webkit-appearance: none !important;
+       background-position: 99% !important;
+       border-radius: .25rem !important;
+       }
+       input[type='text'],
+       input[type='number'],
+        input[type='date'],
+       textarea {
+       border-radius: .25rem !important;
+       }
+    select:disabled,
+    input:disabled,
+    textarea:disabled
+     {
+        background-color: lightgrey !important;
+    }
+       .card-body,
+       .card-block {
+       -ms-flex: 1 1 auto !important;
+       flex: 1 1 auto !important;
+       padding: 10px 10px 10px 10px !important;
+       }
+       select::-ms-expand {
+       display: none;
+       }
+       .modal-header .close {
+       padding: 0px;
+       margin: 0px; 
+       }
+       .dropdown-menu {
+       position: absolute;
+       top: 100%;
+       left: 0;
+       z-index: 1000;
+       display: none;
+       float: left;
+       min-width: 10rem;
+       padding: 0 0;
+       margin: 0.125rem 0 0;
+       font-size: 0.875rem;
+       color: #151b1e;
+       text-align: left;
+       list-style: none;
+       background-color: #fff;
+       background-clip: padding-box;
+       border: 1px solid #c2cfd6;
+       width: 94% !important;
+       height: 95px !important;
+       overflow-y: auto;
+       }
+       #modal1{
+       width:1315px;
+       }
+       #modal2{
+       width:1315px;
+       }
+       .ng-table th {
+       text-align: left;
+       }
+       #datatable1,#datatable2
+       {
+       padding:10px;
+       width: 100%;
+       border: 1px solid lightgrey !important;
+       }
+       .btn-group{
+       visibility:hidden ;
+       }
+       .pagination li.active a {
+       z-index: 1;
+       color: #fff;
+       background-color: #d83c3c !important;
+       border-color: #f5302e;
+       }
+       .pagination li a {
+       background-color: #CCCCCC !important;
+       color: black;
+       }
+       .even {
+       background-color: #f2f2f2;;
+       }
+       .ng-table th {
+       padding: 0.75em;
+       }
+       .ng-table td {
+       padding: 0.75em;
+       }
+       thead.ng-scope {
+       border-bottom: 1px solid lightgray;
+       }
+       .ng-scope.ng-isolate-scope {
+       border-top: 1px solid lightgrey;
+       width: 100%;
+       }
+       .workflowmodal{
+       margin-left: -58% !important;
+       }
+       .clarificationmodal{
+       margin-left: -58% !important;
+       }
+       .body1{
+       overflow: hidden scroll;
+       } 
+       .body2{
+       overflow: hidden scroll;
+       }
+       .btn1{
+       padding-right: 15%;
+       }
+       #modal3{
+       width: 850px;
+       }
+       .clarifymodal{
+       margin-left: -26% !important;
+       }
+       .text-center
+       {
+       text-align:center;
+       }
+</style>
+<div style="background:white; padding: 30px;" ng-init="initdev()">
+  <div class="row">
+    <div class="col-sm-1" ng-if="!(accessedfromInbox)&&(viewmode != 'NA'  )"><a ng-click="rback()" class="btn btn-lg active" role="button" aria-pressed="true"><i class="fa fa-arrow-left" style="font-size: 1.3em;color: #ca2300cc;float: left;margin-left: 2%;"></i></a>
+    </div>
+    <div class="col-sm-3">
+      <h4>{{deviation.GDMS_CODE}}</h4>    </div>
+    <div class="col-sm-6"></div>
+    <div class="col-sm-1" style="color:#DC3545 !important;" ng-if="((taskid)||(viewmode == 'true' ))">
+      <a href="" data-toggle="modal" data-target="#clarificationModal" style="color:#DC3545 !important;" ng-click="clarificationHis()">
+        <img title="Clarification History" style="margin-top: 5%;float:right;" src="images/human_notification_sb.png">
+      </a>
+    </div>
+    <div class="col-sm-1" style="color:#DC3545 !important;" ng-if="((taskid)||(viewmode == 'true' ))">
+      <a href="" data-toggle="modal" data-target="#workflowModal" style="color:#DC3545 !important;" ng-click="workflowHis()">
+        <img title="Workflow History" style="max-width: 40px;" src="images/workflowtaskdefinition.png">
+      </a>
+    </div>
+  </div>
+  <br>
+  <form name="vehicleForm">
+    <div class="row">
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Project Code<span class="text-danger">*</span>
+        </label>
+        <select class="form-control" name="Project Code" ng-model="deviation.PROJECT_CODE" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in projcodes" value="{{pc.PROJECT_CODE}}" name="status">{{pc.PROJECT_CODE}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Platform<span class="text-danger">*</span>
+        </label>
+        <select class="form-control" name="Project Code" ng-model="deviation.GDMS_PLATFORM" ng-required="true" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in PLATFORM" value="{{pc.LMF_DESC}}" name="status">{{pc.LMF_DESC}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Gateway<span class="text-danger">*</span>
+        </label>
+        <select class="form-control" name="Gateway" ng-model="deviation.GDMS_GATEWAY" ng-required="true" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in GATEWAY" value="{{pc.LMF_DESC}}" name="status">{{pc.LMF_DESC}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">No. of Red Deliverables</label>
+        <input class="form-control" type="text" ng-model="deviation.NO_OF_RED_DELI" maxlength="19" autocomplete="off" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' number>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">No. of Green Deliverables</label>
+        <input class="form-control" type="text" ng-model="deviation.NO_OF_GREEN_DELI" maxlength="19" autocomplete="off" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' number>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">No. of Yellow Deliverables</label>
+        <input class="form-control" type="text" ng-model="deviation.NO_OF_YELLOW_DELI" maxlength="19" autocomplete="off" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' number>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Plant</label>
+        <select class="form-control" name="Project Code" ng-model="deviation.PLANT_CODE" ng-required="true" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in locations" value="{{pc.MFG_LOC_NAME}}" name="status">{{pc.MFG_LOC_NAME}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Division</label>
+        <select class="form-control" ng-model="deviation.GDMS_DIVISION" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in DIVISION" value="{{pc.LMF_DESC}}" name="status">{{pc.LMF_DESC}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Scalability<span class="text-danger">*</span>
+        </label>
+        <select class="form-control" ng-model="deviation.SCALABILITY" ng-required="true" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in SCALABILITY" value="{{pc.LMF_DESC}}" name="status">{{pc.LMF_DESC}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Project Category <span class="text-danger">*</span>
+        </label>
+        <select class="form-control" ng-model="deviation.PROJCATEGORY" ng-required="true" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+          <option ng-repeat="pc in PROJCATEGORY" value="{{pc.LMF_DESC}}" name="status">{{pc.LMF_DESC}}</option>
+        </select>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading" style="font-size: 13px;">Deviation Date (Request Date)</label>
+        <md-datepicker class="form-control-1" style="border-radius: 5px; margin-top: 1px;" ng-model="deviation.SUBMITTED_ON" ng-disabled='true' md-hide-icons="calendar"></md-datepicker>
+      </div>
+      <div class="col-sm-2 mb-4">
+        <label class="iheading">Initiated By</label>
+        <input class="form-control" style="border-radius: 5px;" ng-model="deviation.SBT" autocomplete="off" ng-disabled='true'>
+        <md-tooltip>{{deviation.SBT}}</md-tooltip>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 mb-3">
+        <label class="iheading">Workflow Remarks</label>
+        <br>
+        <textarea ng-model="workflowrem" ng-disabled="(viewmode == 'true' )" maxlength="200" style="height:80px;"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-9 mt-3">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap" ng-click="clarificationReq()" ng-if="((taskid)&&(viewmode != 'true' ))" style="width:17%;"><i class="fa fa-share" style="font-size:1.3em;width:17%;"></i> Seek Clarification</button>
+        <button type="button" class="btn btn-danger" ng-click="downloadPreview()" style="width:15%"><i class="fa fa-download" style="font-size: 1.3em;color: white;float: left;margin-left: 2%;"></i> View PDF</button>
+        <button type="button" class="btn btn-danger" ng-click="saveGDMSdetails()" ng-disabled="savedisabled || submitdisabled" style="width:14%" ng-if="(viewmode != 'true' )">
+          <i class="fa fa-save" style="font-size: 1.3em;"></i> Save</button>
+        <button type="button" class="btn btn-outline-danger" ng-click="changeStatus()" ng-if='(!(accessedfromInbox) && (node) && (deviation.STATUS == "OPEN"))' style="width:14%">
+          <i class="fa fa-save" style="font-size: 1.3em;"></i> Save</button>
+        <button type="button" class="btn btn-danger" ng-if="((deviation.CURRENT_STAGE == 'ADPD HEAD OR POWERTRAIN HEAD'  || deviation.CURRENT_STAGE == 'CDMM/CCHEAD/OH/PH' || deviation.CURRENT_STAGE == 'PQO HEAD' || ((deviation.CURRENT_STAGE == 'PRESIDENT') && ((deviation.STATUS != 'OPEN') || (deviation.STATUS != 'REVIEWED'))) || deviation.CURRENT_STAGE == 'QUALITY HEAD') && viewmode != 'true')"
+        style="width:15%" ng-click="rejectTasks()" ng-disabled="(viewmode == 'true' )">
+          <i class="fa fa-arrow-right" style="font-size: 1.3em;color: white;float: left;margin-left: 2%;"></i>Reject</button>
+        <button type="button" class="btn btn-danger" style="width:17%" ng-click="submitTasks()" ng-if="(viewmode != 'true' )" ng-disabled="submitdisabled">
+          <i class="fa fa-arrow-right" style="font-size: 1.3em;color: white;float: left;margin-left: 2%;"></i>{{buttonname}}</button>
+        <button type="button" class="btn btn-danger" style="width:15%" ng-click="clearfields()" ng-if="((viewmode!='true') && !(deviation.GDMS_CODE))">Clear</button>
+      </div>
+    </div>
+  </form>
+  <br>
+  <div class="row" ng-if="deviation.GDMS_GATEWAY">
+    <div class="col-sm-10">
+      <p class="iheading"><b>Executive Summary</b>
+      </p>
+      <label class="iheading" style="font-weight:600px">The deliverables are not meeting the intent and requested to be approved as a deviation for {{deviation.GDMS_GATEWAY}} are listed below.</label>
+    </div>
+  </div>
+  <div>
+    <br>
+    <uib-accordion>
+      <div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
+        <uib-accordion-heading is-open="status.isCustomHeaderOpen">
+          <div style="padding: 0.75rem 1.25rem;">
+            Deviation Description <i style="font-size:30px;" aria-hidden="true" class="font-weight-bold fa float-right text-danger" ng-class="{'fa-angle-up': status.isCustomHeaderOpen, 'fa-angle-down':!status.isCustomHeaderOpen}"></i>	
+          </div>
+        </uib-accordion-heading>
+        <div class="row" style="padding-top: 1.3%;">
+          <div class="col-sm-12">
+            <button type="button" ng-if='((deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' class="btn btn-danger ml-2 mb-2" ng-click="addRow()">
+              <i class="fa fa-plus" style="font-size: 1.8em;color: #FFF;float: left;"></i>            </button>
+            <button type="button" ng-if='((deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' class="btn btn-danger ml-2 mb-2" ng-click="deleteRow()">
+              <i class="fa fa-trash" style="font-size: 1.8em;color:#FFF;float: left;margin-left: 2%;"></i>            </button>
+          </div>
+        </div>
+        <table class="table table-hover table-bordered">
+          <thead style="background-color: lightgrey;">
+            <tr>
+              <th scope="col" style="width:3%;"></th>
+              <th scope="col" style="width:7%;text-align: center;">Deviation ID</th>
+              <th scope="col" style="width:49%;text-align: center;">Deliverables And Sub-Deliverables For Deviations</th>
+              <th scope="col" style="width:8%;text-align: center;">Impact Level</th>
+              <th scope="col" style="width:15%;text-align: center;">Target Implementation Date</th>
+              <th scope="col" style="width:18%;text-align: center;">Department</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="dlv in deliverables">
+              <td style="padding:5px;">
+                <label class="container" style="padding:10px;">
+                  <input type="checkbox" ng-model="dlv.selected" style="text-align:center;">
+                  <span class="checkmark"></span>                </label>
+              </td>
+              <td style="padding:5px;text-align:center;">
+                {{$index+1}}
+              </td>
+              <td style="padding:5px;">
+                <textarea class="form-control" ng-model="deliverables[$index].DELIVERABLES" type="text" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' style="border:none; height:20%;"></textarea>
+              </td>
+              <td style="padding:5px;">
+                <select class="form-control" ng-model="deliverables[$index].IMPACT_LEVEL" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' style="border:none;">
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </td>
+              <td style="padding:5px;">
+                <md-datepicker class="foinput md-warn" name="ACTUAL_DATE" ng-model="deliverables[$index].TARGET_IMPLE_DATE" ng-disabled="true" md-placeholder="To be filled by RM" md-open-on-focus md-hide-icons="triangle"></md-datepicker>
+              </td>
+              <td style="padding:5px;">
+                <select class="form-control" ng-model="deliverables[$index].DEPARTMENT" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))' style="border:none;">
+                  <option ng-repeat="pc in departments" value="{{pc.DEPT_DESC}}" name="status">{{pc.DEPT_DESC}}</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </uib-accordion>
+  </div>
+  <uib-accordion close-others="true">
+    <div uib-accordion-group ng-repeat="dlv in deliverables" class="panel-danger" is-open="dlv.isCustomHeaderOpen" ng-if="deviation.PROJECT_CODE&& deviation.GDMS_GATEWAY&&deliverables[$index].DEPARTMENT">
+      <uib-accordion-heading is-open="dlv.isCustomHeaderOpen">
+        <div style="padding: 0.75rem 1.25rem;">
+          {{deviation.PROJECT_CODE +"-" + deviation.GDMS_GATEWAY+"-" +deliverables[$index].DEPARTMENT+"-" +(("0"+($index+1)).slice(-2)) }} <i style="font-size:30px;" aria-hidden="true" class="font-weight-bold fa float-right text-danger" ng-class="{'fa-angle-up': dlv.isCustomHeaderOpen, 'fa-angle-down':!dlv.isCustomHeaderOpen}"></i>        </div>
+      </uib-accordion-heading>
+      <div>
+        <div class="col-sm-2 mb-3 mt-2 p-0">
+          <label class="iheading">Tracking Schedule<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+          </label>
+          <select class="form-control" ng-model="deliverables[$index].TRACKING_SCHEDULE" ng-required="true" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' ) ">
+            <option value="Monthly">Monthly</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Daily">Daily</option>
+          </select>
+        </div>
+        <table class="table table-hover table-bordered col-12" style="background-color: lightgrey; margin-bottom: 0px;">
+          <thead>
+            <tr class="zpadding">
+              <th scope="col" class="iheading" style="width:25%;text-align: center; font-weight: 600;color: #000;">Deliverable Under Deviation</th>
+              <th scope="col" class="iheading" style="width:25%;text-align: center; font-weight: 600;color: #000;">Risk for Product/Customer<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+              <th scope="col" class="iheading" style="width:10%;text-align: center; font-weight: 600;color: #000;">Impact Level</th>
+              <th scope="col" class="iheading" style="width:20%;text-align: center; font-weight: 600;color: #000;">Root Cause<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+              <th scope="col" class="iheading" style="width:20%;text-align: center; font-weight: 600;color: #000;">Risk Response Strategy<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="zpadding">
+            <tr>
+              <td style="padding:0px">
+                <textarea ng-disabled="true" ng-model="deliverables[$index].DELIVERABLES" style="border:none;"></textarea>
+              </td>
+              <td style="padding:0px">
+                <textarea ng-model="deliverables[$index].RISK" ng-required="true" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) )||(viewmode == 'true' ) "
+                style="border:none;"></textarea>
+              </td>
+              <td style="padding:0px">
+                <textarea ng-disabled="true" ng-model="deliverables[$index].IMPACT_LEVEL" style="border:none;"></textarea>
+              </td>
+              <td style="padding:0px">
+                <textarea ng-required="true" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' ) "
+                ng-model="deliverables[$index].ROOT_CAUSE" style="border:none;"></textarea>
+              </td>
+              <td style="padding:0px">
+                <textarea ng-required="true" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) )||(viewmode == 'true' )  "
+                ng-model="deliverables[$index].RISK_RESPONSE_STRATEGY" style="border:none;"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table  table-bordered">
+          <thead class="zpadding" style="background-color: lightgrey;">
+            <tr>
+              <th scope="col" class="iheading" style="width:25%;text-align: center; font-weight: 600;color: #000;">Interim Containment Plan<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+              <th scope="col" class="iheading" style="width:25%;text-align: center; font-weight: 600;color: #000;">Permanent Corrective Action Plan<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+              <th scope="col" class="iheading" style="width:16.66%;text-align: center; font-weight: 600;color: #000;">Start Date<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+              <th scope="col" class="iheading" style="width:16.66%;text-align: center; font-weight: 600;color: #000;">Target Implementation Date<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+              <th scope="col" class="iheading" style="width:16.66%;text-align: center; font-weight: 600;color: #000;">Risk Status<span ng-if="deviation.CURRENT_STAGE == 'RISK MANAGER'" class="text-danger">*</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="zpadding">
+            <tr>
+              <td style="padding:0px">
+                <textarea ng-required="true" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' ) "
+                ng-model="deliverables[$index].INTERIM_CONT_PLAN" style="border:none;"></textarea>
+              </td>
+              <td style="padding:0px">
+                <textarea ng-required="true" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' ) "
+                ng-model="deliverables[$index].PERM_CORRECTIVE_PLAN" style="border:none;"></textarea>
+              </td>
+              <td style="padding:0px" ng-class="((!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' ))?'tbdisabled':''">
+                <md-datepicker ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' )"
+                ng-required="true" ng-model="deliverables[$index].START_DATE" md-placeholder="Start Date" md-min-date="deviation.SUBMITTED_ON" md-hide-icons="triangle"></md-datepicker>
+              </td>
+              <td style="padding:0px" ng-class="((!((deviation.CURRENT_STAGE == 'RISK MANAGER') && (deliverables[$index].RISK_MANAGER.TOKEN_ID == username)) && !((deviation.CURRENT_STAGE == 'RISK OWNER') && (deliverables[$index].RISK_OWNER.TOKEN_ID == username)) &&  !((deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER') && (deviation.CURRENT_OWNER == username)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Plannner') != -1)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Head') != -1))))?'tbdisabled':''">
+                <md-datepicker ng-disabled="(!((deviation.CURRENT_STAGE == 'RISK MANAGER') && (deliverables[$index].RISK_MANAGER.TOKEN_ID == username)) && !((deviation.CURRENT_STAGE == 'RISK OWNER') && (deliverables[$index].RISK_OWNER.TOKEN_ID == username)) &&  !((deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER') && (deviation.CURRENT_OWNER == username)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Plannner') != -1)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Head') != -1)))"
+                ng-required="true" ng-model="deliverables[$index].TARGET_IMPLE_DATE" md-placeholder="Target Imp Date" md-min-date="deliverables[$index].START_DATE" md-hide-icons="triangle"></md-datepicker>
+              </td>
+              <td style="padding:0px" ng-class="((!((deviation.CURRENT_STAGE == 'RISK MANAGER') && (deliverables[$index].RISK_MANAGER.TOKEN_ID == username)) && !((deviation.CURRENT_STAGE == 'RISK OWNER') && (deliverables[$index].RISK_OWNER.TOKEN_ID == username)) &&  !((deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER') && (deviation.CURRENT_OWNER == username)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Plannner') != -1)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Head') != -1))))?'tbdisabled':''">
+                <select class="form-control" ng-required="true" ng-model="deliverables[$index].RISK_STATUS" ng-disabled="(!((deviation.CURRENT_STAGE == 'RISK MANAGER') && (deliverables[$index].RISK_MANAGER.TOKEN_ID == username)) && !((deviation.CURRENT_STAGE == 'RISK OWNER') && (deliverables[$index].RISK_OWNER.TOKEN_ID == username)) &&  !((deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER') && (deviation.CURRENT_OWNER == username)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Plannner') != -1)) && !((deviation.STATUS == 'OPEN') && (localStorage.currentuserroles.indexOf('ADPD Quality Head') != -1)))">
+                  <option value="Open">Open</option>
+                  <option value="Closed">Closed</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row">
+        <div class="col-sm-3 mb-4">
+          <label class="iheading">Risk Owner</label>
+          <input type="text" ng-model="deliverables[$index].RISK_OWNER" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in rowner  | filter:$viewValue" class="form-control" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+        </div>
+        <div class="col-sm-3 mb-4">
+          <label class="iheading">Risk Manager</label>
+          <input type="text" ng-model="deliverables[$index].RISK_MANAGER" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in rmanager  | filter:$viewValue " class="form-control" ng-disabled='(!(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE)))'>
+        </div>
+        <div class="col-sm-6">
+          <label class="iheading">Remarks</label>
+          <textarea ng-model="deliverables[$index].REMARKS" ng-disabled="(!(deviation.CURRENT_STAGE == 'RISK MANAGER' || deviation.CURRENT_STAGE == 'RISK OWNER' || deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER' ) || !((deliverables[$index].RISK_OWNER.TOKEN_ID == username) || (deliverables[$index].RISK_MANAGER.TOKEN_ID == username) || (deviation.CURRENT_STAGE == 'ADPD QUALITY PLANNER')) ) ||(viewmode == 'true' ) "
+          maxlength="140"></textarea>
+        </div>
+      </div>
+      <br>
+      <br>
+    </div>
+  </uib-accordion>
+  <div ng-if='(deviation.CURRENT_STAGE == "INITIATOR" || !(deviation.CURRENT_STAGE))'>
+    <uib-accordion>
+      <div uib-accordion-group class="panel-default" is-open="appr.isCustomHeaderOpen">
+        <uib-accordion-heading is-open="appr.isCustomHeaderOpen">
+          <div style="padding: 0.75rem 1.25rem;">
+            Select Approvers <i style="font-size:30px;" aria-hidden="true" class="font-weight-bold fa float-right text-danger" ng-class="{'fa-angle-up': appr.isCustomHeaderOpen, 'fa-angle-down':!appr.isCustomHeaderOpen}"></i>          </div>
+        </uib-accordion-heading>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">ADPD Quality Planner
+              <input type="checkbox" checked="checked" ng-disabled="true">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.adpdqp" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in adpdqp  | filter:$viewValue " class="form-control" typeahead-editable="false">
+          </div>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Project Leader
+              <input type="checkbox" checked="checked" ng-disabled="true">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.pleader" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in pleader  | filter:$viewValue" class="form-control" typeahead-editable="false">
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Platform Owner
+              <input type="checkbox" checked="checked" ng-disabled="true">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.platformowner" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in platformowner  | filter:$viewValue" class="form-control" typeahead-editable="false">
+          </div>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Product Quality Head
+              <input type="checkbox" ng-model="pqh" ng-change="pqhchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.pqhead" autocomplete="off" ng-disabled="!pqh" uib-typeahead="role as role.USERTEXT  for role in pqhead | filter:$viewValue " class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">ADPD Quality Head
+              <input type="checkbox" ng-model="adpdqhc" ng-change="adpdqhchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.adpdqh" autocomplete="off" ng-disabled="!adpdqhc" uib-typeahead="role as role.USERTEXT  for role in adpdqh | filter:$viewValue " class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+          <div class="col-sm-3 mb-4">
+            <label class="container">ADPD Head or Powertrain Head
+              <input type="checkbox" ng-model="ahphc" ng-change="ahphchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.ahph" autocomplete="off" ng-disabled="!ahphc" uib-typeahead="role as role.USERTEXT  for role in ahph  | filter:$viewValue" class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">CDMM Head
+              <input type="checkbox" ng-model="cdmmh" ng-change="cdmmhchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.cdmmhead" autocomplete="off" ng-disabled="!cdmmh" uib-typeahead="role as role.USERTEXT  for role in cdmmhead  | filter:$viewValue" class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Customer Care Head
+              <input type="checkbox" ng-model="cch" ng-change="ccheadchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.cchead" autocomplete="off" ng-disabled="!cch" uib-typeahead="role as role.USERTEXT  for role in cchead  | filter:$viewValue" class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Product Planning Head
+              <input type="checkbox" ng-model="pph" ng-change="pphchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.pphead" autocomplete="off" ng-disabled="!pph" uib-typeahead="role as role.USERTEXT  for role in pphead  | filter:$viewValue" class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Operation Head
+              <input type="checkbox" ng-model="oh" ng-change="ohchange()">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.operationhead" autocomplete="off" ng-disabled="!oh" uib-typeahead="role as role.USERTEXT  for role in operationhead  | filter:$viewValue" class="form-control" style="background:white;" typeahead-editable="false">
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">PQO Head
+              <input type="checkbox" checked="checked" ng-disabled="true">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.pqohead" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in pqohead | filter:$viewValue " class="form-control" typeahead-editable="false">
+          </div>
+          <div class="col-sm-3 mb-4">
+            <label class="container">Quality Head
+              <input type="checkbox" checked="checked" ng-disabled="true">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.qhead" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in qhead | filter:$viewValue " class="form-control" typeahead-editable="false">
+          </div>
+        </div>
+        <div class="row">
+          <br>
+          <div class="col-sm-3 mb-4">
+            <label class="container">President
+              <input type="checkbox" checked="checked" ng-disabled="true">
+              <span class="checkmark"></span>            </label>
+          </div>
+          <div class="col-sm-3 mb-4">
+            <input type="text" ng-model="appr.president" autocomplete="off" uib-typeahead="role as role.USERTEXT  for role in president | filter:$viewValue " class="form-control" typeahead-editable="false">
+          </div>
+        </div>
+      </div>
+    </uib-accordion>
+  </div>
+  <div>
+    <uib-accordion>
+      <div uib-accordion-group class="panel-default" is-open="dlv.isCustomHeaderOpen">
+        <uib-accordion-heading is-open="dlv.isCustomHeaderOpen">
+          <div style="padding: 0.75rem 1.25rem;">
+            Upload Documents <i style="font-size:30px;" aria-hidden="true" class="font-weight-bold fa float-right text-danger" ng-class="{'fa-angle-up': dlv.isCustomHeaderOpen, 'fa-angle-down':!dlv.isCustomHeaderOpen}"></i>          </div>
+        </uib-accordion-heading>
+        <div class="row">
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-6" style="padding-right:0px">
+            <label ng-model="DOCUMENT_NAME1" ngf-select="ViewFileName($file,0)" style="height:40px;display: block;border:1px solid #ced4da;width: 100%;" ng-if="(viewmode != 'true' )">
+              <p id="pX" style="margin-top: 0.5rem;margin-left: 1rem;">Choose File</p>
+            </label>
+            <label ng-model="DOCUMENT_NAME1" ngf-select="ViewFileName($file,0)" style="height:40px;display: block;border:1px solid #ced4da;width: 100%;" ng-if="(viewmode == 'true' )" disabled>
+              <p id="pX" style="margin-top: 0.5rem;margin-left: 1rem;">Choose File</p>
+            </label>
+          </div>
+          <div class="col-sm-1" style="padding:0px">
+            <button class="btn btn-primary" type="submit" ng-disabled="DOCUMENT_NAME1==null" ng-click="browseAndAddRow()" style="background-color:#d83c3c;border: 1px solid white;height:40px;"> <i class="fa fa-upload" style="color:white"></i><span style="color:white;padding-left: 8%;
+                         font-weight: 500;"></span>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-10">
+            <div>
+              <button type="button" class="btn  btn-danger" ng-click="deletefileRow()" ng-if="(viewmode != 'true' )">
+                <i class="fa fa-times text-light" style="font-size:15px;"></i>              </button>
+            </div>
+            <div class="tableFixHead mb-3 p-0 row" style="max-height:250px;overflow:auto;margin-left:0px;">
+              <table class="table table-bordered table-responsive-md table-striped text-center" id="remarkTable1">
+                <thead style="width: 100%;">
+                  <tr style="background-color: #f9f9f9;width:100%">
+                    <th class="iheading " scope="col" style="width:5%"></th>
+                    <th class="iheading " scope="col" style="width:20%">Document Name</th>
+                    <th class="iheading " scope="col" style="width:20%">Uploaded On</th>
+                    <th class="iheading " scope="col" style="width:20%">Uploaded by</th>
+                    <th class="iheading" scope="col" style="width:35%">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="dlv in download">
+                    <td>
+                      <label class="container">
+                        <input type="checkbox" ng-model="dlv.selected" ng-disabled="(viewmode == 'true' )">
+                        <span class="checkmark"></span>                      </label>
+                    </td>
+                    <td><a ng-click="downloadfile(dlv.DOCUMENT_PATH,dlv.DOCUMENT_NAME)">{{dlv.DOCUMENT_NAME}}</a>
+                    </td>
+                    <td>{{dlv.UPLOADED_ON}}</td>
+                    <td>{{dlv.UPLOADED_BY}}</td>
+                    <td style="position: relative;">
+                      <textarea ng-model="download[$index].REMARKS" style="top: 0;height:100%;border: none;position: absolute;right: 0px;" maxlength="200" ng-disabled="((download[$index].UPLOADED_BY != logr) || (viewmode=='true'))"></textarea>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </uib-accordion>
+  </div>
+</div>
+<div class="modal fade clarifymodal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" id="modal3">
+      <div class="modal-header" style="background-color:#d83c3c;color:white;padding-top:0.5em !important;padding-bottom:0.5em !important;">
+        <h5 class="modal-title" id="exampleModalLabel">Clarification Request</h5>        <button type="button" style="float:right;color:white;" class="close" data-dismiss="modal">x</button>
+      </div>
+      <div class="modal-body">
+        <form name="myForm">
+          <div class="row">
+            <div class="col-sm-5">
+              <label for="recipient-name" class="col-form-label" style="float:left" required>To User:</label>
+              <input type="text" ng-model="tempUser" uib-typeahead="role.FULLNAME for role in getUsers($viewValue)" class="form-control ">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-10">
+              <label for="message-text" class="col-form-label" style="float:left">Clarification Query:</label>
+              <textarea class="form-control" id="message-text" ng-model="query" maxlength="4000" required style="height:60%;"></textarea>
+            </div>
+          </div>
+        </form>
+        <br>
+        <div class="row">
+          <div class="col-sm-8" style="padding-right:0px">
+            <label ng-model="DOCUMENT_NAME1" ngf-select="ViewFileName($file,1)" style="height:40px;display: block;border:1px solid #ced4da;width: 100%;">
+              <p id="labX" style="margin-top: 0.5rem;margin-left: 1rem;">Choose File</p>
+            </label>
+          </div>
+          <div class="col-sm-1" style="padding:0px">
+            <button class="btn btn-primary" type="submit" ng-disabled="DOCUMENT_NAME1==null" ng-click="browseAndAddRow1()" style="background-color:#d83c3c;border: 1px solid white;height:40px;"> <i class="fa fa-upload" style="color:white"></i><span style="color:white;padding-left: 8%;
+                                  font-weight: 500;"></span>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="tableFixHead mb-3  row" style="overflow:auto;margin:0px;">
+              <div>
+                <button type="button" class="btn  btn-danger" ng-click="deleteClrFileRow()" ng-if="(viewmode != 'true' )">
+                  <i class="fa fa-times text-light" style="font-size:15px;"></i>                </button>
+              </div>
+              <table class="table table-bordered table-responsive-md table-striped text-center" id="remarkTable2">
+                <thead style="width: 100%;">
+                  <tr style="background-color: #f9f9f9;width:100%">
+                    <th scope="col" style="width:5%"></th>
+                    <th scope="col" style="width:30%">Document Name</th>
+                    <th scope="col" style="width:15%">Uploaded On</th>
+                    <th scope="col" style="width:15%">Uploaded by</th>
+                    <th scope="col" style="width:35%">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="dlv in clrdownload">
+                    <td>
+                      <label class="container">
+                        <input type="checkbox" ng-model="dlv.selected" ng-disabled="(viewmode == 'true' )">
+                        <span class="checkmark"></span>                      </label>
+                    </td>
+                    <td><a href="" ng-click="downloadfile(dlv.DOCUMENT_PATH,dlv.DOCUMENT_NAME)">{{dlv.DOCUMENT_NAME}}</a>
+                    </td>
+                    <td>{{dlv.UPLOADED_ON}}</td>
+                    <td>{{dlv.UPLOADED_BY}}</td>
+                    <td style="position: relative;">
+                      <textarea ng-model="clrdownload[$index].REMARKS" style="top: 0;height: 100%;border: none;position: absolute;right: 0px;" maxlength="200"></textarea>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"></div>
+          <div class="col-sm-2">
+            <button type="button" ng-disabled="!myForm.$valid" class="btn btn-primary  " type="submit" style="margin: 0 auto;background-color:#d83c3c;color:white;padding-top: 1%;" ng-click="clarificationSubmit()" data-dismiss="modal"><span style="color:white;font-weight: 500;"><i class="fa fa-save"></i> Submit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<div id="myModal" class="modal fade" style="margin-top: 0%;" role="dialog">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" style="float:right" class="close" data-dismiss="modal">x</button>
+        <div class="row" style="padding:.375rem .75rem">
+          <p><b>Upload File</b>
+          </p>
+        </div>
+        <form name="SaveDetailsForm" role="form">
+          <div class="row">
+            <div class="col-sm-9" style="width: 100%;">
+              <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">File Name</p>
+              <input type="text" ng-model="DOCUMENT_NAME1" readonly style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;width: 100%;">
+            </div>
+            <div class="col-sm-3 mb-4">
+              <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;color:white">File Name</p>
+              <button type="button" class="btn btn-primary btn-block" ngf-select="ViewFileName($file)" style="background-color:#d83c3c;border: 1px solid white;">
+                <span style="color: #fff;font-weight:500">Browse</span>              </button>
+            </div>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-sm-12">
+              <p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Remarks</p>
+              <textarea type="text" ng-model="DOCUMENT_DESC1" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;width: 100%;"></textarea>
+              <div role="alert"><span class="error" ng-show="SaveDetailsForm.DOCUMENT_DESC1.$touched && myForm.totalProd.$invalid" style="color:red;font-size: 0.8em;">
+                            Please enter type</span>              </div>
+            </div>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+              <button class="btn btn-primary btn-block" type="submit" ng-disabled="DOCUMENT_NAME1==null" ng-click="browseAndAddRow()" data-dismiss="modal" style="float: right;background-color:#d83c3c;color:white;padding-top: 5%;margin-top: 16%;"> <i class="fa fa-save" style="color:white"></i><span style="color:white;padding-left: 8%;
+                            font-weight: 500;">Upload</span>
+              </button>
+            </div>
+            <div class="col-sm-4"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade clarificationmodal" id="clarificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" id="modal1">
+      <div class="modal-header" style="background-color:#d83c3c;color:white;padding-top:0.5em !important;padding-bottom:0.5em !important;">
+        <h5 class="modal-title" id="exampleModalLabel">Clarification History</h5>        <button type="button" style="float:right;color:white;" class="close" data-dismiss="modal">x</button>
+      </div>
+      <div class="modal-body body1">
+        <div ng-if="totalPages1">
+          <strong>Showing </strong>{{tableParams1.page()}}<strong> of </strong>{{totalPages1}} <strong>Pages</strong>          <br>
+          <strong>No of Records: </strong>{{totalRacords1}}
+          <br>
+        </div>
+        <div>
+          <button title="First" class="av-pagination" style="font-size: 22px;" ng-disabled="nextPageNum1==1" ng-click="changePage1(1)">&laquo;</button>
+          <button title="Previous" class="av-pagination" style="font-size: 22px;" ng-disabled="nextPageNum1==1" ng-click="changePage1(nextPageNum1-1)">&#8249;</button>
+          <button title="Next" class="av-pagination" style="font-size: 22px;" ng-disabled="nextPageNum1==totalPages1" ng-click="changePage1(nextPageNum1+1)">&#8250;</button>
+          <button title="Last" class="av-pagination" style="font-size: 22px;" ng-disabled="nextPageNum1==totalPages1" ng-click="changePage1(totalPages1)">&raquo;</button>
+        </div>
+        <table ng-table="tableParams1" id='datatable1'>
+          <tr ng-repeat="user in $data" ng-class-even="'even'">
+            <td data-title="'Sr. No.'" style="width:5%;">{{$index+1}}</td>
+            <td data-title="'GDMS Number'" style="width: 10%;">{{user.GDMS_CODE}}</td>
+            <td data-title="'Requested By'" style="width: 13%;">{{user.REQUESTED_BY}}</td>
+            <td data-title="'Requested On'" style="width: 10%;">{{user.REQUESTED_ON|date : 'dd/MM/yyyy'}}</td>
+            <td data-title="'Requested Query'" style="width:20%;">{{user.REQUEST_QUERY}}</td>
+            <td data-title="'Clarified By'" style="width: 12%;">{{user.CLARIFIED_BY}}</td>
+            <td data-title="'Clarified Remarks'" style="overflow:hidden;width: 20%;">{{user.CLARIFICATION_REMARKS}}</td>
+            <td data-title="'Clarified On'" style="width: 10%;">{{user.CLARIFIED_ON|date : 'dd/MM/yyyy'}}</td>
+          </tr>
+          <tr>
+            <td colspan="7" ng-show="$data.length == 0">
+              <h6 style="color:black">
+                         No records found
+                         <h6>
+                      </td>
+                   </tr>
+                </table>
+             </div>
+          </div>
+       </div>
+    </div>
+    <div class="modal fade workflowmodal" id="workflowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <div class="modal-content" id="modal2">
+             <div class="modal-header" style="background-color:#d83c3c;color:white;padding-top:0.5em !important;padding-bottom:0.5em !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Workflow History</h5>
+                <button type="button" style="float:right;color:white;" class="close" data-dismiss="modal">x</button>
+             </div>
+             <div class="modal-body body2">
+             <div ng-if = "totalPages2">
+             <strong>Showing </strong>{{tableParams2.page()}}<strong> of </strong>{{totalPages2}} <strong>Pages</strong>
+             <br>
+             <strong>No of Records: </strong>{{totalRacords2}}
+             <br>
+             </div>
+             <div>
+    <button title="First" class="av-pagination" style = "font-size: 22px;" ng-disabled="nextPageNum2==1" ng-click="changePage2(1)">&laquo;</button>
+    <button title="Previous" class="av-pagination" style = "font-size: 22px;" ng-disabled="nextPageNum2==1" ng-click="changePage2(nextPageNum2-1)">&#8249;</button> 
+    <button title="Next" class="av-pagination" style = "font-size: 22px;" ng-disabled="nextPageNum2==totalPages2" ng-click="changePage2(nextPageNum2+1)">&#8250;</button>
+    <button title="Last" class="av-pagination" style = "font-size: 22px;" ng-disabled="nextPageNum2==totalPages2" ng-click="changePage2(totalPages2)">&raquo;</button>
+    </div>
+                <table ng-table="tableParams2"  id ='datatable2'>
+                   <tr ng-repeat="user in $data" ng-class-even="'even'">
+                      <td data-title="'GDMS Number'" style="width: 15%;" header-class="'text-center'">{{user.GDMS_CODE}}</td>
+                      <td data-title="'Approval Stage'"  style="width: 11%;" header-class="'text-center'">{{user.GDMS_STAGE}}</td>
+                      <td data-title="'Approver'"  style="width: 11%;" header-class="'text-center'">{{user.ASSIGNED_TO}}</td>
+                      <td data-title="'Role'"  style="width: 11%;" header-class="'text-center'">{{user.GDMS_ROLE}}</td>
+                      <td data-title="'Status'"  style="width: 10%;color:{{user.colortxt}}" header-class="'text-center'">{{user.DECISION}}</td>
+                      <td data-title="'Start Date'"  style="width: 11%;" header-class="'text-center'">{{user.STARTDATE}}</td>
+                      <td data-title="'Approved Date'"  style="width: 11%;" header-class="'text-center'">{{user.APPROVEDDATE}}</td>
+                      <td data-title="'Total Ageing'"  style="width: 8%;text-align:center;" header-class="'text-center'">{{user.AGEING}}</td>
+                      <td data-title="'Remarks'"  style="width:auto;" header-class="'text-center'">{{user.REMARKS}}</td>
+                   </tr>
+                   <tr>
+                      <td colspan="9"  ng-show="$data.length == 0">
+                         <h6 style="color:black">
+                         No records found
+                         <h6>
+                      </td>
+                   </tr>
+                </table>
+             </div>
+          </div>
+       </div>
+    </div>

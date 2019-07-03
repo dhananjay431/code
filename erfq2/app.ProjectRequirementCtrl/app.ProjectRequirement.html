@@ -1,0 +1,410 @@
+
+<style>
+.ng-table-pager.ng-scope {
+   display: none;
+}
+</style>
+<!-- <script>
+	var flagtest=0;
+	document.getElementById("test").addEventListener("focusout", myFunction);
+	var PrjArray=[];
+	function myFunction() {
+	}
+	
+	change.addEventListener("input", function (e) {
+	if(document.getElementById("some-submit-element")){
+	 document.getElementById("some-submit-element").disabled = false;
+	 }
+	});
+	
+	change1.addEventListener("input", function (e) {
+	if(document.getElementById("some-submit-element")){
+	 document.getElementById("some-submit-element").disabled = false;
+	 }
+	});
+	
+	change2.addEventListener("input", function (e) {
+	if(document.getElementById("some-submit-element")){
+	 document.getElementById("some-submit-element").disabled = false;
+	 }
+	});
+	
+	change3.addEventListener("input", function (e) {
+	if(document.getElementById("some-submit-element")){
+	 document.getElementById("some-submit-element").disabled = false;
+	 }
+	});
+	
+	
+	
+	 
+	
+	</script> -->
+	<form name="myForm" class="form" ng-init="toolmakerInit()">
+	<div class="container" >
+	<div class = "row" style="float: left;width: 100%;display: flex;">
+	<p class="col-sm-12" style="font-size: 1.6em;font-weight: 500;">Project Requirement</p>
+	</div>
+	<div class="row" style="width:100%">
+	<div class="col-sm-4" style="width:100%">
+	<!--<label>Project Code</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Project Code</p>
+	<input type="text" ng-model="Plist" id="test" autocomplete="off"   uib-typeahead="state as state.AFSPM_POJ_CODE for state in PrjMembers | filter:{AFSPM_POJ_CODE:$viewValue}" 
+	class="form-control"  typeahead-template-url="customTemplate.html"  typeahead-editable="false" ng-change="checkValueT()"  typeahead-on-select="passProjectCode($item,$model,$label)" name="PrjDrpdn" style="width:100%" ><!-- typeahead-editable="false"--> 
+	<!-- <div role="alert">
+      <span class="error" ng-show="myForm.PrjDrpdn.$error.required" style="color:red;font-size: 0.8em;">
+       Required!</span>
+    </div>-->
+	</div>
+	
+	<div class="col-sm-4" style="width:100%">
+	<!--<label>MSIE</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">MSIE</p>
+	<input type="text" ng-model="MSIE" readonly style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;" ></div>
+	
+	<div class="col-sm-4" style="width:100%">
+	<!--<label>Stamping Lead</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%">Stamping Lead</p>
+	<input type="text" ng-model="StampingLead" readonly style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;" ></div>
+	</div>
+	
+	
+	<div class="row" style="width:100%;padding-top: 1%;">
+	<div class="col-sm-4" style="width:100%">
+	<!--<label>Creation Date</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Creation Date</p>
+	<input type="text" ng-model="tmkSumDiv1" readonly   class="form-control" >
+	</div>
+	</div>
+	
+	<div class="row">
+	<p class="col-sm-12" style="font-size: 1em;font-weight: 300;font-weight: 700;padding-top: 2%;">Durability and Build Quality tools</p>
+	</div>
+	
+	
+	<!--input fields-->
+	<div class="row" style="width:100%">
+	<div class="col-sm-4" style="width:100%">
+	<!--<label style="font-size: 1em;">Total Volume</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Total Volume</p>
+	<input type="text" ng-model="Total_Vol" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;" name="totalVol" id="change" >
+	
+	 <!--<div role="alert"><span class="error" ng-show="myForm.totalVol.$touched && myForm.totalVol.$invalid" style="color:red;font-size: 0.8em;">
+       Please enter volume</span>
+    </div>-->
+	
+	</div>
+	<div class="col-sm-4" style="width:100%">
+	<!--<label style="font-size: 1em;">Total Productivity</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Total Productivity</p>
+	<input type="text" ng-model="Total_Prod" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;" name="totalProd"  id="change1" >
+	 <!--<div role="alert"><span class="error" ng-show="myForm.totalProd.$touched && myForm.totalProd.$invalid" style="color:red;font-size: 0.8em;">
+       Please enter Productivity</span>
+    </div>-->
+	</div>
+	<div class="col-sm-4" style="width:100%">
+	<!--<label style="font-size: 1em;">Durability in Years</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Durability in Years</p>
+	<input type="text" ng-model="Total_Duration" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;"  name="totalDuration" id="change2" >
+	 <!--<div role="alert"><span class="error" ng-show="myForm.totalDuration.$touched && myForm.totalDuration.$invalid" style="color:red;font-size: 0.8em;">
+	 
+       Please enter Duration</span>
+    </div>-->
+	</div>
+	</div>
+	
+	
+	<!--input fields-->
+	<div class="row" style="padding-bottom: 2%;padding-top: 1.5%;">
+	<div class="col-sm-4" style="width:100%">
+	<!--<label style="font-size: 1em;">Warranty by Die maker</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Warranty by Die maker in Years</p>
+	<input type="text" ng-model="Total_Waranty" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;padding:.375rem .75rem;width: 100%;" name="waranty" id="change3" >
+	<!--<div role="alert"><span class="error" ng-show="myForm.waranty.$touched && myForm.waranty.$invalid" style="color:red;font-size: 0.8em;">
+       Please enter Warranty</span>
+    </div>-->
+	
+	</div>
+	<div class="col-sm-4" style="width:100%">
+	<!--<label style="font-weight: 500;font-size: 1em;">Build Quality</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Build Quality</p>
+	<label class="container" id="checkCon" style="margin-left: 2%;float:left;font-size: 14px;color: #a09393;font-weight: 700;">
+	M&M Specification
+  <input type="checkbox" id="M_chk_box" class="checkBoxChange" style="width:0;height:0;opacity:0;width:100%"  ng-model="selectOne" value={{TOOLMAKER_NAME}} ng-change="CreateBuildChoice('M&M')" checked >
+  <span class="checkmark" id="chckMark"></span>
+	</label>
+	</div>
+	<div class="col-sm-4" style="width:100%" >
+	<!--<label style="color: white;font-size: 1em;">Build Quality</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;color: white;">Build Quality</p>
+	<label class="container" id="checkCon"  style="margin-left: 2%;float:left;font-size: 14px;color: #a09393;font-weight: 700;">
+	Die maker's specification
+	
+	<input type="checkbox" id="D_chk_box"  class="checkBoxChange" style="width:0;height:0;opacity:0;"  ng-model="selectTwo" value={{TOOLMAKER_NAME1}} ng-change="CreateBuildChoice('DieMaker')">
+	<span class="checkmark" id="chckMark"></span>
+  
+	</label>
+	</div>
+	</div>
+	
+	<hr></hr>
+	<!--<div style="padding-top: 3%;">-->
+	
+  
+<div class="row" style="padding: 0px;padding-bottom: 0% !important;margin-bottom: 0% !important;">
+<p class="col-sm-12" style="font-size: 1em;font-weight: 700;">Panel Supply for various events:</p></div>
+<div class="tableFixHead" style="height: 15em;border: 1px solid #dbd5d5; overflow-y: scroll;">
+
+<table ng-table="tableParams" class="table table-striped table-bordered table-hover table-condensed"  style="width: 100%; overflow-y: scroll;">
+<!--
+	<thead >
+          <tr style="background-color: #fbfafa;width:100%" class="table table-striped table-bordered table-hover table-condensed">
+		  <th class="col-xs-1" style="font-size: 15px;width:5%" ></th>
+            <th class="col-xs-2" style="font-size: 15px;width:19%" >Event</th>
+            <th class="col-xs-1" style="font-size: 15px;width:12%" >Date</th>
+            <th class="col-xs-2" style="font-size: 15px;width:15%" >Panel Quantity</th>
+			<th class="col-xs-2" style="font-size: 15px;width:13%" >PIST Level</th>
+			<th class="col-xs-2" style="font-size: 15px;width:16%" >Panel Condition</th>
+            <th class="col-xs-2" style="font-size: 15px;width:15%" >Delivery Address</th>
+          </tr>
+        </thead>
+		-->
+	
+<tr ng-repeat="eventRow in $data track by $index" style="width:100%;background-color: white;" >
+	<td  class="col-xs-1" style="width:5% !important;font-size: 15px;background-color: #ffff;padding-top: 2%;padding-right: 2%;z-index:1;min-width: 50px;width: 50px;max-width: 50px;" >
+		<label class="container" id="checkCon" style="padding-left: 0px;margin-left: 2%;margin-top: 2%;width: 30%;float:left;font-size: 18px;color: #a09393;margin-bottom: 0px;">
+			<input type="checkbox" id="chk_box" style="width:0;height:0;opacity:0;"  ng-model="eventRow.selected1" value={{eventRow.EVENT}} ng-change="CreateDeleteArray(eventRow,$index)">
+			<span class="checkmark" id="chckMark"></span>
+			</label>
+								</td>
+								<!-- <td>{{eventRow.EVENT}}
+	</td> -->
+								<td title="'Event'" style="width:12%;z-index:1;min-width: 143px;width: 143px;max-width: 143px;" >
+										<select  ng-model="eventRow.EVENT" class="form-control input-lg" ng-change="passEventCode(eventRow,$index)">
+										<option ng-repeat="x in eventList " ng-disabled="disabled[x.EVENT]" value={{x.EVENT}}>{{x.EVENT}}</option>
+										</select></td>
+								<!--<td title="'DATE'" style="width:13%;z-index:1;min-width: 101px;width: 101px;max-width: 101px;" >{{eventRow.EVENT_DATE|date:'dd/MM/yyyy'}}</td>-->
+                                                               
+                                <td title="'DATE'" style="width:13%;z-index:1;"><input ng-model="eventRow.EVENT_DATE" ng-change="changeDate(eventRow)" data-id="{{$index}}"  style="height: 40px;display: block;border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;"  class="datepicker"></td>
+								<td title="'PANEL QUALITY'" style="width:15%;z-index:1;"  ><input  ng-change="enableSave()" style="height: 40px;display: block;border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;" type="text" ng-model="eventRow.PANEL_QUALITY"></td>
+								<td title="'PIST LEVEL'" style="width:14%;z-index:1;" ><input  ng-change="enableSave()" style="height: 40px;display: block;border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;" type="text" ng-model="eventRow.PIST_LEVEL"></td>
+	<!--initial width:18%-->	<td title="'PANEL CONDITIONS'" style="width:18%;z-index:1;" ><input ng-change="enableSave()" style="height: 40px;display: block;border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;" type="text" ng-model="eventRow.PANEL_CONDITIONS"></td>
+								<td title="'DELIVERY ADDRESS'"style="width:21%;z-index:1;" ><input ng-change="enableSave()" style="height: 40px;display: block;border-radius: 0.25rem;border: 1px solid rgb(206, 212, 218);padding: 0.375rem 0.75rem;width: 100%;" type="text" ng-model="eventRow.DELIVERY_ADDRESS"  ></td>
+                         <!--<td  style="width:0%" >{{eventRow.DATA_FLAG}}</td>-->
+								</tr>
+								</table>
+								</div>
+								
+								<!--</div>-->
+								
+								
+								<div class="row" style="padding-top: 1.3%;">
+	<div class="col-sm-6">
+<div><i class="far fa-plus-square" style="font-size: 1.3em;color: #d83c3c;float: left;" ng-click="addRow()" ></i> </div>
+   
+ <div><i class="fas fa-trash" style="font-size: 1.3em;color: #d83c3c;float: left;margin-left: 2%;" ng-click="deleteRow()"></i></div>
+	</div>
+	<div class="col-sm-6">
+	</div>
+	
+	</div>
+	<hr></hr>
+	<!--Document tables-->
+	
+	<div class="row">
+	<div class="col-sm-6">
+	<p  style="font-size: 1em;font-weight: 700;">Upload Documents</p>
+	</div>
+	<div class="col-sm-6">
+	<p style="font-size: 1em;font-weight: 700;">Download Reference Documents</p>
+	</div>
+	</div>
+	
+	
+	<div class="row" style="padding-left: 1.3%;" >
+	<div class="tableFixHead" style="width: 47%;float:left;margin-right: 2%;overflow-y: scroll;display: block;height: 10.5em;border: 1px solid #f2f2f2; " >
+	
+	<table class="table table-striped table-bordered table-hover table-condensed">
+<thead style="width: 100%;">
+          <tr style="background-color: #f9f9f9;width:100%" class="table table-striped table-bordered table-hover table-condensed">
+		  <th style="font-size: 1em;width: 1%;" ></th>
+            <th style="padding: 1%;font-size: 1em;" >Platform</th>
+            <th style="padding: 1%;font-size: 1em;" >Type</th></tr>
+			
+			</thead>
+			<tbody>
+			
+			<tr ng-repeat="FileRow in FileArray " style="width:100%;background-color: white;" class="table table-striped table-bordered table-hover table-condensed" style="background-color:white;">
+			<td style="font-size: 18px;padding-top: 2%;" title="'Panel Condition'">
+		<label class="container" id="checkCon" style="padding-left: 0px;margin-left: 2%;margin-top: 2%;width: 30%;float:left;font-size: 18px;color: #a09393;margin-bottom: 0px;">
+			<input type="checkbox" id="chk_box" style="width:0;height:0;opacity:0;"  ng-model="select11" value={{FileValue}} ng-change="CreateDeleteFileArray(FileRow,$index)">
+			<span class="checkmark" id="chckMark"></span>
+			</label>
+								</td>
+								<td id="$index"  style="font-size: 18px;padding-top: 2%;" ng-click="openFile(FileRow, $index)">
+								<span>
+									<b><a  download='{{FileRow.DOCUMENT_NAME}}' style="color: #423d3d;font-size: 0.8em;cursor:pointer">
+									{{FileRow.DOCUMENT_NAME}}
+									</a></b></span>
+								</td>
+								<td   style="font-size: 14px;padding-top: 2%;" >
+									{{FileRow.DOCUMENT_DESC}}
+								</td>
+			</tr>
+			
+	
+			
+			</tbody>
+			</table>
+			</div>
+			
+
+	
+	<!--download Document table-->
+	<div class="tableFixHead" style="float:left;width: 47%;overflow-y: scroll;height: 10.5em;border: 1px solid #dbd5d5;">
+	<table class="table table-striped table-bordered table-hover table-condensed" style="float:left;" >
+
+			<thead>
+				<tr style="width:100%" class="table table-striped table-bordered table-hover table-condensed" >
+				
+				<th style="width:100%"><div style="float:right;border-radius:1px;width: 1%;width:100%">
+				<span style="float:right;">
+                    <label style="-webkit-text-fill-color: #504949;margin:0px">Search</label>
+                    <input   type="text" name="username"  ng-model="Placehld">
+                   <span> 
+              
+				</div></th>
+				</tr>
+			</thead>
+			
+			<tbody>
+			<tr id='{{$index}}'  ng-repeat="DownloadFile in DFileArray | filter:Placehld" style="width:100%" class="table table-striped table-bordered table-hover table-condensed">
+		
+								
+								<td  style="font-size: 18px;padding-top: 2%;background-color: white;" ng-click="refOpenFile(DownloadFile, $index)">
+								<span style="float: left;width:66%;background-color: white;">
+									<b><a id='{{$index+3}}' download='{{DownloadFile.DOCUMENT_NAME}}' style="color: #423d3d;font-size: 0.8em;cursor:pointer">
+									{{DownloadFile.DOCUMENT_NAME}}
+									</a></b></span>
+									<div style="font-size: 22px;padding-left: 4%;color: #de0000;width: 6%;float: left;cursor: pointer;padding-right: 6%;">
+										<i   ng-click="refOpenFile(DownloadFile, $index)" class="fas fa-download"></i>
+										
+										</div>
+									<div style="color: #de0000;font-size: 15px;width: 20%;float: left;">
+								<span>Download</span>
+								</div>
+								</td>
+
+			</tr>
+			</tbody>
+			
+			</table>
+			</div>
+	</div>
+	
+	
+
+	
+	<div class="row" style="padding-top: 0.8%;padding-left: 2%;" >
+	<div class="col-sm-6" style="padding: 0;">
+<div style="width: 8%;float: left;"><button type="button" id="UploadButton" class="btn btn-info btn-lg" data-toggle="modal" ng-click="clearPopUpData()"  data-target="#myModal"
+data-controls-modal="myModal"   data-backdrop="static" data-keyboard="false" style="background-color: #fff;border: 1px solid white;padding: 0;"
+><i class="fas fa-upload" style="font-size: 1.3em;color: #d83c3c;clear:both"></i></button>
+
+</div>
+   
+ <div style="float: left;padding-top: 1%;padding-left: 2%;"><i class="fas fa-trash" style="font-size: 1.3em;color: #d83c3c;float: left;margin-left: 2%;clear:both" ng-click="FiledeleteRow()"></i></div>
+	</div>
+	
+	
+	
+
+	<div class="col-sm-6">
+	</div>
+	
+	</div>
+	
+	
+
+<!--button --------------------------------------------------------------------------------->
+	<!--ui-sref="mainApp.panelGrouping" -->
+	<button  type="button" class="btn btn-primary btn-block" ng-click="checkIfProceed()" id="nextbtn"    style="float: right;background-color: #d83c3c;
+    width: 12%;margin-top: 0.8%;"><span  style="color:white;" >Next</span>
+	<i class="fas fa-chevron-right" style="vertical-align: middle;color:white;font-weight: 600;"></i>
+	</button>
+	
+	<button  type="button" class="btn btn-primary btn-block"  id="some-submit-element"  ng-click="SubmitProjectRequirement()"  style="float: right;background-color: #d83c3c;
+    width: 12%;margin-right: 2%;" >
+	<i class="fas fa-save" style="vertical-align: middle;color:white"></i><span id="submit-span" style="color:white;padding-left: 10%;">Save</span></button>
+	
+	
+
+
+
+
+								</div>
+								</form>
+	
+	<div id="myModal" class="modal fade" style="margin-top: 0%;" role="dialog">
+
+  <div class="modal-dialog ">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+	   <button type="button" style="float:right" class="close" data-dismiss="modal">x</button>
+	  <div class="row" style="padding:.375rem .75rem">
+	  <p><b>Upload File</b></p>
+	 
+	  </div>
+	
+       <form  name="SaveDetailsForm" role="form">
+	   
+	   <div class="row">
+	<div class="col-sm-9" style="width: 100%;">
+	<!--<label>File Name</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">File Name</p>
+	<input type="text" ng-model="DOCUMENT_NAME1" readonly style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;width: 100%;" >
+	</div>
+	<div class="col-sm-3">
+	<!--<label style="color:white" >File Name</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;color:white">File Name</p>
+	<button type="button" class="btn btn-primary btn-block" ngf-select="ViewFileName($file)"  style="background-color:#d83c3c;border: 1px solid white;">
+	<!--<i class="fas fa-upload" style="font-size: 1.3em;color: #d83c3c;clear:both;padding-left: 3%;"></i>-->
+	<span style="color: #fff;font-weight:500">Browse</span></button>
+	</div >
+	</div>
+	
+	
+	<div class="row" style="width: 100%;">
+	<div class="col-sm-12">
+	<!--<label>Type*</label>-->
+	<p style="font-size: 0.9em;font-weight: 700;padding-bottom:1%;margin-bottom:0%;">Type*</p>
+	<input type="text" ng-model="DOCUMENT_DESC1" style="height:40px;display: block;border-radius:.25rem;border:1px solid #ced4da;width: 100%;" >
+	
+	 <div role="alert"><span class="error" ng-show="SaveDetailsForm.DOCUMENT_DESC1.$touched && myForm.totalProd.$invalid" style="color:red;font-size: 0.8em;">
+       Please enter type</span>
+	</div>
+	</div>
+   </div>
+   
+   <div class="row" style="width: 100%;">
+   <div class="col-sm-4"></div>
+   <div class="col-sm-4">
+   <button class="btn btn-primary btn-block"   type="submit" ng-disabled="SaveDetailsForm.$invalid" ng-click="browseAndAddRow()" 
+   data-dismiss="modal" style="float: right;background-color:#d83c3c;color:white;padding-top: 5%;margin-top: 16%;" >  <i class="fas fa-save" style="color:white"></i><span style="color:white;padding-left: 8%;
+    font-weight: 500;" >Upload</span></button>
+
+   </div>
+    <div class="col-sm-4"></div>
+	</div>
+ 
+	  </form>
+     
+    
+
+  </div>
+</div>
+</div>
+</div>

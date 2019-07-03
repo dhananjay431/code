@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<style>
+		.buttonAB {
+			float: left;
+			line-height: 1.5em;
+			border: 1px solid lightgrey;
+			border-radius: 16px;
+			font-weight: 700;
+			/* font-size: 1.1em; */
+			width: 80%;
+			height: 2em;
+			color: darkgray;
+			background-color: #e3e6ea;
+		}
+		.btn:focus {
+			background-color: #a19c9c;
+			color: white;
+			border-color: #958b8b;
+		}
+
+		.btn:hover {
+			background-color: lightgrey;
+			color: white;
+			border-color: lightgrey;
+		}
+		</style>
+	</head>
+	<body>
+		<div style="clear:both;padding-top:2%" class="row">
+			<div class="btn-group col-sm-9" data-toggle="buttons">
+				<div class="col-sm-1" style="padding:0%">
+					<label for="" class="btn btn-primary col-sm-12 buttonAB" ng-class="{'active':cmm.label == 'A'}" ng-click="setLab('A')" style="float: left;line-height: 1.5em;border: 2px solid lightgrey;border-radius: 16px;">
+					<input type="radio" ng-model="cmm.label" value="A" style="display:none">A</label>
+				</div>
+				<div class="col-sm-1" style="padding:0%">
+					<label for="" class="btn btn-primary col-sm-12 buttonAB" ng-click="setLab('B')" ng-class="{'active':cmm.label == 'B'}" style="float: left;line-height: 1.5em;border: 2px solid lightgrey;border-radius: 16px;">
+					<input type="radio" ng-model="cmm.label" value="B" style="display:none">B</label>
+				</div>
+				<div class="col-sm-10"></div>
+			</div>
+		</div>
+		
+		<table class="table table-bordered mt-4" style="width:100%;">
+			<tr style=" background-color:#f3f3f3">
+				<th>Part Number</th>
+				<th>Parts Combination</th>
+				<th>Selected Parts </th>
+			</tr>
+			<tr ng-repeat="part in PartCombinationSelection[0].PARTS track by $index">
+
+				<td><span >{{part.PARTNUM}} </span></td>
+				<td>
+					<select class='form-control' style="width:100%" ng-model="partNum1" ng-disabled="part.isDisabled" ng-change="changePart(partNum1 , $Index,part.PARTNUM)">
+						<option ng-repeat="partNum in part.PARTDETAIL.PART track by $index" selected>{{partNum}}</option>
+					</select>
+				</td>
+				<td>
+					{{partNum1}}
+				</td>
+			</tr>
+		</table>
+		<div class="row mt-4" >
+			<div class="col-sm-11">
+				<button  type="button" class="btn btn-danger btn-block" ng-click="sendToRevPanel()" id="nextbtn"  style="float: right;background-color: #d83c3c; width: 12%;margin-top: 0.8%;">
+					<span  style="color:white;" >Next</span>
+					<i class="fas fa-chevron-right" style="vertical-align: middle;color:white;font-weight: 600;"></i>
+				</button>
+			</div>
+		</div>
+	</body>
+</html>

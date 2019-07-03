@@ -13,14 +13,14 @@ var removeEmptyLines = require('gulp-remove-empty-lines');
 // }
 
 function htmlp(){
-  return src('./erfq/*/*.htm')
+  return src('./erfq2/*/*.htm')
     .pipe(prettify({indent_char: ' ', indent_size: 2}))
     .pipe(removeHtmlComments())
     .pipe(removeEmptyLines())
-    .pipe(dest('lib'))
+    .pipe(dest('erfq2_lib'))
 }
 exports.default = function() {
    // watch('./*.js', series(tstojs));
    
-    watch('./erfq/*/*.htm', series(htmlp));
+    watch('./erfq2/*/*.htm', series(htmlp));
   };

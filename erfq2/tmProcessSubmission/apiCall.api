@@ -1,0 +1,72 @@
+post : "ERFQPartsDuplicateCheck" 
+
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Body>
+    <ERFQPartsDuplicateCheck xmlns="http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage" preserveSpace="no" qAccess="0" qValues="">
+      <projectCode>PARAMETER</projectCode>
+      <PartInfo>PARAMETER</PartInfo>
+      <toolmakedID>PARAMETER</toolmakedID>
+    </ERFQPartsDuplicateCheck>
+  </SOAP:Body>
+</SOAP:Envelope>
+
+
+
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Body>
+    <UpdateErfqProcessParts xmlns="http://schemas.cordys.com/Mahindra_eRFQ_WSAppPackage" reply="yes" commandUpdate="no" preserveSpace="no" batchUpdate="no">
+      <tuple>
+        <old>
+          <ERFQ_PROCESS_PARTS qConstraint="0">
+            <ERFQ_NUMBER>PARAMETER</ERFQ_NUMBER>
+            <PROJECT_CODE>PARAMETER</PROJECT_CODE>
+            <TOOLMAKER_NAME>PARAMETER</TOOLMAKER_NAME>
+            <PROCESS_COMBINATION>PARAMETER</PROCESS_COMBINATION>
+            <PART_COMBINED>PARAMETER</PART_COMBINED>
+            <PANEL_QUANTITY>PARAMETER</PANEL_QUANTITY>
+            <TOOLMAKER_REMARK>PARAMETER</TOOLMAKER_REMARK>
+            <MSIE_REMARK>PARAMETER</MSIE_REMARK>
+            <DECISION>PARAMETER</DECISION>
+            <COST>PARAMETER</COST>
+            <STATUS>PARAMETER</STATUS>
+            <PANEL_GROUPING>PARAMETER</PANEL_GROUPING>
+            <PART_NUMBER>PARAMETER</PART_NUMBER>
+            <PROCESS_PARTS_SEQ>PARAMETER</PROCESS_PARTS_SEQ>
+            <DIE_COST_REMARK>PARAMETER</DIE_COST_REMARK>
+            <DIE_COST_DECISION>PARAMETER</DIE_COST_DECISION>
+            <DIE_COST_STATUS>PARAMETER</DIE_COST_STATUS>
+            <CURRENCY_UNIT>PARAMETER</CURRENCY_UNIT>
+            <REVISED_COST>PARAMETER</REVISED_COST>
+            <DUPLICACY>PARAMETER</DUPLICACY>
+            <PART_INFO>PARAMETER</PART_INFO>
+          </ERFQ_PROCESS_PARTS>
+        </old>
+        <new>
+          <ERFQ_PROCESS_PARTS qAccess="0" qConstraint="0" qInit="0" qValues="">
+            <ERFQ_NUMBER>PARAMETER</ERFQ_NUMBER>
+            <PROJECT_CODE>PARAMETER</PROJECT_CODE>
+            <TOOLMAKER_NAME>PARAMETER</TOOLMAKER_NAME>
+            <PROCESS_COMBINATION>PARAMETER</PROCESS_COMBINATION>
+            <PART_COMBINED>PARAMETER</PART_COMBINED>
+            <PANEL_QUANTITY>PARAMETER</PANEL_QUANTITY>
+            <TOOLMAKER_REMARK>PARAMETER</TOOLMAKER_REMARK>
+            <MSIE_REMARK>PARAMETER</MSIE_REMARK>
+            <DECISION>PARAMETER</DECISION>
+            <COST>PARAMETER</COST>
+            <STATUS>PARAMETER</STATUS>
+            <PANEL_GROUPING>PARAMETER</PANEL_GROUPING>
+            <PART_NUMBER>PARAMETER</PART_NUMBER>
+            <PROCESS_PARTS_SEQ>PARAMETER</PROCESS_PARTS_SEQ>
+            <DIE_COST_REMARK>PARAMETER</DIE_COST_REMARK>
+            <DIE_COST_DECISION>PARAMETER</DIE_COST_DECISION>
+            <DIE_COST_STATUS>PARAMETER</DIE_COST_STATUS>
+            <CURRENCY_UNIT>PARAMETER</CURRENCY_UNIT>
+            <REVISED_COST>PARAMETER</REVISED_COST>
+            <DUPLICACY>PARAMETER</DUPLICACY>
+            <PART_INFO>PARAMETER</PART_INFO>
+          </ERFQ_PROCESS_PARTS>
+        </new>
+      </tuple>
+    </UpdateErfqProcessParts>
+  </SOAP:Body>
+</SOAP:Envelope>
