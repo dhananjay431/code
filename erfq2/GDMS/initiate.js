@@ -1,9 +1,4 @@
-
-
-//main.js
-angular
-	.module('app', ['ngMaterial'])
-	.config(function ($mdDateLocaleProvider) {
+angular .module('app', ['ngMaterial']) .config(function ($mdDateLocaleProvider) {
 		$mdDateLocaleProvider.formatDate = function (date) {
 			return date ? moment(date).format('DD-MM-YYYY') : '';
 		};
@@ -83,7 +78,7 @@ angular
 		$scope.resp1 = [];
 		$scope.submitdisabled = false;
 		$scope.savedisabled = false;
-		
+
 		$scope.resubmitFlag = 0;
 
 		$scope.clearfields = function () {
@@ -112,10 +107,10 @@ angular
 
 
 		$scope.changePage1 = function (nextPage1) {
-			
+
 			$scope.nextPageNum1 = nextPage1;
 			$scope.tableParams1.page(nextPage1);
-			
+
 			setTimeout(function () {
 
 
@@ -153,10 +148,10 @@ angular
 
 
 		$scope.changePage2 = function (nextPage2) {
-			
+
 			$scope.nextPageNum2 = nextPage2;
 			$scope.tableParams2.page(nextPage2);
-			
+
 			setTimeout(function () {
 
 
@@ -241,7 +236,7 @@ angular
 				dataType: "* json",
 				success: function (d) {
 
-					
+
 
 
 					$scope.alldata = $.cordys.json.findObjects(d, "LOV_MASTER_AUTO");
@@ -272,7 +267,7 @@ angular
 				},
 				success: function (d) {
 
-					
+
 
 
 					$scope.projcodes = $.cordys.json.findObjects(d, "GDMS_MTR_PROJECT_CODES");
@@ -293,7 +288,7 @@ angular
 
 				success: function (d) {
 
-					
+
 					$scope.userroles = $.cordys.json.findObjects(d, "PROJECT_TEAM");
 					$scope.adpdqp = _.groupBy($scope.userroles, 'GDMS_ROLE')["ADPD Quality Plannner"];
 					$scope.platformowner = _.groupBy($scope.userroles, 'GDMS_ROLE')["Platform Owner"];
@@ -332,7 +327,7 @@ angular
 				},
 				success: function (d) {
 
-					
+
 
 
 					$scope.departments = $.cordys.json.findObjects(d, "GDMS_MTR_DEPT");
@@ -356,7 +351,7 @@ angular
 				},
 				success: function (d) {
 
-					
+
 
 
 					$scope.locations = $.cordys.json.findObjects(d, "MANUFACTURING_LOCATIONS");
@@ -378,7 +373,7 @@ angular
 				},
 				success: function (dx) {
 
-					
+
 					$scope.taskStatus = $.cordys.json.findObjects(dx, "GDMS_TRA_TASKS");
 
 					if (dx.tuple != undefined) {
@@ -443,7 +438,7 @@ angular
 					}
 
 
-					
+
 					// var element = document.createElement('a');
 					// element.setAttribute('href', 'data:application/octet-stream;charset=utf-16le;base64,' + encodeURIComponent(d.return));
 					// element.setAttribute('download', filename);
@@ -515,7 +510,7 @@ angular
 					}
 
 
-					
+
 
 					// var filename = $scope.deviation.GDMS_CODE + ".pdf";
 					// var element = document.createElement('a');
@@ -590,7 +585,7 @@ angular
 								fileContent: file
 							},
 							success: function (e) {
-								
+
 								$scope.ServerFilePath = $.cordys.json.findObjects(e, "uploadGDMSFile")[0].uploadGDMSFile;
 								//temperoray change 2
 								var dte = new Date();
@@ -620,7 +615,7 @@ angular
 
 								//check whether the file already exist in table ERFQ Uploaded Document
 								$scope.clearPopUpData();
-								
+
 								$scope.manageTextareaHeight("remarkTable1");
 
 							},
@@ -681,7 +676,7 @@ angular
 								fileContent: file
 							},
 							success: function (e) {
-								
+
 								$scope.ServerFilePath = $.cordys.json.findObjects(e, "uploadGDMSFile")[0].uploadGDMSFile;
 								//temperoray change 2
 								var dte = new Date();
@@ -708,12 +703,12 @@ angular
 								//	 $scope.FileArray[$scope.FileArray.length-1].DOCUMENT_DESC = FileNameObj.DOCUMENT_DESC;
 								//$scope.DOCUMENT_NAME1=name;
 								$scope.$apply();
-								
-								
+
+
 
 								//check whether the file already exist in table ERFQ Uploaded Document
 								$scope.clearPopUpData();
-								
+
 								$scope.manageTextareaHeight("remarkTable2");
 
 							},
@@ -728,10 +723,10 @@ angular
 			} else {
 
 			}
-			
+
 			//change table height
-			
-			
+
+
 		}
 
 
@@ -821,7 +816,7 @@ angular
 				},
 				success: function (dx) {
 
-					
+
 					$scope.currentStatus = $.cordys.json.findObjects(dx, "GDMS_TRA_GDMS_REQ")[0];
 
 					if ($scope.currentStatus.STATUS != "SAVED") {
@@ -835,8 +830,8 @@ angular
 					alert("Error in loading data");
 				}
 			});*/
-			
-			
+
+
 
 				$.cordys.ajax({
 					method: "UpdateGdmsTraGdmsReq",
@@ -874,7 +869,7 @@ angular
 						}
 					},
 					success: function (d) {
-						
+
 						$scope.resp = $.cordys.json.findObjects(d, "GDMS_TRA_GDMS_REQ");
 						$scope.deviation.GDMS_CODE = $scope.resp[0].GDMS_CODE;
 						$scope.deviation.GDMS_ID = $scope.resp[0].GDMS_ID;
@@ -925,7 +920,7 @@ angular
 						}
 					},
 					success: function (d) {
-					
+
 						$scope.resp = $.cordys.json.findObjects(d, "GDMS_TRA_GDMS_REQ");
 						$scope.deviation.GDMS_CODE = $scope.resp[0].GDMS_CODE;
 						$scope.deviation.GDMS_ID = $scope.resp[0].GDMS_ID;
@@ -969,8 +964,8 @@ angular
 			if ($scope.deviation.STATUS == "REJECTED") {
 
 
-				
-				
+
+
 
 
 			} else if ($scope.deviation.GDMS_ID) {
@@ -1011,7 +1006,7 @@ angular
 						}
 					},
 					success: function (d) {
-						
+
 						$scope.resp = $.cordys.json.findObjects(d, "GDMS_TRA_GDMS_REQ");
 						$scope.deviation.GDMS_CODE = $scope.resp[1].GDMS_CODE;
 						$scope.deviation.GDMS_ID = $scope.resp[1].GDMS_ID;
@@ -1072,7 +1067,7 @@ angular
 						}
 					},
 					success: function (d) {
-						
+
 						$scope.resp = $.cordys.json.findObjects(d, "GDMS_TRA_GDMS_REQ");
 						$scope.deviation.GDMS_CODE = $scope.resp[0].GDMS_CODE;
 						$scope.deviation.GDMS_ID = $scope.resp[0].GDMS_ID;
@@ -1120,7 +1115,7 @@ angular
 						"tuple": reqObj
 					},
 					success: function (d) {
-						
+
 						$scope.GetDeviationsByGDMSCode();
 
 					},
@@ -1179,7 +1174,7 @@ angular
 								"RISK_RESPONSE_STRATEGY": $scope.deliverables[i].RISK_RESPONSE_STRATEGY,
 								"INTERIM_CONT_PLAN": $scope.deliverables[i].INTERIM_CONT_PLAN,
 								"PERM_CORRECTIVE_PLAN": $scope.deliverables[i].PERM_CORRECTIVE_PLAN,
-								//"START_DATE" : st,	
+								//"START_DATE" : st,
 								"RISK_STATUS": $scope.deliverables[i].RISK_STATUS,
 								"RISK_OWNER": ro,
 								"RISK_MANAGER": rm,
@@ -1356,7 +1351,7 @@ angular
 				},
 				success: function (d) {
 
-					
+
 
 
 				},
@@ -1474,7 +1469,7 @@ angular
 						"tuple": reqObj1
 					},
 					success: function (d) {
-						
+
 						$scope.GetDocByGDMSCode();
 
 					},
@@ -1543,7 +1538,7 @@ angular
 						"tuple": reqObj1
 					},
 					success: function (d) {
-						
+
 						//$scope.GetDocByGDMSCode();
 
 					},
@@ -1854,9 +1849,9 @@ angular
 				}
 
 			}
-			
-			
-				// Rejection Logic - Submitting Task after Rejection 
+
+
+				// Rejection Logic - Submitting Task after Rejection
 			if ($scope.deviation.STATUS == "REJECTED") {
 
 
@@ -1894,7 +1889,7 @@ angular
 						}
 					},
 					success: function (d) {
-						
+
 						$scope.resp = $.cordys.json.findObjects(d, "GDMS_TRA_GDMS_REQ");
 						$scope.deviation.GDMS_CODE = $scope.resp[0].GDMS_CODE;
 						$scope.deviation.GDMS_ID = $scope.resp[0].GDMS_ID;
@@ -1904,9 +1899,9 @@ angular
 							$scope.download[i].DOCUMENT_ID = undefined;
 						}
 						$scope.$apply();
-						
+
 						$scope.resubmitFlag=1;
-						
+
 						$scope.savedeviations();
 
 						$scope.saveapprovers();
@@ -1929,22 +1924,22 @@ angular
 			}
 
 			$scope.saveGDMS('SUBMITTED');
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 
 			if ($scope.taskid == "") {
 
 
 			} else {
-			
-			
-			
-			
-			
+
+
+
+
+
 
 				$scope.completetask();
 				$.cordys.ajax({
@@ -1992,13 +1987,13 @@ angular
 				if ($scope.accessedfromInbox != true)
 					$state.go('app.main.mytasks');
 			}, 500);
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
 		}
 
 		$scope.clarificationReq = function () {
@@ -2015,7 +2010,7 @@ angular
 
 
 					$scope.allUsers = $.cordys.json.findObjects(e, 'USER_MASTER');
-					
+
 
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
@@ -2045,7 +2040,7 @@ angular
 								else
 									$scope.filteredUsers = temp;
 
-								
+
 								resolve($scope.filteredUsers);
 							} else {
 								resolve($scope.filteredUsers);
@@ -2098,10 +2093,10 @@ angular
 					}
 				},
 				success: function (d) {
-					
+
 					$scope.resp1 = $.cordys.json.findObjects(d, "GDMS_TRA_CLARIFICATIONS");
 
-					
+
 					$scope.savefiledbclarify($scope.resp1[0].CLARIFICATION_ID);
 
 					$.cordys.ajax({
@@ -2401,7 +2396,7 @@ angular
 							}
 						},
 						success: function (d) {
-						
+
 							$scope.resp = $.cordys.json.findObjects(d, "GDMS_TRA_GDMS_REQ");
 							$scope.deviation.GDMS_CODE = $scope.resp[0].GDMS_CODE;
 							$scope.deviation.GDMS_ID = $scope.resp[0].GDMS_ID;
@@ -2596,8 +2591,8 @@ angular
 			var changeStatusFlag = 0;
 
 			$scope.savedeviations();
-			
-			
+
+
 
 			for (var i = 0; i < $scope.deliverables.length; i++) {
 
@@ -2605,29 +2600,29 @@ angular
 				if (new Date($scope.timold[i]).getTime() != new Date($scope.deliverables[i].TARGET_IMPLE_DATE).getTime()) {
 					$scope.createnewversion();
 					changeStatusFlag=1;
-					
+
 					$state.go('app.main.mytasks');
 					return;
 				}
 			}
-			
+
 			if(changeStatusFlag==0)
 				toastr.success("Data Saved Successfully");
-				
+
 			$state.go('app.main.mytasks');
 		}
-		
+
 		$scope.manageTextareaHeight = function(tableName){
-			
-			
+
+
 			var tableRows = document.getElementById(tableName).rows;
-			
+
 			for(var i=1;i<tableRows.length;i++)
 			{
 				var rowHeight = $(tableRows[i]).height();
 				document.getElementById(tableName).rows[i].getElementsByTagName("textarea")[0].style.height
 				= ($(document.getElementById(tableName).rows[i]).height())-1 +"px";
-				
+
 			}
 		}
 
@@ -2648,9 +2643,9 @@ angular
 						$scope.download[i].UPLOADED_ON = $scope.download[i].UPLOADED_ON.substring(8, 10) + "-" + $scope.download[i].UPLOADED_ON.substring(5, 8) + $scope.download[i].UPLOADED_ON.substring(0, 4);
 					}
 					$scope.$apply();
-					
+
 					//change height here
-					
+
 					$scope.manageTextareaHeight("remarkTable1");
 
 				},
